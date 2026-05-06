@@ -4,10 +4,10 @@
 @can('view-dashboard')
 <!-- Welcome Card -->
 <section class="mb-gutter">
-    <div class="relative overflow-hidden bg-primary-container rounded-xl p-8 flex justify-between items-center text-white border border-slate-800">
-        <div class="relative z-10">
-            <h1 class="font-display-xl text-white mb-2">Oss, Prof. {{ explode(' ', auth()->user()->name)[0] }}!</h1>
-            <p class="font-body-lg text-slate-300 max-w-md">
+    <div class="relative overflow-hidden bg-primary-container rounded-xl p-4 md:p-8 flex justify-between items-center text-white border border-slate-800">
+        <div class="relative z-10 w-full md:w-2/3">
+            <h1 class="font-display-xl text-3xl md:text-5xl text-white mb-2">Oss, Prof. {{ explode(' ', auth()->user()->name)[0] }}!</h1>
+            <p class="font-body-lg text-sm md:text-base text-slate-300 max-w-md">
                 O tatame está pronto. Você tem {{ $graduation_candidates->count() }} alunos em destaque para graduação este mês e {{ $late_count }} pendências financeiras urgentes.
             </p>
             <div class="mt-6 flex gap-4">
@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="absolute right-0 top-0 h-full w-1/3 opacity-20 pointer-events-none">
+        <div class="hidden md:block absolute right-0 top-0 h-full w-1/3 opacity-20 pointer-events-none">
             <img class="h-full w-full object-cover grayscale" alt="Jiu-Jitsu Belt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO84udy_5nZZSK1F4KkuE9dHTCdEv6PiaAxznWKslgMTmQtUkZ7EWf66_vHsyzuygWrJOQkm_17ceoBXTh3KXE3pqTF1cnWSaCsqzZEu7wdN-Swwy8jf40bJ0UFhFcE6PA4RUFo_ucPKfVLF5aVsGH01k_g8VqIs_yfHmujpEkXz3t1cVqUh3dr-q9Uii4xTPsiWfIm0inL3MPauhn6qsDQZ3pCKIAWTnfuDx-fLa_xyCWeF-7dFheJENtdN4TrnyoTukiUWYa3_8A"/>
         </div>
     </div>

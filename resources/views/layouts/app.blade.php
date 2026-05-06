@@ -117,9 +117,13 @@
 </head>
 <body class="bg-background text-on-surface">
     <!-- TopAppBar -->
-    <header class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50 font-['Lexend'] font-medium border-b border-slate-200 dark:border-slate-800 flex justify-between items-center h-16 px-6 w-full sticky top-0 z-50">
-        <div class="flex items-center gap-gutter">
-            <span class="text-xl font-black text-slate-900 dark:text-slate-50 tracking-tight">CT Denyson Anderson</span>
+    <header class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50 font-['Lexend'] font-medium border-b border-slate-200 dark:border-slate-800 flex justify-between items-center h-16 px-4 md:px-6 w-full sticky top-0 z-50">
+        <div class="flex items-center gap-2 md:gap-gutter">
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors">
+                <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">menu</span>
+            </button>
+            <span class="text-xl md:text-xl font-black text-slate-900 dark:text-slate-50 tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">CT Denyson Anderson</span>
         </div>
         <div class="flex items-center gap-md">
             <div class="flex items-center gap-4">
@@ -130,9 +134,12 @@
         </div>
     </header>
 
-    <div class="flex min-h-[calc(100vh-64px)]">
+    <div class="flex min-h-[calc(100vh-64px)] relative">
+        <!-- Backdrop for mobile -->
+        <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-slate-900/80 z-40 hidden md:hidden transition-opacity opacity-0 backdrop-blur-sm"></div>
+
         <!-- SideNavBar -->
-        <aside class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 font-['Lexend'] text-sm antialiased fixed left-0 top-16 h-[calc(100vh-64px)] w-[280px] border-r border-slate-200 dark:border-slate-800 flex flex-col py-6 px-4 gap-2">
+        <aside id="main-sidebar" class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 font-['Lexend'] text-sm antialiased fixed left-0 top-16 h-[calc(100vh-64px)] w-[280px] border-r border-slate-200 dark:border-slate-800 flex flex-col py-6 px-4 gap-2 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shadow-xl md:shadow-none">
             <div class="px-4 mb-xl">
                 <div class="flex items-center gap-3">
                     <div class="bg-primary p-2 rounded-lg">
@@ -206,7 +213,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="ml-[280px] flex-1 p-margin overflow-y-auto">
+        <main class="w-full md:w-auto md:ml-[280px] flex-1 p-4 md:p-margin overflow-y-auto overflow-x-hidden">
             @yield('content')
         </main>
     </div>
@@ -215,6 +222,32 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Mobile Menu Toggle
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.getElementById('main-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            
+            function toggleSidebar() {
+                if (!sidebar) return;
+                const isOpen = !sidebar.classList.contains('-translate-x-full');
+                if (isOpen) {
+                    sidebar.classList.add('-translate-x-full');
+                    if (backdrop) backdrop.classList.add('opacity-0');
+                    setTimeout(() => { if (backdrop) backdrop.classList.add('hidden') }, 300);
+                    document.body.style.overflow = '';
+                } else {
+                    sidebar.classList.remove('-translate-x-full');
+                    if (backdrop) {
+                        backdrop.classList.remove('hidden');
+                        setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+                    }
+                    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                }
+            }
+
+            if (menuBtn) menuBtn.addEventListener('click', toggleSidebar);
+            if (backdrop) backdrop.addEventListener('click', toggleSidebar);
+
             @if(session('success'))
             Swal.fire({
                 title: 'Sucesso!',
@@ -247,7 +280,4 @@
         });
     </script>
 </body>
-</html>
->
-
 </html>
