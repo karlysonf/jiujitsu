@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreUserRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'cpf' => 'required|string|unique:users',
+            'telefone' => 'required|string',
+            'data_nascimento' => 'required|date',
+            'faixa' => 'required|string',
+            'grau' => 'required|integer|min:0|max:4',
+            'start_date' => 'required|date',
+            'plan_id' => 'required|exists:plans,id',
+            'password' => 'nullable|string|min:8',
+            'status' => 'nullable|string|in:active,inactive',
+            'user_role' => 'nullable|string|in:aluno,professor,admin',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'O nome é obrigatório.',
+            'email.required' => 'O e-mail é obrigatório.',
+            'email.email' => 'Informe um e-mail válido.',
+            'email.unique' => 'Este e-mail já está em uso.',
+            'cpf.required' => 'O CPF é obrigatório.',
+            'cpf.unique' => 'Este CPF já está cadastrado.',
+            'data_nascimento.required' => 'A data de nascimento é obrigatória.',
+            'plan_id.required' => 'Selecione um plano.',
+            'plan_id.exists' => 'O plano selecionado é inválido.',
+        ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('cpf')) {
+            $this->merge([
+                'cpf' => preg_replace('/[^0-9]/', '', $this->cpf),
+            ]);
+        }
+    }
+}
