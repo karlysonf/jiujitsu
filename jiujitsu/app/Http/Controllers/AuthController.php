@@ -74,7 +74,8 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        $route = $user->hasRole('aluno') ? 'portal.dashboard' : 'dashboard';
+        return redirect()->route($route);
     }
 
     // Processa a tentativa de login
@@ -102,7 +103,8 @@ class AuthController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
-            return redirect()->route('dashboard');
+            $route = $user->hasRole('aluno') ? 'portal.dashboard' : 'dashboard';
+            return redirect()->route($route);
         }
 
         return back()->withErrors([

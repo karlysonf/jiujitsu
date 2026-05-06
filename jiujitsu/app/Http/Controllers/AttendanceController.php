@@ -39,4 +39,17 @@ class AttendanceController extends Controller
 
         return redirect()->back()->with('success', 'Presença registrada com sucesso!');
     }
+
+    public function destroy(Request $request)
+    {
+        Gate::authorize('manage-attendance');
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'date' => 'nullable|date',
+        ]);
+
+        $this->attendanceService->removeAttendance($request->user_id, $request->date);
+
+        return redirect()->back()->with('success', 'Presença removida com sucesso!');
+    }
 }

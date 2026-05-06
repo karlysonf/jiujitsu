@@ -122,13 +122,7 @@
             <span class="text-xl font-black text-slate-900 dark:text-slate-50 tracking-tight">CT Denyson Anderson</span>
         </div>
         <div class="flex items-center gap-md">
-            <div class="relative hidden md:block">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-                <input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-xl text-label-sm focus:outline-none focus:ring-2 focus:ring-on-tertiary-container w-64" placeholder="Buscar aluno ou fatura..." type="text"/>
-            </div>
             <div class="flex items-center gap-4">
-                <button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded-full transition-colors">notifications</button>
-                <button class="material-symbols-outlined text-slate-500 hover:bg-slate-50 p-2 rounded-full transition-colors">settings</button>
                 <div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
                     <img alt="Perfil do Instrutor" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkAM_pl4Pncb9GfmjqFvZ3mu_dvgjBsM1ZiTK8sqFuGaFX29F4xqLIVhUP_Ja23ia2crZ1UuuX1zzxSAyxY4JyPLBSvsV_rG-gU38e0GZ66PY1VkdFAGd7UImAkETMB_LLz4FHtioys3d4AWlk_Y1Q0Y5MVvsPqhA8gUrzJC0L1WSAhceTjGquhprsSnjD1OCJQKsJZ1lLZ2br8b5Ljd90LEY2qygH2qWyXKdUgFlFAYbuWAq6pTDIjWxv30Fg8v_fM8XkOttk4_mf"/>
                 </div>
@@ -161,6 +155,13 @@
                 <a class="{{ request()->routeIs('users.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('users.index') }}">
                     <span class="material-symbols-outlined">group</span>
                     <span>Alunos</span>
+                </a>
+                @endcan
+
+                @can('manage-attendance')
+                <a class="{{ request()->routeIs('attendances.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('attendances.index') }}">
+                    <span class="material-symbols-outlined">how_to_reg</span>
+                    <span>Presença</span>
                 </a>
                 @endcan
 

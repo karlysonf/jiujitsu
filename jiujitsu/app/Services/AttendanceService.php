@@ -29,4 +29,12 @@ class AttendanceService
             ->where('date', $date)
             ->get();
     }
+
+    public function removeAttendance(int $userId, $date = null)
+    {
+        $date = $date ?? now()->toDateString();
+        return Attendance::where('user_id', $userId)
+            ->where('date', $date)
+            ->delete();
+    }
 }

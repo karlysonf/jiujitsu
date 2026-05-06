@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
+        if (auth()->user()->hasRole('aluno')) {
+            return redirect()->route('portal.dashboard');
+        }
         return redirect()->route('dashboard');
     }
     return redirect()->route('login');
@@ -49,7 +52,6 @@ Route::group(['prefix' => 'portal', 'as' => 'portal.'], function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('can:view-dashboard')->name('dashboard');
-    Route::post('/dashboard/checkin', [DashboardController::class, 'checkIn'])->name('dashboard.checkin');
 
     // Users
     Route::middleware(['can:manage-users'])->group(function () {
@@ -69,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['can:manage-attendance'])->group(function () {
         Route::get('/attendances', [AttendanceController::class, 'index'])->name('attendances.index');
         Route::post('/attendances', [AttendanceController::class, 'store'])->name('attendances.store');
+        Route::delete('/attendances', [AttendanceController::class, 'destroy'])->name('attendances.destroy');
     });
 
     // Plans
