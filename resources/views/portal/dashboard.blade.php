@@ -107,6 +107,38 @@
             </div>
         </div>
 
+        <!-- Alterar Senha -->
+        <div class="mt-6 bg-white rounded-xl shadow p-6 border border-gray-100 flex flex-col justify-center">
+            <h2 class="text-lg font-bold mb-4 border-b pb-2"><i class="fas fa-lock mr-2 text-gray-600"></i> Alterar Senha</h2>
+            
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-4" role="alert">
+                    <ul class="list-disc pl-5 text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('portal.change-password') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Nova Senha</label>
+                    <input type="password" name="password" id="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border" required minlength="8" placeholder="No mínimo 8 caracteres">
+                </div>
+                <div>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirmar Nova Senha</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border" required minlength="8" placeholder="Digite a senha novamente">
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
+                        <i class="fas fa-save"></i> Atualizar Senha
+                    </button>
+                </div>
+            </form>
+        </div>
+
         <!-- Card Financeiro -->
         <div class="mt-8 bg-white rounded-xl shadow overflow-hidden border border-gray-100">
             <div class="bg-gray-50 p-4 border-b flex items-center gap-3">

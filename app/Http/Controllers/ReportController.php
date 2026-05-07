@@ -18,7 +18,12 @@ class ReportController extends Controller
     public function monthly(Request $request)
     {
         Gate::authorize('view-reports');
-        $month = $request->month ?? now()->format('Y-m');
+
+        $validated = $request->validate([
+            'month' => 'nullable|date_format:Y-m',
+        ]);
+
+        $month = $validated['month'] ?? now()->format('Y-m');
 
         $payments = Payment::with('user')
             ->where('reference_month', $month)

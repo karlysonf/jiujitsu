@@ -56,4 +56,17 @@ class PortalAlunoController extends Controller
         $payments = $user->payments()->orderBy('due_date', 'desc')->get();
         return view('portal.payments', compact('user', 'payments'));
     }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = auth()->user();
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return back()->with('success', 'Senha alterada com sucesso!');
+    }
 }

@@ -35,6 +35,10 @@ class UserService
 
             $roleName = $data['user_role'] ?? 'aluno';
 
+            if ($roleName === 'admin' && (!auth()->check() || !auth()->user()->hasAnyRole(['root', 'admin']))) {
+                abort(403, 'Você não tem permissão para atribuir o nível de administrador.');
+            }
+
             if ($roleName === 'professor') {
                 $cortesia = \App\Models\Plan::where('name', 'Cortesia')->first();
                 if ($cortesia) {
@@ -145,6 +149,9 @@ class UserService
             $user->update($userData);
 
             if (isset($data['user_role'])) {
+                if ($data['user_role'] === 'admin' && (!auth()->check() || !auth()->user()->hasAnyRole(['root', 'admin']))) {
+                    abort(403, 'Você não tem permissão para atribuir o nível de administrador.');
+                }
                 $user->syncRoles([$data['user_role']]);
             }
 

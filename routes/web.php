@@ -47,6 +47,7 @@ Route::group(['prefix' => 'portal', 'as' => 'portal.'], function () {
         Route::get('/dashboard', [\App\Http\Controllers\PortalAlunoController::class, 'dashboard'])->name('dashboard');
         Route::post('/checkin', [\App\Http\Controllers\PortalAlunoController::class, 'checkIn'])->name('checkin');
         Route::get('/payments', [\App\Http\Controllers\PortalAlunoController::class, 'payments'])->name('payments.index');
+        Route::post('/change-password', [\App\Http\Controllers\PortalAlunoController::class, 'changePassword'])->name('change-password');
     });
 });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class UpdateUserRequest extends FormRequest
             'grau' => 'required|integer|min:0|max:4',
             'start_date' => 'required|date',
             'plan_id' => 'required|exists:plans,id',
-            'password' => 'nullable|string|min:8',
+            'password' => ['nullable', 'string', Password::min(8)->letters()->numbers()],
             'status' => 'required|string|in:active,inactive',
             'user_role' => 'nullable|string|in:aluno,professor,admin',
         ];
