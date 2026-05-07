@@ -29,6 +29,7 @@ class UpdateUserRequest extends FormRequest
             'password' => ['nullable', 'string', Password::min(8)->letters()->numbers()],
             'status' => 'required|string|in:active,inactive',
             'user_role' => 'nullable|string|in:aluno,professor,admin',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
     }
 

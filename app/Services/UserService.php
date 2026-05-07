@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class UserService
@@ -33,6 +34,12 @@ class UserService
                 $data['password'] = Hash::make($data['password']);
             }
 
+            // Processa upload de foto
+            $photoPath = null;
+            if (!empty($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
+                $photoPath = $data['photo']->store('users/photos', 'public');
+            }
+
             $roleName = $data['user_role'] ?? 'aluno';
 
             if ($roleName === 'admin' && (!auth()->check() || !auth()->user()->hasAnyRole(['root', 'admin']))) {
@@ -57,8 +64,8 @@ class UserService
                 'email' => $data['email'],
                 'cpf' => $data['cpf'],
                 'password' => $data['password'],
-                'telefone' => $data['phone'] ?? null,
-                'data_nascimento' => $data['birth_date'] ?? null,
+                'telefone' => $data['phone'] ?? $data['telefone'] ?? null,
+                'data_nascimento' => $data['birth_date'] ?? $data['data_nascimento'] ?? null,
                 'faixa' => $data['faixa'] ?? null,
                 'grau' => $data['grau'] ?? 0,
                 'is_admin' => false,
@@ -71,6 +78,7 @@ class UserService
                 'emergency_contact_phone' => $data['emergency_contact_phone'] ?? null,
                 'notes' => $data['notes'] ?? null,
                 'vencimento_mensalidade' => $data['due_day'] ?? 10,
+                'photo' => $photoPath,
                 'possui_lesao' => false,
                 'medicamento_continuo' => false,
                 'problema_cardiaco' => false,
@@ -124,12 +132,24 @@ class UserService
                 $data['cpf'] = preg_replace('/[^0-9]/', '', $data['cpf']);
             }
 
+            // Processa upload de foto
+            if (!empty($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
+                // Deleta a foto antiga se existir
+                if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                    Storage::disk('public')->delete($user->photo);
+                }
+                $data['photo'] = $data['photo']->store('users/photos', 'public');
+            } else {
+                // Mantém a foto atual se não foi enviada nova
+                unset($data['photo']);
+            }
+
             $userData = [
                 'name' => $data['name'] ?? $user->name,
                 'email' => $data['email'] ?? $user->email,
                 'cpf' => $data['cpf'] ?? $user->cpf,
-                'telefone' => $data['phone'] ?? $user->telefone,
-                'data_nascimento' => $data['birth_date'] ?? $user->data_nascimento,
+                'telefone' => $data['phone'] ?? $data['telefone'] ?? $user->telefone,
+                'data_nascimento' => $data['birth_date'] ?? $data['data_nascimento'] ?? $user->data_nascimento,
                 'faixa' => $data['faixa'] ?? $user->faixa,
                 'grau' => $data['grau'] ?? $user->grau,
                 'plan_id' => $data['plan_id'] ?? $user->plan_id,
@@ -141,6 +161,11 @@ class UserService
                 'user_status' => isset($data['status']) ? ($data['status'] === 'active' ? 1 : 0) : $user->user_status,
                 'vencimento_mensalidade' => $data['due_day'] ?? $user->vencimento_mensalidade,
             ];
+
+            // Inclui foto apenas se foi processada uma nova
+            if (isset($data['photo'])) {
+                $userData['photo'] = $data['photo'];
+            }
 
             if (isset($data['password'])) {
                 $userData['password'] = $data['password'];

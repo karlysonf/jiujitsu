@@ -52,6 +52,7 @@ class User extends Authenticatable
         'notes',
         'status',
         'user_status',
+        'photo',
     ];
 
     /**

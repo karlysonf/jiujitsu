@@ -357,7 +357,7 @@
 </style>
 
 <div class="registration-container">
-    <form action="{{ isset($user) ? route('users.update', $user) : route('users.store') }}" method="POST">
+    <form action="{{ isset($user) ? route('users.update', $user) : route('users.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @if(isset($user)) @method('PUT') @endif
         
@@ -377,18 +377,30 @@
         <!-- Photo Section -->
         <div class="form-section">
             <div class="photo-upload-container">
-                <div class="avatar-placeholder">
-                    <i class="fas fa-user"></i>
-                    <div class="avatar-btn">
+                <!-- Input file hidden -->
+                <input type="file" id="photo_input" name="photo" accept="image/jpg,image/jpeg,image/png,image/webp" style="display:none;">
+
+                <div class="avatar-placeholder" id="avatar_preview" onclick="document.getElementById('photo_input').click()" style="cursor:pointer;" title="Clique para selecionar uma foto">
+                    @if(isset($user) && $user->photo)
+                        <img src="{{ Storage::url($user->photo) }}" id="preview_img" alt="Foto do aluno" style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;">
+                    @else
+                        <i class="fas fa-user" id="preview_icon"></i>
+                        <img id="preview_img" src="" alt="Preview" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:0.75rem;">
+                    @endif
+                    <div class="avatar-btn" onclick="event.stopPropagation(); document.getElementById('photo_input').click()">
                         <i class="fas fa-camera"></i>
                     </div>
                 </div>
                 <div class="upload-info">
                     <h3>Foto do Aluno</h3>
-                    <p>Recomendado: JPG ou PNG, mín. 400x400px.</p>
-                    <a href="#" class="upload-link">
+                    <p>Recomendado: JPG, PNG ou WebP, mín. 400x400px, máx. 2MB.</p>
+                    <a href="#" class="upload-link" onclick="event.preventDefault(); document.getElementById('photo_input').click()">
                         <i class="fas fa-upload"></i> Carregar nova imagem
                     </a>
+                    <p id="photo_name" style="margin-top:0.5rem;font-size:0.75rem;color:#3B82F6;display:none;"></p>
+                    @error('photo')
+                        <p style="color:#EF4444;font-size:0.8125rem;margin-top:0.5rem;"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+                    @enderror
                 </div>
             </div>
         </div>
@@ -514,6 +526,27 @@
 </div>
 
 <script>
+    // Preview de imagem ao selecionar arquivo
+    document.getElementById('photo_input').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const previewImg = document.getElementById('preview_img');
+        const previewIcon = document.getElementById('preview_icon');
+        const photoName = document.getElementById('photo_name');
+
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            previewImg.src = ev.target.result;
+            previewImg.style.display = 'block';
+            if (previewIcon) previewIcon.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+
+        photoName.textContent = '\u2713 ' + file.name;
+        photoName.style.display = 'block';
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         // Masks (simplified, would ideally use a library like IMask)
         const cpfInput = document.querySelector('input[name="cpf"]');
