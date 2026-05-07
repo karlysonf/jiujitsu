@@ -426,7 +426,7 @@
                     
                     <div class="form-group">
                         <label>Data de Nascimento</label>
-                        <input type="date" name="data_nascimento" class="form-control" value="{{ old('data_nascimento', isset($user) && $user->data_nascimento ? $user->data_nascimento->format('Y-m-d') : '') }}" required>
+                        <input type="date" name="data_nascimento" class="form-control" value="{{ old('data_nascimento', isset($user) && $user->data_nascimento ? $user->data_nascimento->format('Y-m-d') : '') }}">
                     </div>
                     
                     <div class="form-group">
@@ -436,7 +436,7 @@
                     
                     <div class="form-group">
                         <label>Telefone</label>
-                        <input type="text" name="telefone" class="form-control" value="{{ old('telefone', $user->telefone ?? '') }}" placeholder="(00) 00000-0000" required>
+                        <input type="text" name="telefone" class="form-control" value="{{ old('telefone', $user->telefone ?? '') }}" placeholder="(00) 00000-0000">
                     </div>
 
                     <div class="form-group">

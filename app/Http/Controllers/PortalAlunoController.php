@@ -37,6 +37,12 @@ class PortalAlunoController extends Controller
     {
         $user = auth()->user();
 
+        // Verifica se é Segunda (1), Quarta (3) ou Sexta (5)
+        $dayOfWeek = Carbon::today()->dayOfWeekIso; // 1 = Monday, 7 = Sunday
+        if (!in_array($dayOfWeek, [1, 3, 5])) {
+            return back()->with('error', 'O check-in só é permitido às Segundas, Quartas e Sextas-feiras.');
+        }
+
         $alreadyCheckedIn = $user->attendances()->whereDate('date', Carbon::today())->exists();
 
         if ($alreadyCheckedIn) {

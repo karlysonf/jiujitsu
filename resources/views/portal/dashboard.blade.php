@@ -38,9 +38,17 @@
     <!-- Main Content Container -->
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
 
-        <!-- Saudação -->
-        <h1 class="text-2xl font-bold mb-6 text-gray-900">Olá, {{ explode(' ', $user->name)[0] }}! 🥋</h1>
-
+        <!-- Saudação com Foto -->
+        <div class="flex items-center gap-4 mb-6">
+            @if($user->photo)
+                <img src="{{ Storage::url($user->photo) }}" alt="Foto do perfil" class="w-16 h-16 rounded-full object-cover shadow-md border-2 border-white">
+            @else
+                <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl shadow-md border-2 border-white">
+                    <i class="fas fa-user"></i>
+                </div>
+            @endif
+            <h1 class="text-2xl font-bold text-gray-900">Olá, {{ explode(' ', $user->name)[0] }}! 🥋</h1>
+        </div>
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative flex items-center gap-3 mb-6" role="alert">
                 <i class="fas fa-check-circle"></i>
@@ -67,9 +75,18 @@
                 
                 <form action="{{ route('portal.checkin') }}" method="POST" class="w-full">
                     @csrf
+                    @php
+                        $dayOfWeek = \Carbon\Carbon::today()->dayOfWeekIso;
+                        $canCheckIn = in_array($dayOfWeek, [1, 3, 5]); // Segunda, Quarta, Sexta
+                    @endphp
+
                     @if($hasCheckedInToday)
                         <button type="button" disabled class="w-full bg-gray-300 text-gray-600 font-bold py-3 px-4 rounded-lg cursor-not-allowed flex items-center justify-center gap-2 transition">
                             <i class="fas fa-check"></i> Presença Confirmada ✅
+                        </button>
+                    @elseif(!$canCheckIn)
+                        <button type="button" disabled class="w-full bg-gray-200 text-gray-500 font-bold py-3 px-4 rounded-lg cursor-not-allowed flex items-center justify-center gap-2 transition" title="Treinos apenas às Segundas, Quartas e Sextas">
+                            <i class="fas fa-ban"></i> Check-in Indisponível Hoje
                         </button>
                     @else
                         <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow transform hover:-translate-y-0.5 transition flex items-center justify-center gap-2">
@@ -139,7 +156,8 @@
             </form>
         </div>
 
-        <!-- Card Financeiro -->
+        <!-- Card Financeiro (Oculto para Professores) -->
+        @if(!$user->hasRole('professor'))
         <div class="mt-8 bg-white rounded-xl shadow overflow-hidden border border-gray-100">
             <div class="bg-gray-50 p-4 border-b flex items-center gap-3">
                 <i class="fas fa-wallet text-gray-600 text-xl"></i>
@@ -210,6 +228,7 @@
                 </div>
             </div>
         </div>
+        @endif
 
     </main>
 
