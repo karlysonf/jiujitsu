@@ -28,6 +28,7 @@
 </section>
 
 <!-- Financial Summary -->
+@if(auth()->user()->hasAnyRole(['root', 'admin']) || in_array(auth()->user()->role_id, [1, 2]))
 <section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-gutter">
     <!-- Received -->
     <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
@@ -69,10 +70,12 @@
         </div>
     </div>
 </section>
+@endif
 
 <!-- Chart Section -->
-<section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<section class="grid grid-cols-1 {{ auth()->user()->hasAnyRole(['root', 'admin']) || in_array(auth()->user()->role_id, [1, 2]) ? 'lg:grid-cols-3' : '' }} gap-gutter">
     <!-- Monthly Flow Chart -->
+    @if(auth()->user()->hasAnyRole(['root', 'admin']) || in_array(auth()->user()->role_id, [1, 2]))
     <div class="lg:col-span-2 bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
         <div class="flex justify-between items-center mb-8">
             <div>
@@ -96,6 +99,7 @@
             @endforeach
         </div>
     </div>
+    @endif
 
     <!-- Recent Activities / Quick Metrics -->
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
