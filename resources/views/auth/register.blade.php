@@ -87,7 +87,7 @@
         <div class="form-group">
             <label for="faixa">Faixa Atual</label>
             <select name="faixa" id="faixa" required style="width: 100%; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #D1D5DB;">
-                @foreach(['Branca', 'Cinza', 'Amarela', 'Laranja', 'Verde', 'Azul', 'Roxa', 'Marrom', 'Preta'] as $f)
+                @foreach(['Branca', 'Cinza', 'Cinza/Branca', 'Cinza/Preta', 'Amarela', 'Amarela/Branca', 'Amarela/Preta', 'Laranja', 'Laranja/Branca', 'Laranja/Preta', 'Verde', 'Verde/Branca', 'Verde/Preta', 'Azul', 'Roxa', 'Marrom', 'Preta'] as $f)
                     <option value="{{ $f }}" {{ old('faixa') == $f ? 'selected' : '' }}>{{ $f }}</option>
                 @endforeach
             </select>

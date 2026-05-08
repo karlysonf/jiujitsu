@@ -42,6 +42,18 @@
                 @php
                     $beltColor = match(strtolower($user->belt)) {
                         'branca' => 'bg-white text-slate-900 border border-slate-300',
+                        'cinza' => 'bg-slate-400 text-white',
+                        'cinza/branca' => 'bg-slate-200 text-slate-700 border border-slate-400',
+                        'cinza/preta' => 'bg-slate-600 text-white',
+                        'amarela' => 'bg-yellow-400 text-yellow-900',
+                        'amarela/branca' => 'bg-yellow-100 text-yellow-700 border border-yellow-400',
+                        'amarela/preta' => 'bg-yellow-600 text-white',
+                        'laranja' => 'bg-orange-400 text-orange-900',
+                        'laranja/branca' => 'bg-orange-100 text-orange-700 border border-orange-400',
+                        'laranja/preta' => 'bg-orange-600 text-white',
+                        'verde' => 'bg-green-500 text-white',
+                        'verde/branca' => 'bg-green-100 text-green-700 border border-green-400',
+                        'verde/preta' => 'bg-green-700 text-white',
                         'azul' => 'bg-blue-600 text-white',
                         'roxa' => 'bg-purple-600 text-white',
                         'marrom' => 'bg-amber-900 text-white',

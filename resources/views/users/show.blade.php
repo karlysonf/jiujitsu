@@ -231,6 +231,18 @@
     .status-late { background: #FEE2E2; color: #991B1B; }
 
     .belt-bg-Branca { background: #f3f4f6; color: #1f2937; }
+    .belt-bg-Cinza { background: #94a3b8; color: #ffffff; }
+    .belt-bg-Cinza-Branca { background: linear-gradient(to bottom, #94a3b8 40%, #ffffff 40%, #ffffff 60%, #94a3b8 60%); color: #1f2937; border: 1px solid #94a3b8; }
+    .belt-bg-Cinza-Preta { background: linear-gradient(to bottom, #94a3b8 40%, #000000 40%, #000000 60%, #94a3b8 60%); color: #ffffff; }
+    .belt-bg-Amarela { background: #facc15; color: #854d0e; }
+    .belt-bg-Amarela-Branca { background: linear-gradient(to bottom, #facc15 40%, #ffffff 40%, #ffffff 60%, #facc15 60%); color: #854d0e; border: 1px solid #facc15; }
+    .belt-bg-Amarela-Preta { background: linear-gradient(to bottom, #facc15 40%, #000000 40%, #000000 60%, #facc15 60%); color: #ffffff; }
+    .belt-bg-Laranja { background: #fb923c; color: #7c2d12; }
+    .belt-bg-Laranja-Branca { background: linear-gradient(to bottom, #fb923c 40%, #ffffff 40%, #ffffff 60%, #fb923c 60%); color: #7c2d12; border: 1px solid #fb923c; }
+    .belt-bg-Laranja-Preta { background: linear-gradient(to bottom, #fb923c 40%, #000000 40%, #000000 60%, #fb923c 60%); color: #ffffff; }
+    .belt-bg-Verde { background: #22c55e; color: #ffffff; }
+    .belt-bg-Verde-Branca { background: linear-gradient(to bottom, #22c55e 40%, #ffffff 40%, #ffffff 60%, #22c55e 60%); color: #166534; border: 1px solid #22c55e; }
+    .belt-bg-Verde-Preta { background: linear-gradient(to bottom, #22c55e 40%, #000000 40%, #000000 60%, #22c55e 60%); color: #ffffff; }
     .belt-bg-Azul { background: #dbeafe; color: #1e40af; }
     .belt-bg-Roxa { background: #f3e8ff; color: #6b21a8; }
     .belt-bg-Marrom { background: #78350f; color: #ffffff; }
@@ -260,8 +272,8 @@
                     </span>
                 </div>
                 <div class="profile-meta">
-                    <div class="belt-badge belt-bg-{{ $user->faixa }}">
-                        <span class="belt-indicator" style="background: {{ strtolower($user->faixa) }}"></span>
+                    <div class="belt-badge belt-bg-{{ str_replace('/', '-', $user->faixa) }}">
+                        <span class="belt-indicator" style="background: {{ strtolower(explode('/', $user->faixa)[0]) }}"></span>
                         {{ $user->faixa }} - {{ $user->grau }}º Grau
                     </div>
                     <span>•</span>

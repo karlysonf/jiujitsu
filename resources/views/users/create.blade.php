@@ -460,7 +460,7 @@
                 <div class="form-group" style="margin-bottom: 1.25rem;">
                     <label>Faixa Atual</label>
                     <select name="faixa" class="form-control" required>
-                        @foreach(['Branca', 'Cinza', 'Amarela', 'Laranja', 'Verde', 'Azul', 'Roxa', 'Marrom', 'Preta'] as $belt)
+                        @foreach(['Branca', 'Cinza', 'Cinza/Branca', 'Cinza/Preta', 'Amarela', 'Amarela/Branca', 'Amarela/Preta', 'Laranja', 'Laranja/Branca', 'Laranja/Preta', 'Verde', 'Verde/Branca', 'Verde/Preta', 'Azul', 'Roxa', 'Marrom', 'Preta'] as $belt)
                         <option value="{{ $belt }}" {{ old('faixa', $user->faixa ?? '') == $belt ? 'selected' : '' }}>{{ $belt }}</option>
                         @endforeach
                     </select>
