@@ -63,6 +63,25 @@ class PortalAlunoController extends Controller
         return view('portal.payments', compact('user', 'payments'));
     }
 
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $user = auth()->user();
+
+        if ($user->photo && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->photo)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->photo);
+        }
+
+        $path = $request->file('photo')->store('users/photos', 'public');
+        
+        $user->update(['photo' => $path]);
+
+        return back()->with('success', 'Foto de perfil atualizada com sucesso!');
+    }
+
     public function changePassword(Request $request)
     {
         $request->validate([

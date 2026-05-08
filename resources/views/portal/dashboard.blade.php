@@ -40,15 +40,33 @@
 
         <!-- Saudação com Foto -->
         <div class="flex items-center gap-4 mb-6">
-            @if($user->photo)
-                <img src="{{ Storage::url($user->photo) }}" alt="Foto do perfil" class="w-16 h-16 rounded-full object-cover shadow-md border-2 border-white">
-            @else
-                <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl shadow-md border-2 border-white">
-                    <i class="fas fa-user"></i>
+            <form id="photo-form" action="{{ route('portal.update-photo') }}" method="POST" enctype="multipart/form-data" class="relative group cursor-pointer" onclick="document.getElementById('portal_photo_input').click()">
+                @csrf
+                <input type="file" id="portal_photo_input" name="photo" accept="image/jpg,image/jpeg,image/png,image/webp" class="hidden" onchange="document.getElementById('photo-form').submit()">
+                
+                @if($user->photo)
+                    <img src="{{ Storage::url($user->photo) }}" alt="Foto do perfil" class="w-16 h-16 rounded-full object-cover shadow-md border-2 border-white group-hover:opacity-75 transition">
+                @else
+                    <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl shadow-md border-2 border-white group-hover:bg-blue-200 transition">
+                        <i class="fas fa-user"></i>
+                    </div>
+                @endif
+                
+                <!-- Ícone de câmera no hover -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-30 rounded-full">
+                    <i class="fas fa-camera text-white text-sm"></i>
                 </div>
-            @endif
+            </form>
+
             <h1 class="text-2xl font-bold text-gray-900">Olá, {{ explode(' ', $user->name)[0] }}! 🥋</h1>
         </div>
+        
+        @error('photo')
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative flex items-center gap-3 mb-6" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span class="block sm:inline font-medium">{{ $message }}</span>
+            </div>
+        @enderror
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative flex items-center gap-3 mb-6" role="alert">
                 <i class="fas fa-check-circle"></i>
