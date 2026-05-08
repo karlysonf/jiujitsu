@@ -111,7 +111,7 @@
         </section>
 
         <!-- Right Side: Login Form -->
-        <section class="flex flex-col justify-center p-xl md:p-xl lg:p-margin bg-surface-container-lowest">
+        <section class="flex flex-col justify-center p-8 md:p-12 lg:p-16 bg-surface-container-lowest">
             <div class="max-w-[440px] mx-auto w-full">
                 <!-- Mobile Logo -->
                 <div class="md:hidden flex items-center gap-sm mb-lg">

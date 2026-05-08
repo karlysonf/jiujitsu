@@ -213,7 +213,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="w-full md:w-auto md:ml-[280px] flex-1 p-4 md:p-margin overflow-y-auto overflow-x-hidden">
+        <main class="w-full md:w-auto md:ml-[280px] flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto overflow-x-hidden">
             @yield('content')
         </main>
     </div>

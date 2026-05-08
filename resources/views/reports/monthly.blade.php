@@ -36,8 +36,8 @@
 
 <div class="card">
     <h3 style="margin-bottom: 1.5rem;">Detalhamento de Pagamentos</h3>
-    <div class="table-container" style="border: none;">
-        <table>
+    <div class="table-container" style="border: none; overflow-x: auto;">
+        <table style="min-width: 500px; width: 100%;">
             <thead>
                 <tr>
                     <th>Aluno</th>

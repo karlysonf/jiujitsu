@@ -3,13 +3,15 @@
 @section('content')
 <style>
     .card { max-width: 700px !important; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+    @media (min-width: 640px) {
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
     .section-title { font-size: 1rem; font-weight: 700; color: var(--primary); margin: 2rem 0 1rem; border-bottom: 1px solid #E5E7EB; padding-bottom: 0.5rem; }
     .section-title:first-of-type { margin-top: 0; }
     .checkbox-group { display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; background: #F9FAFB; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #E5E7EB; margin-bottom: 1rem; width: 100%; text-align: left; }
     .checkbox-row { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; width: 100%; text-align: left; }
     .hidden { display: none; }
-    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
 </style>
 
 <div style="text-align: center; margin-bottom: 2rem;">
@@ -29,7 +31,7 @@
 
     <div class="section-title">Dados Pessoais</div>
     <div class="grid-2">
-        <div class="form-group" style="grid-column: span 2;">
+        <div class="form-group sm:col-span-2">
             <label for="name">Nome Completo</label>
             <input name="name" id="name" type="text" value="{{ old('name') }}" required placeholder="Seu nome completo">
         </div>
@@ -54,11 +56,11 @@
                 <option value="Outro" {{ old('sexo') == 'Outro' ? 'selected' : '' }}>Outro</option>
             </select>
         </div>
-        <div class="form-group" style="grid-column: span 2;">
+        <div class="form-group sm:col-span-2">
             <label for="email">E-mail</label>
             <input name="email" id="email" type="email" value="{{ old('email') }}" required placeholder="seu@email.com">
         </div>
-        <div class="form-group" style="grid-column: span 2;">
+        <div class="form-group sm:col-span-2">
             <label for="endereco">Endereço Completo</label>
             <input name="endereco" id="endereco" type="text" value="{{ old('endereco') }}" required placeholder="Rua, número, bairro, cidade">
         </div>

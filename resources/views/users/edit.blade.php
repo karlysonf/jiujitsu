@@ -403,7 +403,7 @@
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1.8fr 1fr; gap: 1.5rem; align-items: start;">
+        <div class="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-6 items-start">
             <!-- Personal Data Section -->
             <div class="form-section">
                 <div class="section-header">
@@ -412,7 +412,7 @@
                 </div>
                 
                 <div class="form-grid">
-                    <div class="form-group full-width">
+                    <div class="form-group col-span-1 lg:col-span-2">
                         <label>Nome Completo</label>
                         <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" placeholder="Ex: Rodrigo Cavalcanti" required>
                     </div>
@@ -454,7 +454,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group full-width">
+                    <div class="form-group col-span-1 lg:col-span-2">
                         <label>Alterar Senha (deixe em branco para manter a atual)</label>
                         <input type="password" name="password" class="form-control" placeholder="Mínimo 8 caracteres">
                     </div>

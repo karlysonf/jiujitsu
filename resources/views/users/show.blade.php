@@ -11,18 +11,35 @@
         background: white;
         border: 1px solid #E2E8F0;
         border-radius: 1rem;
-        padding: 2rem;
+        padding: 1.5rem;
         margin-bottom: 2rem;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        gap: 1.5rem;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    @media (min-width: 1024px) {
+        .profile-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+        }
     }
 
     .profile-info {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 2rem;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    @media (min-width: 640px) {
+        .profile-info {
+            flex-direction: row;
+            text-align: left;
+            gap: 2rem;
+        }
     }
 
     .profile-avatar {
@@ -74,8 +91,13 @@
 
     .grid-layout {
         display: grid;
-        grid-template-columns: 1fr 2fr;
+        grid-template-columns: 1fr;
         gap: 1.5rem;
+    }
+    @media (min-width: 1024px) {
+        .grid-layout {
+            grid-template-columns: 1fr 2fr;
+        }
     }
 
     .info-card {
@@ -124,9 +146,14 @@
 
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
         margin-bottom: 1.5rem;
+    }
+    @media (min-width: 640px) {
+        .stats-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 
     .stat-box {

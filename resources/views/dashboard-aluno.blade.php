@@ -12,11 +12,26 @@
     .belt-brown { background: linear-gradient(90deg, #78350f 0%, #b45309 100%); }
     .belt-black { background: linear-gradient(90deg, #000000 0%, #374151 100%); }
     
+    /* Faixas com listras */
+    .belt-cinza-branca { background: linear-gradient(90deg, #9ca3af 50%, #ffffff 50%); border: 1px solid #d1d5db; }
+    .belt-cinza-preta { background: linear-gradient(90deg, #9ca3af 50%, #000000 50%); }
+    .belt-amarela-branca { background: linear-gradient(90deg, #facc15 50%, #ffffff 50%); border: 1px solid #d1d5db; }
+    .belt-amarela-preta { background: linear-gradient(90deg, #facc15 50%, #000000 50%); }
+    .belt-laranja-branca { background: linear-gradient(90deg, #fb923c 50%, #ffffff 50%); border: 1px solid #d1d5db; }
+    .belt-laranja-preta { background: linear-gradient(90deg, #fb923c 50%, #000000 50%); }
+    .belt-verde-branca { background: linear-gradient(90deg, #4ade80 50%, #ffffff 50%); border: 1px solid #d1d5db; }
+    .belt-verde-preta { background: linear-gradient(90deg, #4ade80 50%, #000000 50%); }
+    
     .belt-stripe { background: #ffffff; width: 8px; height: 100%; border-radius: 1px; }
     .bento-grid {
         display: grid;
-        grid-template-columns: repeat(12, 1fr);
+        grid-template-columns: 1fr;
         gap: 24px;
+    }
+    @media (min-width: 1024px) {
+        .bento-grid {
+            grid-template-columns: repeat(12, 1fr);
+        }
     }
 </style>
 
@@ -60,10 +75,15 @@
                 </div>
                 <div class="flex items-center gap-4 mb-8">
                     @php
-                        $beltClass = 'belt-' . strtolower(str_replace(['ã', 'á', 'à'], ['a', 'a', 'a'], $user->faixa ?? 'white'));
-                        if ($user->faixa == 'Branca') $beltClass = 'belt-white';
+                        $belt = $user->faixa ?? 'Branca';
+                        $beltSlug = str_replace(['/', ' '], ['-', '-'], strtolower(strtr(utf8_decode($belt), utf8_decode('áàâãéèêíïóôõöúçÑÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ'), 'aaaaeeeiiiooooucnAAAAEEEIIIOOOOUCN')));
+                        $beltClass = 'belt-' . $beltSlug;
+                        
+                        // Fallback cases for exact matches if needed
+                        if ($belt == 'Branca') $beltClass = 'belt-white';
+                        if ($belt == 'Cinza') $beltClass = 'belt-gray';
                     @endphp
-                    <div class="h-16 flex-1 {{ $beltClass }} rounded-lg flex items-center justify-end px-12 gap-3 shadow-inner relative overflow-hidden">
+                    <div class="h-16 flex-1 {{ $beltClass }} rounded-lg flex items-center justify-end px-12 gap-3 shadow-inner relative overflow-hidden border border-slate-200">
                         @for($i = 0; $i < ($user->grau ?? 0); $i++)
                             <div class="belt-stripe"></div>
                         @endfor

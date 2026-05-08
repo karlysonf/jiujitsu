@@ -62,7 +62,8 @@
 
     <!-- Students List -->
     <div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
-        <table class="w-full text-left border-collapse">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[600px] md:min-w-full">
             <thead>
                 <tr class="bg-surface-container-low border-b border-outline-variant">
                     <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Aluno</th>
@@ -156,7 +157,8 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="px-6 py-4 bg-surface-container-low flex items-center justify-between">
+    </div>
+    <div class="px-6 py-4 bg-surface-container-low flex items-center justify-between">
             <span class="text-label-sm font-label-sm text-on-surface-variant" id="showingText">Mostrando {{ $users->count() }} de {{ $users->count() }} alunos</span>
         </div>
     </div>
