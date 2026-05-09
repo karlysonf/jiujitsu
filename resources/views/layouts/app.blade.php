@@ -127,8 +127,12 @@
         </div>
         <div class="flex items-center gap-md">
             <div class="flex items-center gap-4">
-                <div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
-                    <img alt="Perfil do Instrutor" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkAM_pl4Pncb9GfmjqFvZ3mu_dvgjBsM1ZiTK8sqFuGaFX29F4xqLIVhUP_Ja23ia2crZ1UuuX1zzxSAyxY4JyPLBSvsV_rG-gU38e0GZ66PY1VkdFAGd7UImAkETMB_LLz4FHtioys3d4AWlk_Y1Q0Y5MVvsPqhA8gUrzJC0L1WSAhceTjGquhprsSnjD1OCJQKsJZ1lLZ2br8b5Ljd90LEY2qygH2qWyXKdUgFlFAYbuWAq6pTDIjWxv30Fg8v_fM8XkOttk4_mf"/>
+                <div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant bg-slate-100 flex items-center justify-center">
+                    @if(auth()->user()->photo)
+                        <img alt="Perfil" class="h-full w-full object-cover" src="{{ Storage::url(auth()->user()->photo) }}"/>
+                    @else
+                        <span class="material-symbols-outlined text-slate-400 text-sm">person</span>
+                    @endif
                 </div>
             </div>
         </div>

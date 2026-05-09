@@ -31,8 +31,12 @@
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 hover:shadow-md transition-all group">
             <div class="flex justify-between items-start mb-4">
                 <div class="flex items-center gap-3">
-                    <div class="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-600 text-lg">
-                        {{ strtoupper(substr($user->name, 0, 2)) }}
+                    <div class="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-600 text-lg overflow-hidden">
+                        @if($user->photo)
+                            <img src="{{ Storage::url($user->photo) }}" alt="{{ $user->name }}" class="h-full w-full object-cover">
+                        @else
+                            {{ strtoupper(substr($user->name, 0, 2)) }}
+                        @endif
                     </div>
                     <div>
                         <h3 class="font-label-bold text-slate-900">{{ $user->name }}</h3>
