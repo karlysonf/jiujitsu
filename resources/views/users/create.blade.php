@@ -443,7 +443,8 @@
                         <label>Tipo de Usuário</label>
                         <select name="user_role" class="form-control" required>
                             <option value="aluno" {{ old('user_role', $role ?? 'aluno') == 'aluno' ? 'selected' : '' }}>Aluno</option>
-                            <option value="professor" {{ old('user_role', $role ?? '') == 'professor' ? 'selected' : '' }}>Professor</option>
+                             <option value="professor" {{ old('user_role', $role ?? '') == 'professor' ? 'selected' : '' }}>Professor</option>
+                            <option value="instrutor" {{ old('user_role', $role ?? '') == 'instrutor' ? 'selected' : '' }}>Instrutor</option>
                             <option value="admin" {{ old('user_role', $role ?? '') == 'admin' ? 'selected' : '' }}>Administrador</option>
                         </select>
                     </div>

@@ -175,7 +175,7 @@
         </div>
 
         <!-- Card Financeiro (Oculto para Professores) -->
-        @if(!$user->hasRole('professor'))
+        @if(!$user->hasAnyRole(['professor', 'instrutor']))
         <div class="mt-8 bg-white rounded-xl shadow overflow-hidden border border-gray-100">
             <div class="bg-gray-50 p-4 border-b flex items-center gap-3">
                 <i class="fas fa-wallet text-gray-600 text-xl"></i>

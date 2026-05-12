@@ -450,6 +450,7 @@
                         <select name="user_role" class="form-control" required>
                             <option value="aluno" {{ old('user_role', $user->roles->first()->name ?? 'aluno') == 'aluno' ? 'selected' : '' }}>Aluno</option>
                             <option value="professor" {{ old('user_role', $user->roles->first()->name ?? 'aluno') == 'professor' ? 'selected' : '' }}>Professor</option>
+                            <option value="instrutor" {{ old('user_role', $user->roles->first()->name ?? 'aluno') == 'instrutor' ? 'selected' : '' }}>Instrutor</option>
                             <option value="admin" {{ old('user_role', $user->roles->first()->name ?? 'aluno') == 'admin' ? 'selected' : '' }}>Administrador</option>
                         </select>
                     </div>

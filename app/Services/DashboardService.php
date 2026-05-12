@@ -44,7 +44,7 @@ class DashboardService
         })->count();
 
         // User Metrics
-        $activeUsersCount = User::role(['aluno', 'professor'])->where('status', 'active')->count();
+        $activeUsersCount = User::role(['aluno', 'professor', 'instrutor'])->where('status', 'active')->count();
         
         // Simplified Attendance Rate (Classes attended / total possible classes - hypothetical 12/month)
         $avgAttendance = \App\Models\Attendance::whereMonth('date', now()->month)

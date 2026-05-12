@@ -12,7 +12,7 @@ class UserService
 {
     public function getAllUsers($search = null)
     {
-        return User::role(['aluno', 'professor', 'admin'])
+        return User::role(['aluno', 'professor', 'instrutor', 'admin'])
             ->with('plan')
             ->when($search, function ($query, $search) {
                 $query->where(function($q) use ($search) {
@@ -46,7 +46,7 @@ class UserService
                 abort(403, 'Você não tem permissão para atribuir o nível de administrador.');
             }
 
-            if ($roleName === 'professor') {
+            if ($roleName === 'professor' || $roleName === 'instrutor') {
                 $cortesia = \App\Models\Plan::where('name', 'Cortesia')->first();
                 if ($cortesia) {
                     $data['plan_id'] = $cortesia->id;
@@ -195,6 +195,6 @@ class UserService
 
     public function getActiveUsersCount()
     {
-        return User::role(['aluno', 'professor', 'admin'])->where('status', 'active')->count();
+        return User::role(['aluno', 'professor', 'instrutor', 'admin'])->where('status', 'active')->count();
     }
 }

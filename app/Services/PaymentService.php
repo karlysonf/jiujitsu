@@ -75,7 +75,7 @@ class PaymentService
 
     public function generateMonthlyBilling()
     {
-        $activeStudents = User::role(['aluno', 'professor'])->where('status', 'active')->get();
+        $activeStudents = User::role(['aluno', 'professor', 'instrutor'])->where('status', 'active')->get();
         $referenceMonth = now()->format('Y-m');
 
         foreach ($activeStudents as $student) {
@@ -120,7 +120,7 @@ class PaymentService
                 ->where('reference_month', $currentMonth)
                 ->count(),
             'late_payments' => Payment::overdue()->count(),
-            'total_active_students' => User::role(['aluno', 'professor'])->where('status', 'active')->count(),
+            'total_active_students' => User::role(['aluno', 'professor', 'instrutor'])->where('status', 'active')->count(),
         ];
     }
 }

@@ -36,12 +36,12 @@ class AppServiceProvider extends ServiceProvider
 
         // Dashboard access
         Gate::define('view-dashboard', function ($user) {
-            return $user->hasAnyRole(['admin', 'professor']);
+            return $user->hasAnyRole(['admin', 'professor', 'instrutor']);
         });
 
         // Users management
         Gate::define('manage-users', function ($user) {
-            return $user->hasAnyRole(['admin', 'professor']);
+            return $user->hasAnyRole(['admin', 'professor', 'instrutor']);
         });
 
         // Financial management
@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Attendance management
         Gate::define('manage-attendance', function ($user) {
-            return $user->hasAnyRole(['admin', 'professor']);
+            return $user->hasAnyRole(['admin', 'professor', 'instrutor']);
         });
 
         // Plans management

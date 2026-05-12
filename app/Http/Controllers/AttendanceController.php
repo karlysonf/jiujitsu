@@ -22,7 +22,7 @@ class AttendanceController extends Controller
         Gate::authorize('manage-attendance');
         $date = $request->date ?? now()->toDateString();
         $attendances = $this->attendanceService->getDailyAttendance($date);
-        $users = User::role(['aluno', 'professor'])->where('status', 'active')->orderBy('name')->get();
+        $users = User::role(['aluno', 'professor', 'instrutor'])->where('status', 'active')->orderBy('name')->get();
 
         return view('attendances.index', compact('attendances', 'users', 'date'));
     }

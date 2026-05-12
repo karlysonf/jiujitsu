@@ -8,7 +8,7 @@
         <div class="relative z-10 w-full md:w-2/3">
             <h1 class="font-display-xl text-3xl md:text-5xl text-white mb-2">Oss, Prof. {{ explode(' ', auth()->user()->name)[0] }}!</h1>
             <p class="font-body-lg text-sm md:text-base text-slate-300 max-w-md">
-                O tatame está pronto. Você tem {{ $graduation_candidates->count() }} alunos em destaque para graduação este mês e {{ $late_count }} pendências financeiras urgentes.
+                O tatame está pronto. Você tem {{ $late_count }} pendências financeiras urgentes.
             </p>
             <div class="mt-6 flex gap-4">
                 <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg px-4 py-2 flex items-center gap-2">

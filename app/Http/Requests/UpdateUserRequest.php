@@ -28,7 +28,7 @@ class UpdateUserRequest extends FormRequest
             'plan_id' => 'required|exists:plans,id',
             'password' => ['nullable', 'string', Password::min(8)->letters()->numbers()],
             'status' => 'required|string|in:active,inactive',
-            'user_role' => 'nullable|string|in:aluno,professor,admin',
+            'user_role' => 'nullable|string|in:aluno,professor,instrutor,admin',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
     }
