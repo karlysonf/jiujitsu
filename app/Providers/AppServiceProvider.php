@@ -40,8 +40,21 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Users management
-        Gate::define('manage-users', function ($user) {
-            return $user->hasAnyRole(['admin', 'professor', 'instrutor']);
+        Gate::define('manage-users', function ($user, $targetUser = null) {
+            if ($user->hasAnyRole(['admin', 'root'])) {
+                return true;
+            }
+
+            if ($user->hasAnyRole(['professor', 'instrutor'])) {
+                // Se houver um usuário alvo, só permite se o alvo for aluno
+                if ($targetUser instanceof \App\Models\User) {
+                    return $targetUser->hasRole('aluno');
+                }
+                // Se não houver alvo (index/create), permite o acesso à listagem/formulário
+                return true;
+            }
+
+            return false;
         });
 
         // Financial management

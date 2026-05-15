@@ -46,7 +46,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        Gate::authorize('manage-users');
+        Gate::authorize('manage-users', $user);
         $user->load(['payments', 'attendances', 'plan']);
 
         return view('users.show', compact('user'));
@@ -54,7 +54,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        Gate::authorize('manage-users');
+        Gate::authorize('manage-users', $user);
         $plans = Plan::orderBy('name')->get();
 
         return view('users.edit', compact('user', 'plans'));
@@ -62,7 +62,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        Gate::authorize('manage-users');
+        Gate::authorize('manage-users', $user);
         $this->userService->updateUser($user, $request->validated());
 
         return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso!');

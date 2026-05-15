@@ -4,3 +4,4 @@
 /public/build
 /storage/logs
 /bootstrap/cache/*.php
+.DS_Store
