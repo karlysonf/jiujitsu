@@ -20,7 +20,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'authenticate'])->name('login.post');
+Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:5,1')->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -34,7 +34,7 @@ Route::post('/reset-password', [\App\Http\Controllers\PasswordResetController::c
 // Portal do Aluno
 Route::group(['prefix' => 'portal', 'as' => 'portal.'], function () {
     Route::get('/login', [\App\Http\Controllers\PortalLoginController::class, 'showLoginForm'])->middleware('guest')->name('login');
-    Route::post('/login', [\App\Http\Controllers\PortalLoginController::class, 'login'])->middleware('guest')->name('login.post');
+    Route::post('/login', [\App\Http\Controllers\PortalLoginController::class, 'login'])->middleware('guest', 'throttle:5,1')->name('login.post');
 
     // Recuperação de Senha do Aluno
     Route::get('/forgot-password', [\App\Http\Controllers\PortalPasswordResetController::class, 'create'])->middleware('guest')->name('password.request');

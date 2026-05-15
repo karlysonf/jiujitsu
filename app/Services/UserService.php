@@ -42,8 +42,10 @@ class UserService
 
             $roleName = $data['user_role'] ?? 'aluno';
 
-            if ($roleName === 'admin' && (!auth()->check() || !auth()->user()->hasAnyRole(['root', 'admin']))) {
-                abort(403, 'Você não tem permissão para atribuir o nível de administrador.');
+            // Segurança: Apenas root/admin podem atribuir papéis privilegiados
+            $privilegedRoles = ['admin', 'root'];
+            if (in_array($roleName, $privilegedRoles) && (!auth()->check() || !auth()->user()->hasAnyRole(['root', 'admin']))) {
+                abort(403, 'Você não tem permissão para atribuir papéis administrativos.');
             }
 
             if ($roleName === 'professor' || $roleName === 'instrutor') {
@@ -174,8 +176,10 @@ class UserService
             $user->update($userData);
 
             if (isset($data['user_role'])) {
-                if ($data['user_role'] === 'admin' && (!auth()->check() || !auth()->user()->hasAnyRole(['root', 'admin']))) {
-                    abort(403, 'Você não tem permissão para atribuir o nível de administrador.');
+                // Segurança: Impede que um usuário sem privilégios promova alguém a admin ou root
+                $privilegedRoles = ['admin', 'root'];
+                if (in_array($data['user_role'], $privilegedRoles) && (!auth()->check() || !auth()->user()->hasAnyRole(['root', 'admin']))) {
+                    abort(403, 'Você não tem permissão para atribuir papéis administrativos.');
                 }
                 $user->syncRoles([$data['user_role']]);
             }

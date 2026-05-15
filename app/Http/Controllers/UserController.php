@@ -70,6 +70,11 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        // Proteção Crítica: Ninguém pode deletar o usuário Root, exceto o próprio Root (opcional) ou barramento total
+        if ($user->hasRole('root')) {
+            abort(403, 'O usuário superadministrador não pode ser excluído.');
+        }
+
         abort_unless(auth()->user()->hasAnyRole(['root', 'admin']), 403, 'Ação não autorizada.');
 
         $this->userService->deleteUser($user);
