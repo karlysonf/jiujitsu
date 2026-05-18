@@ -50,12 +50,18 @@
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
             <input id="studentSearch" class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded focus:border-tertiary-container focus:ring-2 focus:ring-tertiary-container/20 outline-none transition-all font-body-md text-body-md" placeholder="Buscar aluno pelo nome..." type="text"/>
         </div>
-        <div class="flex items-center gap-2">
-            <span class="text-label-bold font-label-bold text-on-surface mr-2">Status:</span>
-            <div class="inline-flex rounded-lg border border-outline-variant p-1 bg-surface-container-low" id="statusFilters">
-                <button data-status="all" class="filter-btn px-4 py-1.5 rounded bg-white shadow-sm text-label-bold font-label-bold text-primary">Todos</button>
-                <button data-status="present" class="filter-btn px-4 py-1.5 rounded text-label-bold font-label-bold text-on-surface-variant hover:bg-white/50 transition-colors">Presente</button>
-                <button data-status="absent" class="filter-btn px-4 py-1.5 rounded text-label-bold font-label-bold text-on-surface-variant hover:bg-white/50 transition-colors">Ausente</button>
+        <div class="flex items-center gap-4 flex-wrap">
+            <div class="flex items-center gap-2">
+                <span class="text-label-bold font-label-bold text-on-surface">Data da Aula:</span>
+                <input type="date" id="attendanceDate" value="{{ $date }}" class="px-3 py-1.5 rounded border border-outline-variant bg-surface-container-low focus:border-tertiary-container focus:ring-2 focus:ring-tertiary-container/20 outline-none transition-all font-body-md text-body-md text-primary cursor-pointer" onchange="window.location.href = '{{ route('attendances.index') }}?date=' + this.value">
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-label-bold font-label-bold text-on-surface">Status:</span>
+                <div class="inline-flex rounded-lg border border-outline-variant p-1 bg-surface-container-low" id="statusFilters">
+                    <button data-status="all" class="filter-btn px-4 py-1.5 rounded bg-white shadow-sm text-label-bold font-label-bold text-primary">Todos</button>
+                    <button data-status="present" class="filter-btn px-4 py-1.5 rounded text-label-bold font-label-bold text-on-surface-variant hover:bg-white/50 transition-colors">Presente</button>
+                    <button data-status="absent" class="filter-btn px-4 py-1.5 rounded text-label-bold font-label-bold text-on-surface-variant hover:bg-white/50 transition-colors">Ausente</button>
+                </div>
             </div>
         </div>
     </div>
