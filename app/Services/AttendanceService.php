@@ -9,9 +9,10 @@ class AttendanceService
 {
     public function recordAttendance(int $userId, $date = null)
     {
-        return Attendance::create([
+        $date = $date ?? now()->toDateString();
+        return Attendance::firstOrCreate([
             'user_id' => $userId,
-            'date' => $date ?? now()->toDateString(),
+            'date' => $date,
         ]);
     }
 
