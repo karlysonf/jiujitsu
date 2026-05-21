@@ -26,7 +26,7 @@
                 </div>
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="email">E-mail</label>
-                    <input name="email" id="email" type="email" value="{{ old('email') }}" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-black">
+                    <input name="email" id="email" type="email" value="{{ old('email') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-black">
                 </div>
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="sexo">Sexo</label>
