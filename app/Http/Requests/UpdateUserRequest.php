@@ -18,7 +18,7 @@ class UpdateUserRequest extends FormRequest
 
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $userId,
+            'email' => 'nullable|string|email|max:255|unique:users,email,' . $userId,
             'cpf' => 'required|string|unique:users,cpf,' . $userId,
             'telefone' => 'nullable|string',
             'data_nascimento' => 'nullable|date',
@@ -37,7 +37,6 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name.required' => 'O nome é obrigatório.',
-            'email.required' => 'O e-mail é obrigatório.',
             'email.unique' => 'Este e-mail já está em uso.',
             'cpf.required' => 'O CPF é obrigatório.',
             'cpf.unique' => 'Este CPF já está cadastrado.',
