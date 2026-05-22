@@ -380,7 +380,7 @@
 
                 <div class="avatar-placeholder" id="avatar_preview" onclick="document.getElementById('photo_input').click()" style="cursor:pointer;" title="Clique para selecionar uma foto">
                     @if($user->photo)
-                        <img src="{{ Storage::url($user->photo) }}" id="preview_img" alt="Foto do aluno" style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;">
+                        <img src="{{ Storage::disk('public')->url($user->photo) }}" id="preview_img" alt="Foto do aluno" style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem;">
                     @else
                         <i class="fas fa-user" id="preview_icon"></i>
                         <img id="preview_img" src="" alt="Preview" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:0.75rem;">

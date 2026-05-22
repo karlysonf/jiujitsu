@@ -129,7 +129,7 @@
             <div class="flex items-center gap-4">
                 <div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant bg-slate-100 flex items-center justify-center">
                     @if(auth()->user()->photo)
-                        <img alt="Perfil" class="h-full w-full object-cover" src="{{ Storage::url(auth()->user()->photo) }}"/>
+                        <img alt="Perfil" class="h-full w-full object-cover" src="{{ Storage::disk('public')->url(auth()->user()->photo) }}"/>
                     @else
                         <span class="material-symbols-outlined text-slate-400 text-sm">person</span>
                     @endif

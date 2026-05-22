@@ -290,7 +290,7 @@
         <div class="profile-info">
             <div class="profile-avatar">
                 @if($user->photo)
-                    <img src="{{ Storage::url($user->photo) }}" alt="{{ $user->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    <img src="{{ Storage::disk('public')->url($user->photo) }}" alt="{{ $user->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 @else
                     <i class="fas fa-user-ninja"></i>
                 @endif

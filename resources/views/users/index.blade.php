@@ -33,7 +33,7 @@
                 <div class="flex items-center gap-3">
                     <div class="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-600 text-lg overflow-hidden">
                         @if($user->photo)
-                            <img src="{{ Storage::url($user->photo) }}" alt="{{ $user->name }}" class="h-full w-full object-cover">
+                            <img src="{{ Storage::disk('public')->url($user->photo) }}" alt="{{ $user->name }}" class="h-full w-full object-cover">
                         @else
                             {{ strtoupper(substr($user->name, 0, 2)) }}
                         @endif

@@ -45,7 +45,7 @@
                 <input type="file" id="portal_photo_input" name="photo" accept="image/jpg,image/jpeg,image/png,image/webp" class="hidden" onchange="document.getElementById('photo-form').submit()">
                 
                 @if($user->photo)
-                    <img src="{{ Storage::url($user->photo) }}" alt="Foto do perfil" class="w-16 h-16 rounded-full object-cover shadow-md border-2 border-white group-hover:opacity-75 transition">
+                    <img src="{{ Storage::disk('public')->url($user->photo) }}" alt="Foto do perfil" class="w-16 h-16 rounded-full object-cover shadow-md border-2 border-white group-hover:opacity-75 transition">
                 @else
                     <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl shadow-md border-2 border-white group-hover:bg-blue-200 transition">
                         <i class="fas fa-user"></i>
