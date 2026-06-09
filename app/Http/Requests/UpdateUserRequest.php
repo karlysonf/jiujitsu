@@ -26,6 +26,7 @@ class UpdateUserRequest extends FormRequest
             'grau' => 'required|integer|min:0|max:4',
             'start_date' => 'required|date',
             'plan_id' => 'required|exists:plans,id',
+            'custom_price' => 'nullable|numeric|min:0',
             'password' => ['nullable', 'string', Password::min(8)->letters()->numbers()],
             'status' => 'required|string|in:active,inactive',
             'user_role' => 'nullable|string|in:aluno,professor,instrutor,admin',

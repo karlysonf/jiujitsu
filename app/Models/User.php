@@ -53,6 +53,7 @@ class User extends Authenticatable
         'status',
         'user_status',
         'photo',
+        'custom_price',
     ];
 
     /**

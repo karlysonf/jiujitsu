@@ -46,7 +46,11 @@
                 <div class="relative z-10 flex flex-col md:flex-row md:items-center gap-8">
                     <div class="relative">
                         <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-50 ring-2 ring-blue-600">
-                            <img class="w-full h-full object-cover" src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=0D8ABC&color=fff&size=128" alt="{{ $user->name }}">
+                            @if($user->photo)
+                                <img class="w-full h-full object-cover" src="{{ Storage::disk('public')->url($user->photo) }}" alt="{{ $user->name }}">
+                            @else
+                                <img class="w-full h-full object-cover" src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=0D8ABC&color=fff&size=128" alt="{{ $user->name }}">
+                            @endif
                         </div>
                     </div>
                     <div>

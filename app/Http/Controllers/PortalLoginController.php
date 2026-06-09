@@ -14,18 +14,24 @@ class PortalLoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
+        $request->validate([
+            'cpf' => ['required', 'string'],
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $cpf = preg_replace('/[^0-9]/', '', $request->input('cpf'));
+        $password = $request->input('password');
+
+        $user = \App\Models\User::where('cpf', $cpf)->first();
+
+        if ($user && \Illuminate\Support\Facades\Hash::check($password, $user->password)) {
+            Auth::login($user);
             $request->session()->regenerate();
             return redirect()->route('portal.dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'As credenciais fornecidas (E-mail/Senha) estão incorretas.',
-        ])->onlyInput('email');
+            'cpf' => 'As credenciais fornecidas (CPF/Senha) estão incorretas.',
+        ])->onlyInput('cpf');
     }
 }

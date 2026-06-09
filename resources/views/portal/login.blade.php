@@ -2,7 +2,7 @@
 @section('content')
 <div style="text-align: center; margin-bottom: 2rem;">
     <h1 style="font-size: 1.5rem; font-weight: 700; color: #1e40af;">Portal do Aluno</h1>
-    <p style="color: var(--text-muted); margin-top: 0.5rem;">Acesse sua área restrita informando seu E-mail.</p>
+    <p style="color: var(--text-muted); margin-top: 0.5rem;">Acesse sua área restrita informando seu CPF.</p>
 </div>
 
 <form action="{{ route('portal.login.post') }}" method="POST">
@@ -16,8 +16,8 @@
     @endif
 
     <div class="form-group" style="margin-bottom: 1.5rem;">
-        <label for="email" style="display: block; font-weight: 600; margin-bottom: 0.5rem;">E-mail</label>
-        <input name="email" id="email" type="email" placeholder="Digite aqui..." required autofocus style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem;">
+        <label for="cpf" style="display: block; font-weight: 600; margin-bottom: 0.5rem;">CPF</label>
+        <input name="cpf" id="cpf" type="text" placeholder="000.000.000-00" required autofocus style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem;">
     </div>
 
     <div class="form-group" style="margin-bottom: 1.5rem;">

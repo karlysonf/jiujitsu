@@ -14,7 +14,7 @@ class PlanSeeder extends Seeder
     {
         Plan::firstOrCreate(
             ['name' => 'Plano Padrão'],
-            ['price' => 65.00]
+            ['price' => 75.00]
         );
 
         Plan::firstOrCreate(

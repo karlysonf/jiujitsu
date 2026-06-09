@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-[1600px] mx-auto">
+<div class="max-w-[1600px] mx-auto pb-24">
     <!-- Header Section -->
     <div class="mb-10">
         <h1 class="font-headline-lg text-headline-lg text-primary mb-2">Controle de Presença</h1>
@@ -67,107 +67,103 @@
     </div>
 
     <!-- Students List -->
-    <div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse min-w-[600px] md:min-w-full">
-            <thead>
-                <tr class="bg-surface-container-low border-b border-outline-variant">
-                    <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Aluno</th>
-                    <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Graduação</th>
-                    <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider text-right">Ações</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-outline-variant" id="attendanceTableBody">
-                @foreach($users as $user)
-                    @php
-                        $hasAttended = $attendances->where('user_id', $user->id)->isNotEmpty();
-                        $beltColor = match(strtolower($user->faixa)) {
-                            'branca' => 'bg-slate-200',
-                            'cinza' => 'bg-slate-400',
-                            'cinza/branca' => 'bg-slate-300',
-                            'cinza/preta' => 'bg-slate-600',
-                            'amarela' => 'bg-yellow-400',
-                            'amarela/branca' => 'bg-yellow-200',
-                            'amarela/preta' => 'bg-yellow-600',
-                            'laranja' => 'bg-orange-400',
-                            'laranja/branca' => 'bg-orange-200',
-                            'laranja/preta' => 'bg-orange-600',
-                            'verde' => 'bg-green-500',
-                            'verde/branca' => 'bg-green-200',
-                            'verde/preta' => 'bg-green-700',
-                            'azul' => 'bg-blue-600',
-                            'roxa' => 'bg-purple-600',
-                            'marrom' => 'bg-amber-800',
-                            'preta' => 'bg-slate-900',
-                            default => 'bg-slate-400'
-                        };
-                    @endphp
-                    <tr class="hover:bg-slate-50 transition-colors group attendance-row" data-name="{{ strtolower($user->name) }}" data-present="{{ $hasAttended ? 'true' : 'false' }}">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-outline overflow-hidden">
-                                    @if($user->avatar_url)
-                                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
-                                    @else
-                                        <span class="material-symbols-outlined text-3xl">person</span>
-                                    @endif
-                                </div>
-                                <div>
-                                    <div class="font-label-bold text-label-bold text-primary">{{ $user->name }}</div>
-                                    <div class="text-label-sm font-label-sm text-on-surface-variant">Ult. aula: {{ $user->attendances->first()?->date?->diffForHumans() ?? 'Nenhuma registrada' }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <div class="h-2 w-16 bg-surface-container rounded-full overflow-hidden">
-                                    <div class="h-full {{ $beltColor }}" style="width: 100%"></div>
-                                </div>
-                                <span class="text-label-sm font-label-sm text-on-surface-variant">Faixa {{ $user->faixa }}</span>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            @if($hasAttended)
-                                <span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-label-sm font-label-bold">Confirmado</span>
-                            @else
-                                <span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-label-bold">Ausente</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <div class="flex items-center justify-end gap-3 {{ $hasAttended ? '' : 'opacity-0 group-hover:opacity-100' }} transition-opacity">
-                                @if($hasAttended)
-                                    <form action="{{ route('attendances.destroy') }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <input type="hidden" name="user_id" value="{{ $user->id }}">
-                                        <input type="hidden" name="date" value="{{ $date }}">
-                                        <button type="submit" class="border border-error text-error px-4 py-2 rounded font-label-bold text-label-bold hover:bg-error-container/20 transition-colors active:opacity-80">
-                                            Retirar Presença
-                                        </button>
-                                    </form>
-                                @else
-                                    <form action="{{ route('attendances.store') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="user_id" value="{{ $user->id }}">
-                                        <input type="hidden" name="date" value="{{ $date }}">
-                                        <button type="submit" class="bg-primary text-on-primary px-4 py-2 rounded font-label-bold text-label-bold flex items-center gap-2 hover:scale-95 transition-transform active:opacity-80">
-                                            <span class="material-symbols-outlined text-[18px]">check</span>
-                                            Confirmar Presença
-                                        </button>
-                                    </form>
-                                @endif
-                            </div>
-                        </td>
+    <form action="{{ route('attendances.bulk') }}" method="POST" id="attendanceForm">
+        @csrf
+        <input type="hidden" name="date" value="{{ $date }}">
+        <div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm mb-6">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[600px] md:min-w-full">
+                <thead>
+                    <tr class="bg-surface-container-low border-b border-outline-variant">
+                        <th class="px-6 py-4 w-16 text-center">
+                            <input type="checkbox" id="selectAll" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer">
+                        </th>
+                        <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Aluno</th>
+                        <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Graduação</th>
+                        <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Status</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    <div class="px-6 py-4 bg-surface-container-low flex items-center justify-between">
-            <span class="text-label-sm font-label-sm text-on-surface-variant" id="showingText">Mostrando {{ $users->count() }} de {{ $users->count() }} alunos</span>
+                </thead>
+                <tbody class="divide-y divide-outline-variant" id="attendanceTableBody">
+                    @foreach($users as $user)
+                        @php
+                            $hasAttended = $attendances->where('user_id', $user->id)->isNotEmpty();
+                            $beltColor = match(strtolower($user->faixa)) {
+                                'branca' => 'bg-slate-200',
+                                'cinza' => 'bg-slate-400',
+                                'cinza/branca' => 'bg-slate-300',
+                                'cinza/preta' => 'bg-slate-600',
+                                'amarela' => 'bg-yellow-400',
+                                'amarela/branca' => 'bg-yellow-200',
+                                'amarela/preta' => 'bg-yellow-600',
+                                'laranja' => 'bg-orange-400',
+                                'laranja/branca' => 'bg-orange-200',
+                                'laranja/preta' => 'bg-orange-600',
+                                'verde' => 'bg-green-500',
+                                'verde/branca' => 'bg-green-200',
+                                'verde/preta' => 'bg-green-700',
+                                'azul' => 'bg-blue-600',
+                                'roxa' => 'bg-purple-600',
+                                'marrom' => 'bg-amber-800',
+                                'preta' => 'bg-slate-900',
+                                default => 'bg-slate-400'
+                            };
+                        @endphp
+                        <tr class="hover:bg-slate-50 transition-colors group attendance-row" data-name="{{ strtolower($user->name) }}" data-present="{{ $hasAttended ? 'true' : 'false' }}">
+                            <td class="px-6 py-4 text-center">
+                                <input type="checkbox" name="present_users[]" value="{{ $user->id }}" {{ $hasAttended ? 'checked' : '' }} class="student-checkbox w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer">
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-outline overflow-hidden">
+                                        @if($user->avatar_url)
+                                            <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                                        @else
+                                            <span class="material-symbols-outlined text-3xl">person</span>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <div class="font-label-bold text-label-bold text-primary">{{ $user->name }}</div>
+                                        <div class="text-label-sm font-label-sm text-on-surface-variant">Ult. aula: {{ $user->attendances->first()?->date?->diffForHumans() ?? 'Nenhuma registrada' }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 w-16 bg-surface-container rounded-full overflow-hidden">
+                                        <div class="h-full {{ $beltColor }}" style="width: 100%"></div>
+                                    </div>
+                                    <span class="text-label-sm font-label-sm text-on-surface-variant">Faixa {{ $user->faixa }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 status-cell">
+                                <span class="status-badge px-3 py-1 rounded-full text-label-sm font-label-bold transition-all duration-200 {{ $hasAttended ? 'bg-secondary-container text-on-secondary-container' : 'bg-error-container text-on-error-container' }}">
+                                    {{ $hasAttended ? 'Confirmado' : 'Ausente' }}
+                                </span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-4 bg-surface-container-low flex items-center justify-between">
+                <span class="text-label-sm font-label-sm text-on-surface-variant" id="showingText">Mostrando {{ $users->count() }} de {{ $users->count() }} alunos</span>
+            </div>
         </div>
-    </div>
+
+        <!-- Sticky Bottom Bar for bulk actions -->
+        <div class="sticky bottom-4 bg-white dark:bg-slate-900 border border-outline-variant py-4 px-6 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] z-20 mt-6 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary text-[24px]">checklist</span>
+                <span class="text-body-md text-primary font-label-bold" id="selectedCountText">
+                    0 de {{ $users->count() }} presenças marcadas
+                </span>
+            </div>
+            <button type="submit" class="w-full sm:w-auto bg-primary text-on-primary px-8 py-3.5 rounded-xl font-label-bold text-label-bold flex items-center justify-center gap-2 hover:scale-[0.98] transition-transform shadow-md active:opacity-90">
+                <span class="material-symbols-outlined text-[20px]">save</span>
+                Validar Presenças
+            </button>
+        </div>
+    </form>
 </div>
 
 <script>
@@ -176,6 +172,7 @@
         const filterButtons = document.querySelectorAll('.filter-btn');
         const rows = document.querySelectorAll('.attendance-row');
         const showingText = document.getElementById('showingText');
+        const selectAll = document.getElementById('selectAll');
 
         let currentStatus = 'all';
         let currentSearch = '';
@@ -201,6 +198,14 @@
             showingText.textContent = `Mostrando ${visibleCount} de ${rows.length} alunos`;
         }
 
+        function updateSelectedCount() {
+            const totalChecked = document.querySelectorAll('.student-checkbox:checked').length;
+            const countText = document.getElementById('selectedCountText');
+            if (countText) {
+                countText.textContent = `${totalChecked} de ${rows.length} presenças marcadas`;
+            }
+        }
+
         searchInput.addEventListener('input', (e) => {
             currentSearch = e.target.value;
             updateFilters();
@@ -219,6 +224,45 @@
                 updateFilters();
             });
         });
+
+        // Checkbox toggle logic
+        rows.forEach(row => {
+            const checkbox = row.querySelector('.student-checkbox');
+            const statusBadge = row.querySelector('.status-badge');
+            if (checkbox && statusBadge) {
+                checkbox.addEventListener('change', function() {
+                    row.setAttribute('data-present', this.checked ? 'true' : 'false');
+                    
+                    if (this.checked) {
+                        statusBadge.textContent = 'Confirmado';
+                        statusBadge.className = 'status-badge px-3 py-1 rounded-full text-label-sm font-label-bold bg-secondary-container text-on-secondary-container';
+                    } else {
+                        statusBadge.textContent = 'Ausente';
+                        statusBadge.className = 'status-badge px-3 py-1 rounded-full text-label-sm font-label-bold bg-error-container text-on-error-container';
+                    }
+                    
+                    updateSelectedCount();
+                });
+            }
+        });
+
+        // Select all logic for visible rows
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                rows.forEach(row => {
+                    if (row.style.display !== 'none') {
+                        const checkbox = row.querySelector('.student-checkbox');
+                        if (checkbox && checkbox.checked !== selectAll.checked) {
+                            checkbox.checked = selectAll.checked;
+                            checkbox.dispatchEvent(new Event('change'));
+                        }
+                    }
+                });
+            });
+        }
+
+        // Initialize count
+        updateSelectedCount();
     });
 </script>
 @endsection

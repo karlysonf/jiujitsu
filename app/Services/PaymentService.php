@@ -98,7 +98,7 @@ class PaymentService
                             'reference_month' => $referenceMonth,
                         ],
                         [
-                            'amount' => $student->plan ? $student->plan->price : 150.00,
+                            'amount' => $student->custom_price ?? ($student->plan ? $student->plan->price : 150.00),
                             'due_date' => $dueDate,
                             'status' => 'pending',
                         ]

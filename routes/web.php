@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['can:manage-attendance'])->group(function () {
         Route::get('/attendances', [AttendanceController::class, 'index'])->name('attendances.index');
         Route::post('/attendances', [AttendanceController::class, 'store'])->name('attendances.store');
+        Route::post('/attendances/bulk', [AttendanceController::class, 'bulkStore'])->name('attendances.bulk');
         Route::delete('/attendances', [AttendanceController::class, 'destroy'])->name('attendances.destroy');
     });
 

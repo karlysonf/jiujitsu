@@ -514,6 +514,20 @@
                 </label>
                 @endforeach
             </div>
+
+            <div class="form-group mt-6">
+                <label style="display: block; font-size: 0.8125rem; font-weight: 600; color: #64748B; margin-bottom: 0.5rem;">Valor Personalizado da Mensalidade (opcional)</label>
+                <div style="position: relative; max-width: 300px;">
+                    <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-weight: 600; color: #64748B;">R$</span>
+                    <input type="number" step="0.01" min="0" name="custom_price" class="form-control" style="padding-left: 2.5rem;" value="{{ old('custom_price', $user->custom_price ?? '') }}" placeholder="Ex: 60,00">
+                </div>
+                <p style="font-size: 0.75rem; color: #64748B; margin-top: 0.375rem; line-height: 1.4;">
+                    Deixe em branco para usar o valor padrão do plano selecionado. Preencha caso este aluno tenha um desconto ou valor diferenciado acordado.
+                </p>
+                @error('custom_price')
+                    <p style="color:#EF4444;font-size:0.8125rem;margin-top:0.5rem;"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+                @enderror
+            </div>
         </div>
 
         <div class="footer-help">

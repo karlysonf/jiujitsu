@@ -89,15 +89,10 @@ class AuthController extends Controller
         $identity = $request->input('login_identity');
         $password = $request->input('password');
 
-        // Detecta se é e-mail ou CPF
-        $field = filter_var($identity, FILTER_VALIDATE_EMAIL) ? 'email' : 'cpf';
-
         // Remove formatação do CPF para buscar no banco
-        if ($field === 'cpf') {
-            $identity = preg_replace('/[^0-9]/', '', $identity);
-        }
+        $identity = preg_replace('/[^0-9]/', '', $identity);
 
-        $user = User::where($field, $identity)->first();
+        $user = User::where('cpf', $identity)->first();
 
         if ($user && Hash::check($password, $user->password)) {
             Auth::login($user);

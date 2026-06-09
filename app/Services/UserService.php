@@ -75,6 +75,7 @@ class UserService
                 'status' => $data['status'] ?? 'active',
                 'user_status' => isset($data['status']) && $data['status'] === 'active' ? 1 : 0,
                 'plan_id' => $data['plan_id'] ?? null,
+                'custom_price' => $data['custom_price'] ?? null,
                 'start_date' => $data['start_date'] ?? now(),
                 'emergency_contact_name' => $data['emergency_contact_name'] ?? null,
                 'emergency_contact_phone' => $data['emergency_contact_phone'] ?? null,
@@ -104,7 +105,7 @@ class UserService
             if ($user->status === 'active' && (!$user->plan || $user->plan->name !== 'Cortesia')) {
                 \App\Models\Payment::create([
                     'user_id' => $user->id,
-                    'amount' => $user->plan ? $user->plan->price : 150.00,
+                    'amount' => $user->custom_price ?? ($user->plan ? $user->plan->price : 150.00),
                     'due_date' => $firstDueDate,
                     'status' => 'pending',
                     'reference_month' => $firstDueDate->format('Y-m'),
@@ -155,6 +156,7 @@ class UserService
                 'faixa' => $data['faixa'] ?? $user->faixa,
                 'grau' => $data['grau'] ?? $user->grau,
                 'plan_id' => $data['plan_id'] ?? $user->plan_id,
+                'custom_price' => array_key_exists('custom_price', $data) ? $data['custom_price'] : $user->custom_price,
                 'start_date' => $data['start_date'] ?? $user->start_date,
                 'emergency_contact_name' => $data['emergency_contact_name'] ?? $user->emergency_contact_name,
                 'emergency_contact_phone' => $data['emergency_contact_phone'] ?? $user->emergency_contact_phone,

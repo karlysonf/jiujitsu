@@ -52,4 +52,32 @@ class AttendanceController extends Controller
 
         return redirect()->back()->with('success', 'Presença removida com sucesso!');
     }
+
+    public function bulkStore(Request $request)
+    {
+        Gate::authorize('manage-attendance');
+        $request->validate([
+            'date' => 'required|date',
+            'present_users' => 'nullable|array',
+            'present_users.*' => 'exists:users,id',
+        ]);
+
+        $date = $request->date;
+        $presentUsers = $request->input('present_users', []);
+
+        $activeUserIds = User::role(['aluno', 'professor', 'instrutor'])
+            ->where('status', 'active')
+            ->pluck('id')
+            ->toArray();
+
+        foreach ($activeUserIds as $userId) {
+            if (in_array($userId, $presentUsers)) {
+                $this->attendanceService->recordAttendance($userId, $date);
+            } else {
+                $this->attendanceService->removeAttendance($userId, $date);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Presenças atualizadas com sucesso!');
+    }
 }

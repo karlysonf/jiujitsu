@@ -371,7 +371,7 @@
                 </div>
                 <div class="data-row">
                     <span class="data-label">Valor Mensal</span>
-                    <span class="data-value">R$ {{ number_format($user->plan ? $user->plan->price : 0, 2, ',', '.') }}</span>
+                    <span class="data-value">R$ {{ number_format($user->custom_price ?? ($user->plan ? $user->plan->price : 0), 2, ',', '.') }}</span>
                 </div>
                 <div class="data-row">
                     <span class="data-label">Dia do Vencimento</span>
