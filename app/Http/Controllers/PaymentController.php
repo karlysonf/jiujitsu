@@ -46,6 +46,7 @@ class PaymentController extends Controller
         Gate::authorize('manage-finance');
         $data = $request->validate([
             'user_id' => 'required|exists:users,id',
+            'payment_id' => 'nullable|exists:payments,id',
             'amount' => 'required|numeric',
             'due_date' => 'required|date',
             'payment_date' => 'nullable|date',
@@ -66,6 +67,28 @@ class PaymentController extends Controller
             Log::error("Erro ao registrar pagamento: " . $e->getMessage());
             return redirect()->back()->with('error', 'Ocorreu um erro ao processar o pagamento. Tente novamente.');
         }
+    }
+
+    public function getOpenPaymentsByUser(User $user)
+    {
+        Gate::authorize('manage-finance');
+        
+        $payments = $user->payments()
+            ->whereIn('status', ['pending', 'late'])
+            ->orderBy('due_date', 'asc')
+            ->get()
+            ->map(function ($payment) {
+                return [
+                    'id' => $payment->id,
+                    'amount' => $payment->amount,
+                    'due_date' => $payment->due_date->format('Y-m-d'),
+                    'due_date_formatted' => $payment->due_date->format('d/m/Y'),
+                    'reference_month' => $payment->reference_month,
+                    'reference_month_formatted' => ucfirst(\Carbon\Carbon::parse($payment->reference_month . '-01')->translatedFormat('F/Y')),
+                ];
+            });
+
+        return response()->json($payments);
     }
 
     public function userHistory(User $user)

@@ -42,10 +42,17 @@ class PaymentService
                     return $existingPayment;
                 }
 
-                // 2. Busca por um pagamento existente para o aluno no mesmo mês de referência (geralmente gerado como 'pending')
-                $payment = Payment::where('user_id', $userId)
-                    ->where('reference_month', $data['reference_month'])
-                    ->first();
+                // 2. Busca por um pagamento existente para o aluno (por payment_id se fornecido, ou pelo mês de referência)
+                $payment = null;
+                if (!empty($data['payment_id'])) {
+                    $payment = Payment::find($data['payment_id']);
+                }
+
+                if (!$payment) {
+                    $payment = Payment::where('user_id', $userId)
+                        ->where('reference_month', $data['reference_month'])
+                        ->first();
+                }
 
                 if ($payment) {
                     if ($payment->status === 'paid') {

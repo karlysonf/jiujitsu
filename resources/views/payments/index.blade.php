@@ -25,13 +25,23 @@
                     <div>
                         <label class="block text-label-sm font-label-sm text-outline-variant mb-1 ml-1">Selecionar Aluno</label>
                         <div class="relative">
-                            <select name="user_id" class="w-full h-12 pl-10 pr-4 rounded-lg border border-slate-200 bg-surface-container-lowest focus:ring-2 focus:ring-on-tertiary-container focus:border-on-tertiary-container transition-all appearance-none font-body-md text-body-md" required>
+                            <select name="user_id" id="user_id_select" class="w-full h-12 pl-10 pr-4 rounded-lg border border-slate-200 bg-surface-container-lowest focus:ring-2 focus:ring-on-tertiary-container focus:border-on-tertiary-container transition-all appearance-none font-body-md text-body-md" required>
                                 <option value="">Buscar por nome...</option>
                                 @foreach($users as $user)
                                     <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->belt }})</option>
                                 @endforeach
                             </select>
                             <span class="material-symbols-outlined absolute left-3 top-3 text-outline">search</span>
+                        </div>
+                    </div>
+
+                    <div id="open_payments_container" class="hidden">
+                        <label class="block text-label-sm font-label-sm text-outline-variant mb-1 ml-1">Mensalidade em Aberto</label>
+                        <div class="relative">
+                            <select name="payment_id" id="payment_id_select" class="w-full h-12 pl-10 pr-4 rounded-lg border border-slate-200 bg-surface-container-lowest focus:ring-2 focus:ring-on-tertiary-container focus:border-on-tertiary-container transition-all appearance-none font-body-md text-body-md">
+                                <option value="">Cobrança Avulsa / Novo Recebimento</option>
+                            </select>
+                            <span class="material-symbols-outlined absolute left-3 top-3 text-outline">receipt_long</span>
                         </div>
                     </div>
 
@@ -70,9 +80,9 @@
                         </div>
                     </div>
 
-                    <input type="hidden" name="due_date" value="{{ now()->format('Y-m-d') }}">
+                    <input type="hidden" name="due_date" id="due_date_input" value="{{ now()->format('Y-m-d') }}">
                     <input type="hidden" name="payment_date" value="{{ now()->format('Y-m-d') }}">
-                    <input type="hidden" name="reference_month" value="{{ now()->format('Y-m') }}">
+                    <input type="hidden" name="reference_month" id="reference_month_input" value="{{ now()->format('Y-m') }}">
 
                     <div class="pt-4">
                         <button class="w-full h-14 bg-primary text-white rounded-lg font-headline-md text-body-lg flex items-center justify-center gap-3 hover:bg-slate-800 transition-all shadow-md active:scale-[0.98]" type="submit">
@@ -183,4 +193,91 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const studentSelect = document.getElementById('user_id_select');
+    const openPaymentsContainer = document.getElementById('open_payments_container');
+    const paymentSelect = document.getElementById('payment_id_select');
+    const amountInput = document.querySelector('input[name="amount"]');
+    const dueDateInput = document.getElementById('due_date_input');
+    const referenceMonthInput = document.getElementById('reference_month_input');
+
+    let openPayments = [];
+
+    const currentDateStr = "{{ now()->format('Y-m-d') }}";
+    const currentMonthStr = "{{ now()->format('Y-m') }}";
+
+    studentSelect.addEventListener('change', function () {
+        const userId = this.value;
+        if (!userId) {
+            openPaymentsContainer.classList.add('hidden');
+            resetFields();
+            return;
+        }
+
+        fetch(`/payments/open-by-user/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                openPayments = data;
+                paymentSelect.innerHTML = '';
+
+                if (openPayments.length > 0) {
+                    const avulsoOpt = document.createElement('option');
+                    avulsoOpt.value = '';
+                    avulsoOpt.textContent = 'Cobrança Avulsa / Novo Recebimento';
+                    paymentSelect.appendChild(avulsoOpt);
+
+                    openPayments.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        const formattedAmount = parseFloat(p.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                        opt.textContent = `Mensalidade de ${p.reference_month_formatted} (Vence em ${p.due_date_formatted}) - ${formattedAmount}`;
+                        paymentSelect.appendChild(opt);
+                    });
+
+                    paymentSelect.value = openPayments[0].id;
+                    updateFieldsForPayment(openPayments[0]);
+                } else {
+                    const opt = document.createElement('option');
+                    opt.value = '';
+                    opt.textContent = 'Nenhuma mensalidade em aberto (Novo recebimento avulso)';
+                    paymentSelect.appendChild(opt);
+                    resetFields();
+                }
+                
+                openPaymentsContainer.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Erro ao buscar mensalidades:', error);
+                openPaymentsContainer.classList.add('hidden');
+                resetFields();
+            });
+    });
+
+    paymentSelect.addEventListener('change', function () {
+        const paymentId = this.value;
+        if (!paymentId) {
+            resetFields();
+        } else {
+            const selected = openPayments.find(p => p.id == paymentId);
+            if (selected) {
+                updateFieldsForPayment(selected);
+            }
+        }
+    });
+
+    function updateFieldsForPayment(payment) {
+        amountInput.value = payment.amount;
+        dueDateInput.value = payment.due_date;
+        referenceMonthInput.value = payment.reference_month;
+    }
+
+    function resetFields() {
+        amountInput.value = '';
+        dueDateInput.value = currentDateStr;
+        referenceMonthInput.value = currentMonthStr;
+    }
+});
+</script>
 @endsection

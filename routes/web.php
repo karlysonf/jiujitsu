@@ -65,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
         Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
         Route::post('/payments/generate', [PaymentController::class, 'generateBilling'])->name('billing.generate');
+        Route::get('/payments/open-by-user/{user}', [PaymentController::class, 'getOpenPaymentsByUser'])->name('payments.open-by-user');
         Route::get('/users/{user}/payments', [PaymentController::class, 'userHistory'])->name('payments.user-history');
         Route::delete('/payments/{payment}', [PaymentController::class, 'destroy'])->name('payments.destroy');
     });
