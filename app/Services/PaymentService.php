@@ -27,6 +27,8 @@ class PaymentService
         return Cache::lock("payment_process_{$idempotencyKey}", 10)->block(5, function () use ($data, $idempotencyKey) {
             
             return DB::transaction(function () use ($data, $idempotencyKey) {
+                $userId = $data['user_id'] ?? $data['student_id'] ?? null;
+
                 // 1. Validação de Idempotência
                 $existingPayment = Payment::where('idempotency_key', $idempotencyKey)
                     ->orWhere(function($query) use ($data) {
@@ -40,22 +42,44 @@ class PaymentService
                     return $existingPayment;
                 }
 
-                return Payment::updateOrCreate(
-                    [
+                // 2. Busca por um pagamento existente para o aluno no mesmo mês de referência (geralmente gerado como 'pending')
+                $payment = Payment::where('user_id', $userId)
+                    ->where('reference_month', $data['reference_month'])
+                    ->first();
+
+                if ($payment) {
+                    if ($payment->status === 'paid') {
+                        Log::info("Pagamento ignorado por duplicidade (Já pago para o mês de referência: {$data['reference_month']})");
+                        return $payment;
+                    }
+
+                    // Atualiza a cobrança existente para 'paid' com o novo valor recebido
+                    $payment->update([
                         'idempotency_key' => $idempotencyKey,
-                    ],
-                    [
-                        'user_id' => $data['student_id'], // Map student_id from request to user_id
                         'amount' => $data['amount'],
-                        'due_date' => $data['due_date'],
                         'payment_date' => $data['payment_date'] ?? now(),
                         'status' => 'paid',
                         'payment_method' => $data['payment_method'],
-                        'reference_month' => $data['reference_month'],
-                        'notes' => $data['notes'] ?? null,
-                        'gateway_transaction_id' => $data['gateway_transaction_id'] ?? null,
-                    ]
-                );
+                        'notes' => $data['notes'] ?? $payment->notes,
+                        'gateway_transaction_id' => $data['gateway_transaction_id'] ?? $payment->gateway_transaction_id,
+                    ]);
+
+                    return $payment;
+                }
+
+                // 3. Se não houver cobrança pré-existente no mês de referência, cria um novo registro
+                return Payment::create([
+                    'idempotency_key' => $idempotencyKey,
+                    'user_id' => $userId,
+                    'amount' => $data['amount'],
+                    'due_date' => $data['due_date'],
+                    'payment_date' => $data['payment_date'] ?? now(),
+                    'status' => 'paid',
+                    'payment_method' => $data['payment_method'],
+                    'reference_month' => $data['reference_month'],
+                    'notes' => $data['notes'] ?? null,
+                    'gateway_transaction_id' => $data['gateway_transaction_id'] ?? null,
+                ]);
             });
         });
     }
@@ -66,7 +90,7 @@ class PaymentService
     protected function generateIdempotencyKey(array $data): string
     {
         return md5(implode('|', [
-            $data['student_id'],
+            $data['user_id'] ?? $data['student_id'] ?? '',
             $data['amount'],
             $data['reference_month'],
             $data['due_date']
