@@ -156,7 +156,14 @@
                                     @if($payment->status == 'paid')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-700 uppercase">Confirmado</span>
                                     @else
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-700 uppercase">Pendente</span>
+                                        <div class="flex flex-col items-end gap-1">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-700 uppercase">Pendente</span>
+                                            @if($payment->asaas_invoice_url)
+                                                <a href="{{ $payment->asaas_invoice_url }}" target="_blank" class="text-[10px] text-blue-600 hover:underline flex items-center gap-0.5 mt-1 font-semibold">
+                                                    <span class="material-symbols-outlined text-[10px]">qr_code_2</span> Pagar / Link
+                                                </a>
+                                            @endif
+                                        </div>
                                     @endif
                                 </td>
                             </tr>

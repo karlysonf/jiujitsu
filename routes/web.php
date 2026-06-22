@@ -19,6 +19,9 @@ Route::get('/', function () {
     return redirect()->route('login');
 })->name('home');
 
+// Webhook Asaas
+Route::post('/webhooks/asaas', [\App\Http\Controllers\Webhooks\AsaasWebhookController::class, 'handle'])->name('webhooks.asaas');
+
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:5,1')->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
@@ -57,6 +60,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Users
     Route::middleware(['can:manage-users'])->group(function () {
+        Route::get('/users/import', [\App\Http\Controllers\StudentImportController::class, 'show'])->name('users.import');
+        Route::post('/users/import', [\App\Http\Controllers\StudentImportController::class, 'store'])->name('users.import.store');
         Route::resource('users', UserController::class);
     });
 
@@ -91,6 +96,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/monthly', [ReportController::class, 'monthly'])->name('reports.monthly');
         Route::get('/reports/delinquency', [ReportController::class, 'delinquency'])->name('reports.delinquency');
+    });
+
+    // Settings
+    Route::middleware(['can:manage-settings'])->group(function () {
+        Route::get('/settings', [\App\Http\Controllers\TenantSettingsController::class, 'index'])->name('settings.index');
+        Route::put('/settings', [\App\Http\Controllers\TenantSettingsController::class, 'update'])->name('settings.update');
     });
 
     // System Kill Switch (Root Only)

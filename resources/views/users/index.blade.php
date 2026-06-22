@@ -7,10 +7,16 @@
         <p class="text-slate-500">Visualize e gerencie todos os alunos ativos e inativos.</p>
     </div>
     @can('manage-users')
-    <a href="{{ route('users.create') }}" class="bg-primary text-white px-6 py-3 rounded-xl font-label-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all">
-        <span class="material-symbols-outlined">person_add</span>
-        Novo Aluno
-    </a>
+    <div class="flex gap-2">
+        <a href="{{ route('users.import') }}" class="border border-slate-300 text-slate-700 px-6 py-3 rounded-xl font-label-bold flex items-center gap-2 hover:bg-slate-50 active:scale-95 transition-all">
+            <span class="material-symbols-outlined">upload_file</span>
+            Importar CSV
+        </a>
+        <a href="{{ route('users.create') }}" class="bg-primary text-white px-6 py-3 rounded-xl font-label-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+            <span class="material-symbols-outlined">person_add</span>
+            Novo Aluno
+        </a>
+    </div>
     @endcan
 </div>
 

@@ -33,7 +33,7 @@
                 "on-background": "#191c1e",
                 "on-tertiary-fixed-variant": "#003ea8",
                 "secondary-container": "#fed65b",
-                "primary": "#000000",
+                "primary": "var(--primary-color)",
                 "on-tertiary-fixed": "#00174b",
                 "secondary-fixed-dim": "#e9c349",
                 "on-tertiary": "#ffffff",
@@ -57,7 +57,7 @@
                 "background": "#f7f9fb",
                 "primary-fixed": "#dae2fd",
                 "on-primary-fixed-variant": "#3f465c",
-                "secondary": "#735c00",
+                "secondary": "var(--secondary-color)",
                 "inverse-primary": "#bec6e0",
                 "surface-tint": "#565e74",
                 "on-primary-container": "#7c839b"
@@ -101,6 +101,10 @@
       }
     </script>
     <style>
+        :root {
+            --primary-color: {{ isset($currentTenant) ? $currentTenant->primary_color : '#3b82f6' }};
+            --secondary-color: {{ isset($currentTenant) ? $currentTenant->secondary_color : '#1e3a8a' }};
+        }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             display: inline-block;
@@ -123,7 +127,7 @@
             <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors">
                 <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">menu</span>
             </button>
-            <span class="text-xl md:text-xl font-black text-slate-900 dark:text-slate-50 tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">CT Denyson Anderson</span>
+            <span class="text-xl md:text-xl font-black text-slate-900 dark:text-slate-50 tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">{{ isset($currentTenant) ? $currentTenant->name : 'CT Denyson Anderson' }}</span>
         </div>
         <div class="flex items-center gap-md">
             <div class="flex items-center gap-4">
@@ -146,11 +150,15 @@
         <aside id="main-sidebar" class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 font-['Lexend'] text-sm antialiased fixed left-0 top-16 h-[calc(100vh-64px)] w-[280px] border-r border-slate-200 dark:border-slate-800 flex flex-col py-6 px-4 gap-2 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shadow-xl md:shadow-none">
             <div class="px-4 mb-xl">
                 <div class="flex items-center gap-3">
-                    <div class="bg-primary p-2 rounded-lg">
-                        <span class="material-symbols-outlined text-white">sports_kabaddi</span>
-                    </div>
+                    @if(isset($currentTenant) && $currentTenant->logo)
+                        <img src="{{ Storage::disk('public')->url($currentTenant->logo) }}" alt="Logo" class="h-10 w-10 object-contain rounded-lg shadow-sm">
+                    @else
+                        <div class="bg-primary p-2 rounded-lg">
+                            <span class="material-symbols-outlined text-white">sports_kabaddi</span>
+                        </div>
+                    @endif
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50 leading-tight">CT Denyson Anderson</h2>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50 leading-tight">{{ isset($currentTenant) ? $currentTenant->name : 'CT Denyson Anderson' }}</h2>
                         <p class="text-xs text-slate-500">Gestão de Elite para Academias</p>
                     </div>
                 </div>
@@ -194,6 +202,13 @@
                 <a class="{{ request()->routeIs('reports.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('reports.index') }}">
                     <span class="material-symbols-outlined">analytics</span>
                     <span>Relatórios</span>
+                </a>
+                @endcan
+
+                @can('manage-settings')
+                <a class="{{ request()->routeIs('settings.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('settings.index') }}">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span>Configurações</span>
                 </a>
                 @endcan
             </nav>

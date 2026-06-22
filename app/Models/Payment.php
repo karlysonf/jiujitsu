@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\BelongsToTenant;
 
 class Payment extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, BelongsToTenant;
 
     protected $fillable = [
         'user_id',
@@ -21,6 +22,9 @@ class Payment extends Model
         'notes',
         'gateway_transaction_id',
         'idempotency_key',
+        'asaas_invoice_url',
+        'asaas_pix_code',
+        'asaas_pix_qrcode',
     ];
 
     protected $casts = [

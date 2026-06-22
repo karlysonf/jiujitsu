@@ -123,7 +123,7 @@ class PaymentService
                 $lockKey = "billing_{$student->id}_{$referenceMonth}";
                 
                 Cache::lock($lockKey, 30)->get(function () use ($student, $referenceMonth, $dueDate) {
-                    Payment::firstOrCreate(
+                    $payment = Payment::firstOrCreate(
                         [
                             'user_id' => $student->id,
                             'reference_month' => $referenceMonth,
@@ -134,6 +134,13 @@ class PaymentService
                             'status' => 'pending',
                         ]
                     );
+
+                    if ($payment->wasRecentlyCreated) {
+                        $asaas = app(\App\Services\AsaasService::class);
+                        if ($asaas->isConfigured()) {
+                            $asaas->createPayment($payment, 'PIX');
+                        }
+                    }
                 });
             });
         }

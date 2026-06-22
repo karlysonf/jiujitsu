@@ -77,6 +77,11 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole('admin');
         });
 
+        // Settings management
+        Gate::define('manage-settings', function ($user) {
+            return $user->hasRole('admin');
+        });
+
     }
 
 }

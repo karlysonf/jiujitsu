@@ -36,15 +36,29 @@
                                 Pago
                             </span>
                         @elseif($payment->status === 'late')
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">
-                                <span class="material-symbols-outlined text-sm">warning</span>
-                                Atrasado
-                            </span>
+                            <div class="flex flex-col items-start gap-1">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">
+                                    <span class="material-symbols-outlined text-sm">warning</span>
+                                    Atrasado
+                                </span>
+                                @if($payment->asaas_invoice_url)
+                                    <a href="{{ $payment->asaas_invoice_url }}" target="_blank" class="mt-1 inline-flex items-center gap-1 px-3 py-1 text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition-all rounded-lg">
+                                        <span class="material-symbols-outlined text-xs">qr_code_2</span> Pagar Pix / Cartão
+                                    </a>
+                                @endif
+                            </div>
                         @else
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">
-                                <span class="material-symbols-outlined text-sm">schedule</span>
-                                Pendente
-                            </span>
+                            <div class="flex flex-col items-start gap-1">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">
+                                    <span class="material-symbols-outlined text-sm">schedule</span>
+                                    Pendente
+                                </span>
+                                @if($payment->asaas_invoice_url)
+                                    <a href="{{ $payment->asaas_invoice_url }}" target="_blank" class="mt-1 inline-flex items-center gap-1 px-3 py-1 text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition-all rounded-lg">
+                                        <span class="material-symbols-outlined text-xs">qr_code_2</span> Pagar Pix / Cartão
+                                    </a>
+                                @endif
+                            </div>
                         @endif
                     </td>
                 </tr>
