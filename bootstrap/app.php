@@ -20,8 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
             Request::HEADER_X_FORWARDED_PROTO |
             Request::HEADER_X_FORWARDED_AWS_ELB);
 
-        // Resolve o Tenant ativo com base no domínio/subdomínio
-        $middleware->append(\App\Http\Middleware\ResolveTenant::class);
+        // Resolve o Tenant ativo com base no domínio/subdomínio após a inicialização da sessão/auth
+        $middleware->web(append: [
+            \App\Http\Middleware\ResolveTenant::class,
+        ]);
 
         // Ignora verificação CSRF no webhook do Asaas
         $middleware->validateCsrfTokens(except: [

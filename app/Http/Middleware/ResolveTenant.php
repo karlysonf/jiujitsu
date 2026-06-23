@@ -56,6 +56,10 @@ class ResolveTenant
             }
         }
 
+        if (!$tenant && auth()->check()) {
+            $tenant = auth()->user()->tenant;
+        }
+
         if ($tenant) {
             app()->instance('currentTenant', $tenant);
             
