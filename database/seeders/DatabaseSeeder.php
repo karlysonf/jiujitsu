@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'João Aluno',
                 'email' => 'aluno@jiujitsu.com',
-                'password' => Hash::make('senha123'),
+                'password' => Hash::make('mudar123'),
                 'telefone' => '11888888888',
                 'faixa' => 'branca',
                 'is_admin' => false,

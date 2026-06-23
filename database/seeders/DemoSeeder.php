@@ -80,7 +80,7 @@ class DemoSeeder extends Seeder
                 [
                     'name' => $data['name'],
                     'email' => $email,
-                    'password' => Hash::make('senha123'),
+                    'password' => Hash::make('mudar123'),
                     'telefone' => '(11) 9' . rand(7000, 9999) . '-' . rand(1000, 9999),
                     'data_nascimento' => Carbon::now()->subYears(rand(18, 45))->subDays(rand(1, 365)),
                     'faixa' => $data['belt'],
