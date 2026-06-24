@@ -21,10 +21,14 @@ class Tenant extends Model
         'asaas_api_key',
         'asaas_environment',
         'status',
+        'plan_tier',
+        'max_users',
+        'expires_at',
     ];
 
     protected $casts = [
         'asaas_api_key' => 'encrypted',
+        'expires_at' => 'datetime',
     ];
 
     /**
@@ -47,5 +51,31 @@ class Tenant extends Model
     public function plans()
     {
         return $this->hasMany(Plan::class);
+    }
+
+    /**
+     * Get the count of active students, teachers, and instructors.
+     */
+    public function getActiveUsersCount(): int
+    {
+        return $this->users()
+            ->withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->where('status', 'active')
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('name', ['aluno', 'professor', 'instrutor']);
+            })
+            ->count();
+    }
+
+    /**
+     * Check if the tenant has reached the active users limit.
+     */
+    public function hasReachedUserLimit(): bool
+    {
+        if (is_null($this->max_users)) {
+            return false;
+        }
+
+        return $this->getActiveUsersCount() >= $this->max_users;
     }
 }

@@ -25,6 +25,13 @@ class AuthController extends Controller
     // Processa o registro
     public function register(Request $request)
     {
+        $tenant = \App\Models\Tenant::current();
+        if ($tenant && $tenant->hasReachedUserLimit()) {
+            return back()->withErrors([
+                'email' => 'O limite de cadastros ativos para esta academia foi atingido. Entre em contato com a administração.'
+            ])->withInput();
+        }
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'cpf' => ['required', 'string', 'unique:users,cpf', 'regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/'],

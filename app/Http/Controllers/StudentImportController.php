@@ -105,6 +105,12 @@ class StudentImportController extends Controller
                 continue;
             }
 
+            // Verify tenant registration limit
+            $tenant = \App\Models\Tenant::current();
+            if ($tenant && $tenant->hasReachedUserLimit()) {
+                return redirect()->route('users.index')->with('error', "Importação interrompida: O limite do seu plano ({$tenant->max_users} cadastros ativos) foi atingido. {$imported} alunos foram importados e {$skipped} pulados.");
+            }
+
             // Create user
             $user = User::create([
                 'name' => $name,

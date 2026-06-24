@@ -108,4 +108,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/system/toggle-lock', [\App\Http\Controllers\Root\SystemController::class, 'toggleLock'])
         ->middleware('role:root')
         ->name('system.toggle-lock');
+
+    // Root/Super-Admin Management
+    Route::middleware(['role:root'])->prefix('root')->as('root.')->group(function () {
+        Route::resource('tenants', \App\Http\Controllers\Root\TenantManagementController::class);
+    });
 });

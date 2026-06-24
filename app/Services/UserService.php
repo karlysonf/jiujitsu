@@ -42,6 +42,17 @@ class UserService
 
             $roleName = $data['user_role'] ?? 'aluno';
 
+            // Check plan limit if creating an active user with limited role
+            $status = $data['status'] ?? 'active';
+            if ($status === 'active' && in_array($roleName, ['aluno', 'professor', 'instrutor'])) {
+                $tenant = \App\Models\Tenant::current();
+                if ($tenant && $tenant->hasReachedUserLimit()) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'user_limit' => "O limite de {$tenant->max_users} cadastros ativos do seu plano foi atingido. Faça o upgrade para continuar cadastrando."
+                    ]);
+                }
+            }
+
             // Segurança: Apenas root/admin podem atribuir papéis privilegiados
             $privilegedRoles = ['admin', 'root'];
             if (in_array($roleName, $privilegedRoles) && (!auth()->check() || !auth()->user()->hasAnyRole(['root', 'admin']))) {
@@ -124,6 +135,20 @@ class UserService
     {
         DB::beginTransaction();
         try {
+            $newStatus = $data['status'] ?? $user->status;
+            $newRole = $data['user_role'] ?? ($user->roles()->first() ? $user->roles()->first()->name : null);
+
+            $wasCounted = $user->status === 'active' && in_array($user->roles()->first()?->name, ['aluno', 'professor', 'instrutor']);
+            $willBeCounted = $newStatus === 'active' && in_array($newRole, ['aluno', 'professor', 'instrutor']);
+
+            if (!$wasCounted && $willBeCounted) {
+                $tenant = \App\Models\Tenant::current();
+                if ($tenant && $tenant->hasReachedUserLimit()) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'user_limit' => "O limite de {$tenant->max_users} cadastros ativos do seu plano foi atingido. Faça o upgrade para continuar cadastrando."
+                    ]);
+                }
+            }
             if (empty($data['password'])) {
                 unset($data['password']);
             } else {

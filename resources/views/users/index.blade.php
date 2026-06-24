@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    $tenant = \App\Models\Tenant::current();
+    $reachedLimit = $tenant ? $tenant->hasReachedUserLimit() : false;
+@endphp
+
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
     <div>
         <h1 class="font-headline-lg text-slate-900">Gestão de Alunos</h1>
@@ -8,17 +13,27 @@
     </div>
     @can('manage-users')
     <div class="flex gap-2">
-        <a href="{{ route('users.import') }}" class="border border-slate-300 text-slate-700 px-6 py-3 rounded-xl font-label-bold flex items-center gap-2 hover:bg-slate-50 active:scale-95 transition-all">
+        <a href="{{ route('users.import') }}" class="border border-slate-300 text-slate-700 px-6 py-3 rounded-xl font-label-bold flex items-center gap-2 hover:bg-slate-50 active:scale-95 transition-all @if($reachedLimit) opacity-50 cursor-not-allowed pointer-events-none @endif">
             <span class="material-symbols-outlined">upload_file</span>
             Importar CSV
         </a>
-        <a href="{{ route('users.create') }}" class="bg-primary text-white px-6 py-3 rounded-xl font-label-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+        <a href="{{ route('users.create') }}" class="bg-primary text-white px-6 py-3 rounded-xl font-label-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all @if($reachedLimit) opacity-50 cursor-not-allowed pointer-events-none @endif">
             <span class="material-symbols-outlined">person_add</span>
             Novo Aluno
         </a>
     </div>
     @endcan
 </div>
+
+@if($reachedLimit)
+<div class="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 text-red-800 dark:text-red-300 flex items-start gap-3">
+    <span class="material-symbols-outlined mt-0.5">warning</span>
+    <div>
+        <p class="text-sm font-bold">Limite de Cadastros Atingido</p>
+        <p class="text-xs mt-1">Sua academia atingiu o limite máximo de {{ $tenant->max_users }} cadastros ativos no plano atual. Para cadastrar novos alunos, professores ou instrutores, você precisará inativar algum cadastro existente ou solicitar o upgrade de plano em Configurações.</p>
+    </div>
+</div>
+@endif
 
 <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
     <form action="{{ route('users.index') }}" method="GET" class="flex gap-2">
@@ -114,7 +129,7 @@
             <span class="material-symbols-outlined text-slate-300 text-6xl mb-4">person_search</span>
             <h3 class="text-lg font-label-bold text-slate-900">Nenhum aluno encontrado</h3>
             <p class="text-slate-500 mb-6">Tente ajustar sua busca ou cadastre um novo aluno.</p>
-            <a href="{{ route('users.create') }}" class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-label-bold hover:opacity-90">
+            <a href="{{ route('users.create') }}" class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-label-bold hover:opacity-90 @if($reachedLimit) opacity-50 cursor-not-allowed pointer-events-none @endif">
                 <span class="material-symbols-outlined">person_add</span>
                 Novo Aluno
             </a>

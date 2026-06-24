@@ -11,6 +11,68 @@
         @csrf
         @method('PUT')
 
+        <!-- Plano e Assinatura Section -->
+        <div class="bg-white dark:bg-slate-900 shadow-md rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-3 pb-6 border-b border-slate-100 dark:border-slate-800 mb-6">
+                <span class="material-symbols-outlined text-primary text-2xl">workspace_premium</span>
+                <h2 class="text-xl font-bold text-slate-900 dark:text-slate-50">Plano e Assinatura do Sistema</h2>
+            </div>
+
+            @php
+                $activeCount = $tenant->getActiveUsersCount();
+                $limit = $tenant->max_users;
+                $percent = $limit ? min(100, ($activeCount / $limit) * 100) : 0;
+                $tierNames = [
+                    'bronze' => 'Bronze (Até 50 cadastros)',
+                    'silver' => 'Prata (Até 100 cadastros)',
+                    'gold' => 'Ouro (Ilimitado)'
+                ];
+                $planName = $tierNames[$tenant->plan_tier] ?? ucfirst($tenant->plan_tier ?? 'Bronze');
+            @endphp
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div>
+                    <p class="text-sm font-semibold text-slate-500">Plano Atual</p>
+                    <p class="text-lg font-bold text-slate-900 dark:text-slate-100">{{ $planName }}</p>
+                    
+                    @if($tenant->expires_at)
+                        <p class="text-xs text-slate-400 mt-1">Sua assinatura expira em: {{ $tenant->expires_at->format('d/m/Y') }}</p>
+                    @endif
+                </div>
+
+                <div>
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="font-semibold text-slate-700 dark:text-slate-300">Uso do Limite de Cadastros</span>
+                        <span class="font-bold text-slate-900 dark:text-slate-100">
+                            {{ $activeCount }} / {{ $limit ?? '∞' }}
+                        </span>
+                    </div>
+                    
+                    @if($limit)
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3.5 overflow-hidden">
+                            <div class="bg-primary h-full rounded-full transition-all duration-500" style="width: {{ $percent }}%"></div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2">Inclui alunos, professores e instrutores com status ativo.</p>
+                    @else
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3.5 overflow-hidden">
+                            <div class="bg-green-500 h-full rounded-full" style="width: 100%"></div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2">Você possui cadastros ilimitados no plano atual.</p>
+                    @endif
+                </div>
+            </div>
+            
+            @if($limit && $activeCount >= $limit)
+                <div class="mt-6 p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/55 text-red-800 dark:text-red-300 flex items-start gap-3">
+                    <span class="material-symbols-outlined mt-0.5">warning</span>
+                    <div>
+                        <p class="text-sm font-bold">Limite Atingido</p>
+                        <p class="text-xs mt-1">Você atingiu o limite máximo de cadastros permitidos pelo seu plano. Novas matrículas ou ativações de alunos/professores estão bloqueadas.</p>
+                    </div>
+                </div>
+            @endif
+        </div>
+
         <!-- Branding Section -->
         <div class="bg-white dark:bg-slate-900 shadow-md rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-800">
             <div class="flex items-center gap-3 pb-6 border-b border-slate-100 dark:border-slate-800 mb-6">

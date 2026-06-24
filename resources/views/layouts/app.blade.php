@@ -211,6 +211,13 @@
                     <span>Configurações</span>
                 </a>
                 @endcan
+
+                @if(auth()->user()->hasRole('root'))
+                <a class="{{ request()->routeIs('root.tenants.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('root.tenants.index') }}">
+                    <span class="material-symbols-outlined">domain</span>
+                    <span>Gerenciar Academias</span>
+                </a>
+                @endif
             </nav>
 
             <div class="mt-auto pt-6 border-t border-slate-200 dark:border-slate-800">
