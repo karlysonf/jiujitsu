@@ -115,14 +115,18 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-// Rota temporária para depurar e corrigir o usuário Root em produção (Railway)
+// Rota temporária para depurar e corrigir o usuário Root e banco em produção (Railway)
 Route::get('/debug-root-user', function () {
     try {
-        // 1. Limpa o cache de permissões do Spatie em produção
+        // 1. Executa as migrations pendentes em produção
+        \Artisan::call('migrate', ['--force' => true]);
+        $migrationStatus = "Migrations executadas!";
+
+        // 2. Limpa o cache de permissões do Spatie em produção
         \Artisan::call('permission:cache-reset');
         $cacheStatus = "Cache de permissões limpo!";
 
-        // 2. Busca o usuário pelo CPF
+        // 3. Busca o usuário pelo CPF
         $user = \App\Models\User::withoutGlobalScope(\App\Scopes\TenantScope::class)
             ->where('cpf', '04314745169')
             ->first();
@@ -130,25 +134,27 @@ Route::get('/debug-root-user', function () {
         if (!$user) {
             return response()->json([
                 'error' => 'Usuário com o CPF 04314745169 não foi encontrado no banco de dados do Railway.',
+                'migrations' => $migrationStatus,
                 'cache' => $cacheStatus
             ]);
         }
 
-        // 3. Garante que a role 'root' existe e atribui ao usuário
+        // 4. Garante que a role 'root' existe e atribui ao usuário
         $rootRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'root', 'guard_name' => 'web']);
         
         $rolesBefore = $user->getRoleNames()->toArray();
-        
-        // Sincroniza a role root
         $user->assignRole($rootRole);
-        
-        // Recarrega o usuário
         $user->load('roles');
         $rolesAfter = $user->getRoleNames()->toArray();
 
+        // 5. Verifica se as colunas da tabela 'tenants' existem
+        $columns = \Schema::getColumnListing('tenants');
+
         return response()->json([
             'message' => 'Processo de depuração concluído com sucesso!',
+            'migrations' => $migrationStatus,
             'cache' => $cacheStatus,
+            'tenants_table_columns' => $columns,
             'user' => [
                 'name' => $user->name,
                 'email' => $user->email,
@@ -160,7 +166,10 @@ Route::get('/debug-root-user', function () {
         ]);
     } catch (\Exception $e) {
         return response()->json([
-            'error' => $e->getMessage()
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => array_slice(explode("\n", $e->getTraceAsString()), 0, 15)
         ], 500);
     }
 });
