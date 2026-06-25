@@ -76,6 +76,7 @@ class ResolveTenant
 
         if ($tenant) {
             app()->instance('currentTenant', $tenant);
+            app()->instance(Tenant::class, $tenant); // Bind the active Tenant model for dependency injection
             
             // Share tenant data globally with all Blade views
             view()->share('currentTenant', $tenant);
