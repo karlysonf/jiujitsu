@@ -24,6 +24,7 @@ class ResolveTenant
 
         // 1. Try resolving by custom domain
         $tenant = Tenant::where('domain', $host)->where('status', '!=', 'suspended')->first();
+        $resolvedFromHost = ($tenant !== null);
 
         if (!$tenant && !filter_var($host, FILTER_VALIDATE_IP)) {
             // 2. Parse subdomain
@@ -53,11 +54,24 @@ class ResolveTenant
                 if (!$tenant) {
                     abort(404, 'Academia não encontrada ou suspensa.');
                 }
+                $resolvedFromHost = true;
             }
         }
 
-        if (!$tenant && auth()->check()) {
-            $tenant = auth()->user()->tenant;
+        if (!$resolvedFromHost && auth()->check()) {
+            $user = auth()->user();
+            
+            // If the logged-in user is not root, redirect them to their specific subdomain
+            if (!$user->hasRole('root') && $user->tenant && !config('tenant.bypass_redirect', app()->runningUnitTests())) {
+                $tenantSubdomain = $user->tenant->subdomain;
+                $scheme = $request->secure() ? 'https://' : 'http://';
+                $cleanHttpHost = preg_replace('/^(www\.)?/', '', $request->getHttpHost());
+                $newHost = "{$tenantSubdomain}.{$cleanHttpHost}";
+                
+                return redirect()->to($scheme . $newHost . $request->getRequestUri());
+            }
+
+            $tenant = $user->tenant;
         }
 
         if ($tenant) {
@@ -65,6 +79,10 @@ class ResolveTenant
             
             // Share tenant data globally with all Blade views
             view()->share('currentTenant', $tenant);
+
+            if (isset($resolvedFromHost) && $resolvedFromHost) {
+                $request->attributes->set('tenant_resolved_from_host', true);
+            }
         }
 
         return $next($request);

@@ -102,6 +102,19 @@ class AuthController extends Controller
         $user = User::where('cpf', $identity)->first();
 
         if ($user && Hash::check($password, $user->password)) {
+            // Check if logging in on the apex domain (no active tenant resolved from host)
+            $resolvedFromHost = $request->attributes->get('tenant_resolved_from_host', false);
+            if (!$resolvedFromHost && !$user->hasRole('root') && $user->tenant) {
+                $subdomain = $user->tenant->subdomain;
+                $scheme = $request->secure() ? 'https://' : 'http://';
+                $cleanHost = preg_replace('/^(www\.)?/', '', $request->getHost());
+                $newHost = "{$subdomain}.{$cleanHost}";
+                
+                return redirect()->to($scheme . $newHost . '/login')
+                    ->withInput(['login_identity' => $request->input('login_identity')])
+                    ->withErrors(['login_identity' => 'Por favor, faça login através do subdomínio da sua academia.']);
+            }
+
             Auth::login($user);
             $request->session()->regenerate();
 
