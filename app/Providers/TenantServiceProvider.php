@@ -15,7 +15,7 @@ class TenantServiceProvider extends ServiceProvider
         // Bind the active Tenant model to the service container.
         // This enables dependency injection in Controllers, Services, etc.
         $this->app->singleton(Tenant::class, function ($app) {
-            return Tenant::current();
+            return Tenant::current() ?: new Tenant();
         });
 
         // Register a shorter helper string key 'currentTenant' if desired
