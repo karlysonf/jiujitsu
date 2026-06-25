@@ -199,7 +199,7 @@
                         </div>
                         <div class="flex-1">
                             <p class="font-label-bold text-slate-900">Treino de Jiu-Jitsu</p>
-                            <p class="text-label-sm text-on-surface-variant mb-2">CT Denyson Anderson</p>
+                            <p class="text-label-sm text-on-surface-variant mb-2">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</p>
                             <div class="flex items-center gap-1 text-[10px] font-bold text-green-600 uppercase">
                                 <span class="material-symbols-outlined text-sm">check_circle</span>
                                 Presença Confirmada

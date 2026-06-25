@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>{{ $title ?? 'CT Denyson Anderson' }}</title>
+    <title>{{ $title ?? (isset($currentTenant) ? $currentTenant->name : 'Gestão Combate') }}</title>
     
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -127,7 +127,7 @@
             <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors">
                 <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">menu</span>
             </button>
-            <span class="text-xl md:text-xl font-black text-slate-900 dark:text-slate-50 tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">{{ isset($currentTenant) ? $currentTenant->name : 'CT Denyson Anderson' }}</span>
+            <span class="text-xl md:text-xl font-black text-slate-900 dark:text-slate-50 tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</span>
         </div>
         <div class="flex items-center gap-md">
             <div class="flex items-center gap-4">
@@ -158,7 +158,7 @@
                         </div>
                     @endif
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50 leading-tight">{{ isset($currentTenant) ? $currentTenant->name : 'CT Denyson Anderson' }}</h2>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50 leading-tight">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</h2>
                         <p class="text-xs text-slate-500">Gestão de Elite para Academias</p>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Acesso do Instrutor - CT Denyson Anderson</title>
+    <title>Acesso do Instrutor - {{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
@@ -86,7 +86,7 @@
                     <div class="w-10 h-10 bg-secondary-container rounded flex items-center justify-center">
                         <span class="material-symbols-outlined text-on-secondary-container">sports_martial_arts</span>
                     </div>
-                    <h1 class="text-white font-headline-md text-headline-md tracking-tight">CT Denyson Anderson</h1>
+                    <h1 class="text-white font-headline-md text-headline-md tracking-tight">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</h1>
                 </div>
                 <div class="mt-xl">
                     <h2 class="text-white font-display-xl text-display-xl mb-md">Domine o fluxo da sua <span class="text-secondary-container">Academia</span>.</h2>
@@ -118,7 +118,7 @@
                     <div class="w-10 h-10 bg-primary-container rounded flex items-center justify-center">
                         <span class="material-symbols-outlined text-white">sports_martial_arts</span>
                     </div>
-                    <h1 class="text-primary font-headline-md text-headline-md">CT Denyson Anderson</h1>
+                    <h1 class="text-primary font-headline-md text-headline-md">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</h1>
                 </div>
                 <header class="mb-lg">
                     <h3 class="text-primary font-headline-lg text-headline-lg mb-xs">Acesso do Instrutor</h3>

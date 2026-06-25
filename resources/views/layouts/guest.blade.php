@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'CT Denyson Anderson' }}</title>
+    <title>{{ $title ?? (isset($currentTenant) ? $currentTenant->name : 'Gestão Combate') }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/design_system.css') }}">
@@ -85,7 +85,7 @@
     <div class="card">
         <div class="logo">
             <i class="fas fa-user-ninja"></i>
-            <span>CT Denyson Anderson</span>
+            <span>{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</span>
         </div>
         
         @yield('content')
