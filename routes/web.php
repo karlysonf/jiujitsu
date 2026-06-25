@@ -114,3 +114,53 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('tenants', \App\Http\Controllers\Root\TenantManagementController::class);
     });
 });
+
+// Rota temporária para depurar e corrigir o usuário Root em produção (Railway)
+Route::get('/debug-root-user', function () {
+    try {
+        // 1. Limpa o cache de permissões do Spatie em produção
+        \Artisan::call('permission:cache-reset');
+        $cacheStatus = "Cache de permissões limpo!";
+
+        // 2. Busca o usuário pelo CPF
+        $user = \App\Models\User::withoutGlobalScope(\App\Scopes\TenantScope::class)
+            ->where('cpf', '04314745169')
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                'error' => 'Usuário com o CPF 04314745169 não foi encontrado no banco de dados do Railway.',
+                'cache' => $cacheStatus
+            ]);
+        }
+
+        // 3. Garante que a role 'root' existe e atribui ao usuário
+        $rootRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'root', 'guard_name' => 'web']);
+        
+        $rolesBefore = $user->getRoleNames()->toArray();
+        
+        // Sincroniza a role root
+        $user->assignRole($rootRole);
+        
+        // Recarrega o usuário
+        $user->load('roles');
+        $rolesAfter = $user->getRoleNames()->toArray();
+
+        return response()->json([
+            'message' => 'Processo de depuração concluído com sucesso!',
+            'cache' => $cacheStatus,
+            'user' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'tenant_id' => $user->tenant_id,
+                'roles_before' => $rolesBefore,
+                'roles_after' => $rolesAfter,
+                'has_root_role_now' => $user->hasRole('root') ? 'SIM' : 'NÃO',
+            ]
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
+});
