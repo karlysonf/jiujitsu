@@ -173,3 +173,16 @@ Route::get('/debug-root-user', function () {
         ], 500);
     }
 });
+
+// Rota temporária para ler os logs do Laravel em produção (Railway)
+Route::get('/debug-logs', function () {
+    $logPath = storage_path('logs/laravel.log');
+    if (!file_exists($logPath)) {
+        return response()->json(['message' => 'Arquivo de log não existe em: ' . $logPath]);
+    }
+
+    $lines = file($logPath);
+    $lastLines = array_slice($lines, -150); // Get last 150 lines
+    
+    return response(implode("", $lastLines), 200, ['Content-Type' => 'text/plain']);
+});
