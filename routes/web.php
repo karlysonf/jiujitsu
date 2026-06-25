@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
+        if (auth()->user()->hasRole('root')) {
+            return redirect()->route('root.tenants.index');
+        }
         if (auth()->user()->hasRole('aluno')) {
             return redirect()->route('portal.dashboard');
         }

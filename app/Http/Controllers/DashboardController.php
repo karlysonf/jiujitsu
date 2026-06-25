@@ -16,6 +16,10 @@ class DashboardController extends Controller
 
     public function index()
     {
+        if (auth()->user()->hasRole('root')) {
+            return redirect()->route('root.tenants.index');
+        }
+
         $data = $this->dashboardService->getDashboardData();
         return view('dashboard', $data);
     }

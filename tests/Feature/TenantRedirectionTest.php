@@ -67,7 +67,6 @@ class TenantRedirectionTest extends TestCase
         $response->assertRedirect('http://ctdenyson.gestaocombate.com.br/dashboard');
     }
 
-    /** @test */
     public function test_root_user_on_apex_domain_is_not_redirected()
     {
         $this->actingAs($this->rootUser);
@@ -75,8 +74,8 @@ class TenantRedirectionTest extends TestCase
         // Make request on apex domain
         $response = $this->get('http://gestaocombate.com.br/dashboard');
 
-        // Should not redirect, it should render (or redirect to home, but not to subdomain)
-        $response->assertStatus(200);
+        // Should redirect to root tenants index on the same apex domain (not a subdomain redirect)
+        $response->assertRedirect(route('root.tenants.index'));
     }
 
     /** @test */

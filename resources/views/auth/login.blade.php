@@ -84,28 +84,52 @@
             <div class="z-10">
                 <div class="flex items-center gap-sm mb-lg">
                     <div class="w-10 h-10 bg-secondary-container rounded flex items-center justify-center">
-                        <span class="material-symbols-outlined text-on-secondary-container">sports_martial_arts</span>
+                        @if(isset($currentTenant))
+                            <span class="material-symbols-outlined text-on-secondary-container">sports_martial_arts</span>
+                        @else
+                            <span class="material-symbols-outlined text-on-secondary-container">admin_panel_settings</span>
+                        @endif
                     </div>
                     <h1 class="text-white font-headline-md text-headline-md tracking-tight">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</h1>
                 </div>
                 <div class="mt-xl">
-                    <h2 class="text-white font-display-xl text-display-xl mb-md">Domine o fluxo da sua <span class="text-secondary-container">Academia</span>.</h2>
-                    <p class="text-on-primary-container font-body-lg text-body-lg max-w-[400px]">A precisão de um faixa preta, agora para suas operações. Experimente a gestão de elite.</p>
+                    @if(isset($currentTenant))
+                        <h2 class="text-white font-display-xl text-display-xl mb-md">Domine o fluxo da sua <span class="text-secondary-container">Academia</span>.</h2>
+                        <p class="text-on-primary-container font-body-lg text-body-lg max-w-[400px]">A precisão de um faixa preta, agora para suas operações. Experimente a gestão de elite.</p>
+                    @else
+                        <h2 class="text-white font-display-xl text-display-xl mb-md">Painel Administrativo <span class="text-secondary-container">Global</span>.</h2>
+                        <p class="text-on-primary-container font-body-lg text-body-lg max-w-[400px]">Central de controle do Gestão Combate. Monitore inquilinos, planos e faturamento global.</p>
+                    @endif
                 </div>
             </div>
             <div class="absolute inset-0 z-0 opacity-40">
-                <img alt="Martial arts training environment" class="w-full h-full object-cover grayscale brightness-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBM07F_jJUvlHvLVXx8StEv_Wq15sjdWylwYOUF7n-Pk9C1yPZr9KNVMhnQO-mMr3yukvDzl1dS4XLdcegZvJbxgLJgK79-MepGh90fk8U_qLvOGYPNLld0sqateslLitaH__Y5Si2cgH2i2sNI-fgZEzfP4vndKrNZq9vQyXNF3X6p0tni0XIc9ql4txIAz-Bbt9ap7JCOeuH9y72crfv2QnSxKBBV5QnCSnUunHvb2OXhhyjjLDi5HsWSUVi5CvwTzNQ19s6IkcRL" />
+                @if(isset($currentTenant))
+                    <img alt="Martial arts training environment" class="w-full h-full object-cover grayscale brightness-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBM07F_jJUvlHvLVXx8StEv_Wq15sjdWylwYOUF7n-Pk9C1yPZr9KNVMhnQO-mMr3yukvDzl1dS4XLdcegZvJbxgLJgK79-MepGh90fk8U_qLvOGYPNLld0sqateslLitaH__Y5Si2cgH2i2sNI-fgZEzfP4vndKrNZq9vQyXNF3X6p0tni0XIc9ql4txIAz-Bbt9ap7JCOeuH9y72crfv2QnSxKBBV5QnCSnUunHvb2OXhhyjjLDi5HsWSUVi5CvwTzNQ19s6IkcRL" />
+                @else
+                    <img alt="Technology dashboard overview" class="w-full h-full object-cover grayscale brightness-50" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" />
+                @endif
             </div>
             <div class="z-10">
                 <div class="flex gap-md">
-                    <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
-                        <span class="text-secondary-container font-headline-md block">1.2k+</span>
-                        <span class="text-white/60 font-label-sm uppercase">Alunos Matriculados</span>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
-                        <span class="text-secondary-container font-headline-md block">98%</span>
-                        <span class="text-white/60 font-label-sm uppercase">Taxa de Retenção</span>
-                    </div>
+                    @if(isset($currentTenant))
+                        <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
+                            <span class="text-secondary-container font-headline-md block">1.2k+</span>
+                            <span class="text-white/60 font-label-sm uppercase">Alunos Matriculados</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
+                            <span class="text-secondary-container font-headline-md block">98%</span>
+                            <span class="text-white/60 font-label-sm uppercase">Taxa de Retenção</span>
+                        </div>
+                    @else
+                        <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
+                            <span class="text-secondary-container font-headline-md block">SaaS</span>
+                            <span class="text-white/60 font-label-sm uppercase">Multi-Inquilino</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
+                            <span class="text-secondary-container font-headline-md block">Seguro</span>
+                            <span class="text-white/60 font-label-sm uppercase">Painel Criptografado</span>
+                        </div>
+                    @endif
                 </div>
             </div>
         </section>

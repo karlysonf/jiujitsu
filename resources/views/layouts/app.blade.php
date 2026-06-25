@@ -165,58 +165,58 @@
             </div>
             
             <nav class="flex-1 flex flex-col gap-1">
-                <a class="{{ request()->routeIs('dashboard') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('dashboard') }}">
-                    <span class="material-symbols-outlined">dashboard</span>
-                    <span>Dashboard</span>
-                </a>
-
-                @can('manage-users')
-                <a class="{{ request()->routeIs('users.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('users.index') }}">
-                    <span class="material-symbols-outlined">group</span>
-                    <span>Alunos</span>
-                </a>
-                @endcan
-
-                @can('manage-attendance')
-                <a class="{{ request()->routeIs('attendances.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('attendances.index') }}">
-                    <span class="material-symbols-outlined">how_to_reg</span>
-                    <span>Presença</span>
-                </a>
-                @endcan
-
-                @if(auth()->user()->hasRole('aluno'))
-                <a class="{{ request()->routeIs('portal.payments.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('portal.payments.index') }}">
-                    <span class="material-symbols-outlined">payments</span>
-                    <span>Pagamentos</span>
-                </a>
+                @if(auth()->user()->hasRole('root'))
+                    <a class="{{ request()->routeIs('root.tenants.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('root.tenants.index') }}">
+                        <span class="material-symbols-outlined">domain</span>
+                        <span>Gerenciar Academias</span>
+                    </a>
                 @else
-                    @can('manage-finance')
-                    <a class="{{ request()->routeIs('payments.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('payments.index') }}">
+                    <a class="{{ request()->routeIs('dashboard') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('dashboard') }}">
+                        <span class="material-symbols-outlined">dashboard</span>
+                        <span>Dashboard</span>
+                    </a>
+
+                    @can('manage-users')
+                    <a class="{{ request()->routeIs('users.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('users.index') }}">
+                        <span class="material-symbols-outlined">group</span>
+                        <span>Alunos</span>
+                    </a>
+                    @endcan
+
+                    @can('manage-attendance')
+                    <a class="{{ request()->routeIs('attendances.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('attendances.index') }}">
+                        <span class="material-symbols-outlined">how_to_reg</span>
+                        <span>Presença</span>
+                    </a>
+                    @endcan
+
+                    @if(auth()->user()->hasRole('aluno'))
+                    <a class="{{ request()->routeIs('portal.payments.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('portal.payments.index') }}">
                         <span class="material-symbols-outlined">payments</span>
                         <span>Pagamentos</span>
                     </a>
+                    @else
+                        @can('manage-finance')
+                        <a class="{{ request()->routeIs('payments.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('payments.index') }}">
+                            <span class="material-symbols-outlined">payments</span>
+                            <span>Pagamentos</span>
+                        </a>
+                        @endcan
+                    @endif
+
+                    @can('view-reports')
+                    <a class="{{ request()->routeIs('reports.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('reports.index') }}">
+                        <span class="material-symbols-outlined">analytics</span>
+                        <span>Relatórios</span>
+                    </a>
                     @endcan
-                @endif
 
-                @can('view-reports')
-                <a class="{{ request()->routeIs('reports.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('reports.index') }}">
-                    <span class="material-symbols-outlined">analytics</span>
-                    <span>Relatórios</span>
-                </a>
-                @endcan
-
-                @can('manage-settings')
-                <a class="{{ request()->routeIs('settings.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('settings.index') }}">
-                    <span class="material-symbols-outlined">settings</span>
-                    <span>Configurações</span>
-                </a>
-                @endcan
-
-                @if(auth()->user()->hasRole('root'))
-                <a class="{{ request()->routeIs('root.tenants.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('root.tenants.index') }}">
-                    <span class="material-symbols-outlined">domain</span>
-                    <span>Gerenciar Academias</span>
-                </a>
+                    @can('manage-settings')
+                    <a class="{{ request()->routeIs('settings.*') ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-semibold shadow-sm border-r-4 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200" href="{{ route('settings.index') }}">
+                        <span class="material-symbols-outlined">settings</span>
+                        <span>Configurações</span>
+                    </a>
+                    @endcan
                 @endif
             </nav>
 
