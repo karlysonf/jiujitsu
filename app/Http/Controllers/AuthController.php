@@ -96,10 +96,14 @@ class AuthController extends Controller
         $identity = $request->input('login_identity');
         $password = $request->input('password');
 
-        // Remove formatação do CPF para buscar no banco
-        $identity = preg_replace('/[^0-9]/', '', $identity);
-
-        $user = User::where('cpf', $identity)->first();
+        // Tenta buscar por CPF (removendo formatação) ou pelo campo de login username
+        $cleanedCpf = preg_replace('/[^0-9]/', '', $identity);
+        $user = User::where(function ($query) use ($cleanedCpf, $identity) {
+            if (!empty($cleanedCpf)) {
+                $query->where('cpf', $cleanedCpf);
+            }
+            $query->orWhere('login', $identity);
+        })->first();
 
         if ($user && Hash::check($password, $user->password)) {
             // Check if logging in on the apex domain (no active tenant resolved from host)

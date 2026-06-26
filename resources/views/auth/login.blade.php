@@ -162,12 +162,12 @@
                     @csrf
                     <!-- CPF Field -->
                     <div class="space-y-xs">
-                        <label class="text-on-surface font-label-bold text-label-bold block" for="login_identity">CPF</label>
+                        <label class="text-on-surface font-label-bold text-label-bold block" for="login_identity">CPF ou Usuário</label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none text-outline group-focus-within:text-tertiary-container transition-colors">
                                 <span class="material-symbols-outlined">badge</span>
                             </div>
-                            <input class="block w-full pl-[56px] pr-md py-md bg-surface-bright border border-outline-variant rounded-lg font-body-md text-on-surface placeholder:text-outline focus:ring-2 focus:ring-tertiary-container/20 focus:border-tertiary-container transition-all outline-none" id="login_identity" name="login_identity" placeholder="000.000.000-00" type="text" value="{{ old('login_identity') }}" required autofocus />
+                            <input class="block w-full pl-[56px] pr-md py-md bg-surface-bright border border-outline-variant rounded-lg font-body-md text-on-surface placeholder:text-outline focus:ring-2 focus:ring-tertiary-container/20 focus:border-tertiary-container transition-all outline-none" id="login_identity" name="login_identity" placeholder="CPF ou Usuário" type="text" value="{{ old('login_identity') }}" required autofocus />
                         </div>
                     </div>
                     <!-- Password Field -->
