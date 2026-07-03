@@ -9,7 +9,7 @@
         <p class="font-body-md text-body-md text-outline">Gere relatórios detalhados sobre o faturamento e desempenho da academia.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
         <!-- Monthly Billing Report -->
         <div class="bg-white rounded-xl border border-slate-200 p-md shadow-sm flex flex-col justify-between group hover:border-on-tertiary-container transition-all">
             <div>
@@ -46,6 +46,33 @@
                     Visualizar Lista
                 </a>
             </div>
+        </div>
+
+        <!-- Attendance Report -->
+        <div class="bg-white rounded-xl border border-slate-200 p-md shadow-sm flex flex-col justify-between group hover:border-on-tertiary-container transition-all">
+            <div>
+                <div class="w-12 h-12 bg-secondary-container/20 text-on-secondary-container rounded-lg flex items-center justify-center text-xl mb-4">
+                    <span class="material-symbols-outlined">how_to_reg</span>
+                </div>
+                <h3 class="font-label-bold text-label-bold text-primary mb-2">Frequência e Presença</h3>
+                <p class="text-sm text-outline mb-6">Acompanhe a assiduidade dos alunos, presenças consolidadas e relatórios de pico por período.</p>
+            </div>
+            
+            <form action="{{ route('reports.attendance') }}" method="GET" class="space-y-4">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-label-sm text-outline-variant mb-1 ml-1">Início</label>
+                        <input type="date" name="start_date" value="{{ now()->startOfMonth()->toDateString() }}" class="w-full h-10 px-2 rounded-lg border border-slate-200 bg-surface-container-lowest focus:ring-2 focus:ring-on-tertiary-container focus:border-on-tertiary-container transition-all text-xs" required>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-label-sm text-outline-variant mb-1 ml-1">Fim</label>
+                        <input type="date" name="end_date" value="{{ now()->toDateString() }}" class="w-full h-10 px-2 rounded-lg border border-slate-200 bg-surface-container-lowest focus:ring-2 focus:ring-on-tertiary-container focus:border-on-tertiary-container transition-all text-xs" required>
+                    </div>
+                </div>
+                <button type="submit" class="w-full h-12 bg-primary text-white rounded-lg font-label-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all">
+                    Visualizar Frequência
+                </button>
+            </form>
         </div>
 
         <!-- Annual Billing Report -->

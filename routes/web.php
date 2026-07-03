@@ -99,6 +99,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/monthly', [ReportController::class, 'monthly'])->name('reports.monthly');
         Route::get('/reports/delinquency', [ReportController::class, 'delinquency'])->name('reports.delinquency');
+        Route::get('/reports/attendance', [ReportController::class, 'attendance'])->name('reports.attendance');
     });
 
     // Settings
