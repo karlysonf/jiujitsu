@@ -79,13 +79,13 @@ It was developed with scalability, security and performance in mind using Larave
 Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/jiujitsu-manager.git
+git clone https://github.com/yourusername/jiujitsu.git
 ```
 
 Enter the folder
 
 ```bash
-cd jiujitsu-manager
+cd jiujitsu
 ```
 
 Install dependencies
