@@ -1,7 +1,5 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20PNG/2%20RGB/1%20Full%20Color/laravel-logolockup-rgb-red.png" width="420" alt="Project Logo">
-</p>
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <h1 align="center">
 🥋 JiuJitsu Manager
 </h1>
@@ -9,6 +7,7 @@
 <p align="center">
 A modern SaaS platform for Jiu-Jitsu academies to manage students, instructors, attendance, payments and rankings.
 </p>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 <p align="center">
 
@@ -20,7 +19,7 @@ A modern SaaS platform for Jiu-Jitsu academies to manage students, instructors, 
 
 <img src="https://img.shields.io/badge/License-MIT-success?style=for-the-badge">
 
-<img src="https://img.shields.io/github/last-commit/yourusername/jiujitsu-manager?style=for-the-badge">
+<img src="https://img.shields.io/github/last-commit/karlysonf/jiujitsu?style=for-the-badge">
 
 </p>
 
