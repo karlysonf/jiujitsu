@@ -19,7 +19,7 @@ A modern SaaS platform for Jiu-Jitsu academies to manage students, instructors, 
 
 <img src="https://img.shields.io/badge/License-MIT-success?style=for-the-badge">
 
-<img src="https://img.shields.io/github/last-commit/karlysonf/jiujitsu?style=for-the-badge">
+<img src="https://img.shields.io/github/last-commit/karlysonf/gestormensal?style=for-the-badge">
 
 </p>
 
