@@ -1,5 +1,5 @@
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <h1 align="center">
 🥋 JiuJitsu Manager
 </h1>
@@ -7,7 +7,7 @@
 <p align="center">
 A modern SaaS platform for Jiu-Jitsu academies to manage students, instructors, attendance, payments and rankings.
 </p>
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 <p align="center">
 
@@ -22,6 +22,10 @@ A modern SaaS platform for Jiu-Jitsu academies to manage students, instructors, 
 <img src="https://img.shields.io/github/last-commit/karlysonf/jiujitsu?style=for-the-badge">
 
 </p>
+
+---
+
+<img width="1367" height="705" alt="Captura de Tela 2026-07-08 às 08 52 50" src="https://github.com/user-attachments/assets/f23e8cad-87be-4b64-8cd0-42193a02503c" />
 
 ---
 
