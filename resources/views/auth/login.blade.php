@@ -231,7 +231,7 @@
                             <span class="material-symbols-outlined text-[20px]">support_agent</span>
                             Suporte
                         </button>
-                        <button type="button" class="flex items-center gap-xs text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-container-high px-md py-xs rounded-full transition-colors">
+                        <button onclick="toggleDemoModal(true)" type="button" class="flex items-center gap-xs text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-container-high px-md py-xs rounded-full transition-colors">
                             <span class="material-symbols-outlined text-[20px]">play_circle</span>
                             Demonstração
                         </button>
@@ -292,12 +292,144 @@
                     </a>
                 </div>
 
-                <!-- QR Code Section -->
-                <div class="flex flex-col items-center justify-center p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-850 rounded-xl shadow-sm min-w-[170px]">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwa.me%2F5582987532852" alt="WhatsApp QR Code" class="w-32 h-32 object-contain" />
-                    <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-2 tracking-wider">Escaneie o QR Code</span>
+            <!-- QR Code Section -->
+            <div class="flex flex-col items-center justify-center p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-850 rounded-xl shadow-sm min-w-[170px]">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwa.me%2F5582987532852" alt="WhatsApp QR Code" class="w-32 h-32 object-contain" />
+                <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-2 tracking-wider">Escaneie o QR Code</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Demo Modal Overlay (using native dialog) -->
+<dialog id="demo-modal" class="bg-white dark:bg-slate-900 rounded-2xl max-w-6xl w-full p-0 shadow-2xl border border-slate-200 dark:border-slate-800 backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm transform scale-95 transition-all duration-300 opacity-0 outline-none">
+    <!-- Content Container -->
+    <div class="flex flex-col md:flex-row h-full min-h-[500px] md:h-[650px] overflow-hidden">
+        <!-- Sidebar (Steps/Tabs) -->
+        <div class="w-full md:w-80 bg-slate-50 dark:bg-slate-950 p-6 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-850 flex flex-col justify-between">
+            <div>
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary-container dark:text-white">smart_display</span>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50">Tour do Sistema</h2>
+                    </div>
+                    <button onclick="toggleDemoModal(false)" type="button" class="md:hidden flex items-center justify-center p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <!-- Steps List -->
+                <div class="space-y-4">
+                    <!-- Step 1 Button -->
+                    <button onclick="goToSlide(0)" id="demo-step-0" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all flex items-start gap-3 group">
+                        <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
+                            <span class="material-symbols-outlined text-[22px]">dashboard</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">Painel Principal</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5">Indicadores financeiros e de frequência em tempo real.</p>
+                            <!-- Progress bar -->
+                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-1 rounded-full mt-2 overflow-hidden relative">
+                                <div id="demo-progress-0" class="bg-indigo-650 h-full w-0 transition-all duration-100 ease-linear"></div>
+                            </div>
+                        </div>
+                    </button>
+
+                    <!-- Step 2 Button -->
+                    <button onclick="goToSlide(1)" id="demo-step-1" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all flex items-start gap-3 group">
+                        <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
+                            <span class="material-symbols-outlined text-[22px]">group</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">Gestão de Alunos</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5">Listagem visual de alunos ativos, inativos e graduações.</p>
+                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-1 rounded-full mt-2 overflow-hidden relative">
+                                <div id="demo-progress-1" class="bg-indigo-650 h-full w-0 transition-all duration-100 ease-linear"></div>
+                            </div>
+                        </div>
+                    </button>
+
+                    <!-- Step 3 Button -->
+                    <button onclick="goToSlide(2)" id="demo-step-2" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all flex items-start gap-3 group">
+                        <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
+                            <span class="material-symbols-outlined text-[22px]">person_add</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">Cadastro de Aluno</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5">Formulário inteligente com seleção de plano e graduação.</p>
+                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-1 rounded-full mt-2 overflow-hidden relative">
+                                <div id="demo-progress-2" class="bg-indigo-650 h-full w-0 transition-all duration-100 ease-linear"></div>
+                            </div>
+                        </div>
+                    </button>
+
+                    <!-- Step 4 Button -->
+                    <button onclick="goToSlide(3)" id="demo-step-3" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all flex items-start gap-3 group">
+                        <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
+                            <span class="material-symbols-outlined text-[22px]">checklist</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">Controle de Presença</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5">Chamada eletrônica rápida com status de presença.</p>
+                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-1 rounded-full mt-2 overflow-hidden relative">
+                                <div id="demo-progress-3" class="bg-indigo-650 h-full w-0 transition-all duration-100 ease-linear"></div>
+                            </div>
+                        </div>
+                    </button>
                 </div>
             </div>
+
+            <!-- Footer Autoplay Controls & Keyboard Helper -->
+            <div class="mt-8 pt-4 border-t border-slate-200 dark:border-slate-850 flex items-center justify-between text-xs text-slate-450">
+                <button onclick="toggleAutoplay()" type="button" class="flex items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors bg-slate-200/50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full font-semibold">
+                    <span class="material-symbols-outlined text-sm" id="autoplay-icon">pause</span>
+                    <span id="autoplay-text">Autoplay</span>
+                </button>
+                <span class="hidden md:inline font-mono">Use ➔ ou ⬅</span>
+            </div>
+        </div>
+
+        <!-- Main Showcase Area (Image display) -->
+        <div class="flex-1 bg-slate-100 dark:bg-slate-900 flex flex-col justify-between relative group/showcase">
+            <!-- Close Button (Desktop) -->
+            <button onclick="toggleDemoModal(false)" type="button" class="hidden md:flex absolute top-6 right-6 z-10 items-center justify-center w-10 h-10 rounded-full bg-white/90 dark:bg-slate-950/90 hover:bg-white dark:hover:bg-slate-950 text-slate-750 hover:text-slate-900 dark:text-slate-350 dark:hover:text-white transition-all shadow-md active:scale-95 border border-slate-200 dark:border-slate-800">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+
+            <!-- Slides Container -->
+            <div class="flex-1 flex items-center justify-center p-6 md:p-10">
+                <div class="relative w-full h-full max-h-[450px] overflow-hidden rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+                    <!-- Step 1 Image -->
+                    <img src="{{ asset('images/demo/step1.png') }}" id="demo-img-0" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-100 transition-all duration-500 scale-100" alt="Painel Principal (Dashboard)">
+                    <!-- Step 2 Image -->
+                    <img src="{{ asset('images/demo/step3.png') }}" id="demo-img-1" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-0 transition-all duration-500 scale-95 pointer-events-none" alt="Gestão de Alunos">
+                    <!-- Step 3 Image -->
+                    <img src="{{ asset('images/demo/step2.png') }}" id="demo-img-2" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-0 transition-all duration-500 scale-95 pointer-events-none" alt="Cadastro de Aluno">
+                    <!-- Step 4 Image -->
+                    <img src="{{ asset('images/demo/step4.png') }}" id="demo-img-3" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-0 transition-all duration-500 scale-95 pointer-events-none" alt="Controle de Presença">
+                </div>
+            </div>
+
+            <!-- Navigation Controls Footer -->
+            <div class="p-6 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                    <h4 class="text-sm font-bold text-slate-850 dark:text-slate-100" id="slide-title">Painel Principal</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5" id="slide-desc">Indicadores financeiros e de frequência em tempo real.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="prevSlide()" type="button" class="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 transition-all active:scale-95">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <button onclick="nextSlide()" type="button" class="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 transition-all active:scale-95">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</dialog>
 
         </div>
     </div>
@@ -331,6 +463,196 @@
                     modal.classList.add('hidden');
                 }, 300);
             }
+        }
+
+        /* Demo Modal Scripts */
+        let demoInterval = null;
+        let currentDemoSlide = 0;
+        const totalDemoSlides = 4;
+        const demoSlideDuration = 5000;
+        let demoAutoplayActive = true;
+        let demoProgressInterval = null;
+
+        const demoSlidesData = [
+            {
+                title: "Painel Principal",
+                desc: "Indicadores financeiros e de frequência em tempo real."
+            },
+            {
+                title: "Gestão de Alunos",
+                desc: "Listagem visual de alunos ativos, inativos e graduações."
+            },
+            {
+                title: "Cadastro de Aluno",
+                desc: "Formulário inteligente com seleção de plano e graduação."
+            },
+            {
+                title: "Controle de Presença",
+                desc: "Chamada eletrônica rápida com status de presença."
+            }
+        ];
+
+        function toggleDemoModal(show) {
+            const dialog = document.getElementById('demo-modal');
+            if (show) {
+                dialog.showModal();
+                setTimeout(() => {
+                    dialog.classList.remove('scale-95', 'opacity-0');
+                    dialog.classList.add('scale-100', 'opacity-100');
+                }, 10);
+                goToSlide(0);
+                startAutoplay();
+            } else {
+                dialog.classList.remove('scale-100', 'opacity-100');
+                dialog.classList.add('scale-95', 'opacity-0');
+                stopAutoplay();
+                setTimeout(() => {
+                    dialog.close();
+                }, 300);
+            }
+        }
+
+        // Close on backdrop click
+        document.getElementById('demo-modal').addEventListener('click', (e) => {
+            const dialog = document.getElementById('demo-modal');
+            const dialogDimensions = dialog.getBoundingClientRect();
+            if (
+                e.clientX < dialogDimensions.left ||
+                e.clientX > dialogDimensions.right ||
+                e.clientY < dialogDimensions.top ||
+                e.clientY > dialogDimensions.bottom
+            ) {
+                toggleDemoModal(false);
+            }
+        });
+
+        // Close on ESC key
+        document.getElementById('demo-modal').addEventListener('cancel', (e) => {
+            e.preventDefault();
+            toggleDemoModal(false);
+        });
+
+        // Keyboard navigation (left/right arrow keys)
+        document.addEventListener('keydown', (e) => {
+            const dialog = document.getElementById('demo-modal');
+            if (dialog && dialog.open) {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            }
+        });
+
+        function goToSlide(slideIndex) {
+            for (let i = 0; i < totalDemoSlides; i++) {
+                const btn = document.getElementById(`demo-step-${i}`);
+                if (btn) {
+                    btn.classList.remove('bg-white', 'dark:bg-slate-900', 'border-slate-200', 'dark:border-slate-800', 'shadow-sm');
+                    btn.classList.add('border-transparent');
+                }
+                
+                const progress = document.getElementById(`demo-progress-${i}`);
+                if (progress) {
+                    progress.style.transition = 'none';
+                    progress.style.width = '0%';
+                }
+                
+                const img = document.getElementById(`demo-img-${i}`);
+                if (img) {
+                    img.classList.remove('opacity-100', 'scale-100');
+                    img.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                }
+            }
+
+            currentDemoSlide = slideIndex;
+            
+            const activeBtn = document.getElementById(`demo-step-${slideIndex}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white', 'dark:bg-slate-900', 'border-slate-200', 'dark:border-slate-800', 'shadow-sm');
+                activeBtn.classList.remove('border-transparent');
+            }
+            
+            const activeImg = document.getElementById(`demo-img-${slideIndex}`);
+            if (activeImg) {
+                activeImg.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                activeImg.classList.add('opacity-100', 'scale-100');
+            }
+
+            document.getElementById('slide-title').innerText = demoSlidesData[slideIndex].title;
+            document.getElementById('slide-desc').innerText = demoSlidesData[slideIndex].desc;
+
+            if (demoAutoplayActive) {
+                resetAndStartProgressBar(slideIndex);
+            }
+        }
+
+        function nextSlide() {
+            let next = (currentDemoSlide + 1) % totalDemoSlides;
+            goToSlide(next);
+        }
+
+        function prevSlide() {
+            let prev = (currentDemoSlide - 1 + totalDemoSlides) % totalDemoSlides;
+            goToSlide(prev);
+        }
+
+        function toggleAutoplay() {
+            demoAutoplayActive = !demoAutoplayActive;
+            const icon = document.getElementById('autoplay-icon');
+            const text = document.getElementById('autoplay-text');
+            
+            if (demoAutoplayActive) {
+                icon.innerText = 'pause';
+                text.innerText = 'Autoplay';
+                resetAndStartProgressBar(currentDemoSlide);
+            } else {
+                icon.innerText = 'play_arrow';
+                text.innerText = 'Pausado';
+                stopAutoplay();
+                document.getElementById(`demo-progress-${currentDemoSlide}`).style.width = '0%';
+            }
+        }
+
+        function startAutoplay() {
+            demoAutoplayActive = true;
+            document.getElementById('autoplay-icon').innerText = 'pause';
+            document.getElementById('autoplay-text').innerText = 'Autoplay';
+            resetAndStartProgressBar(currentDemoSlide);
+        }
+
+        function stopAutoplay() {
+            if (demoInterval) {
+                clearInterval(demoInterval);
+                demoInterval = null;
+            }
+            if (demoProgressInterval) {
+                clearInterval(demoProgressInterval);
+                demoProgressInterval = null;
+            }
+        }
+
+        function resetAndStartProgressBar(slideIndex) {
+            stopAutoplay();
+            
+            const progress = document.getElementById(`demo-progress-${slideIndex}`);
+            if (!progress) return;
+            
+            progress.style.transition = 'none';
+            progress.style.width = '0%';
+            
+            let startTime = Date.now();
+            
+            demoProgressInterval = setInterval(() => {
+                let elapsed = Date.now() - startTime;
+                let percentage = Math.min((elapsed / demoSlideDuration) * 100, 100);
+                progress.style.width = `${percentage}%`;
+                
+                if (elapsed >= demoSlideDuration) {
+                    clearInterval(demoProgressInterval);
+                    nextSlide();
+                }
+            }, 30);
         }
     </script>
 </body>
