@@ -72,7 +72,14 @@ It was developed with scalability, security and performance in mind using Larave
 
 <p align="center">
 
-<img src="docs/dashboard.png" width="90%">
+<img width="1466" height="705" alt="Captura de Tela 2026-07-10 às 14 39 06" src="https://github.com/user-attachments/assets/2840ae8f-ae5c-49d6-a9be-0003d4c85c2b" />
+<img width="1470" height="708" alt="Captura de Tela 2026-07-10 às 14 39 16" src="https://github.com/user-attachments/assets/7ed0e184-f55f-4731-9e48-752e12c22f9a" />
+<img width="1459" height="706" alt="Captura de Tela 2026-07-10 às 14 39 45" src="https://github.com/user-attachments/assets/93e3959c-8e8b-45a6-8129-45e7da093890" />
+<img width="1459" height="706" alt="Captura de Tela 2026-07-10 às 14 39 45" src="https://github.com/user-attachments/assets/207264f1-5fda-4d78-b94f-20df97d79c50" />
+<img width="1451" height="706" alt="Captura de Tela 2026-07-10 às 14 40 14" src="https://github.com/user-attachments/assets/3fd9a197-668f-48d2-9af7-0f7685e774b9" />
+<img width="1452" height="704" alt="Captura de Tela 2026-07-10 às 14 40 29" src="https://github.com/user-attachments/assets/f4f56d58-3c97-4015-992c-e876f5bbaa70" />
+<img width="1456" height="703" alt="Captura de Tela 2026-07-10 às 14 40 40" src="https://github.com/user-attachments/assets/d7df059f-e7b9-4ccf-9ac3-29a50e408158" />
+
 
 </p>
 
