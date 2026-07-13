@@ -242,8 +242,12 @@
     </main>
 
     <!-- Support Modal Overlay -->
-    <div id="support-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full p-6 md:p-8 shadow-2xl relative border border-slate-200 dark:border-slate-800 transform scale-95 transition-transform duration-300">
+    <div id="support-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 overflow-y-auto p-4 hidden opacity-0 transition-opacity duration-300 flex justify-center items-start sm:items-center">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full p-6 md:p-8 shadow-2xl relative border border-slate-200 dark:border-slate-800 transform scale-95 transition-transform duration-300 my-8 sm:my-auto">
+            <!-- Close Button -->
+            <button onclick="toggleSupportModal(false)" type="button" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-850 transition-colors" aria-label="Fechar">
+                <span class="material-symbols-outlined">close</span>
+            </button>
 
             <!-- Header -->
             <div class="flex items-center gap-4 mb-6">
@@ -303,11 +307,11 @@
 </div>
 
 <!-- Demo Modal Overlay (using native dialog) -->
-<dialog id="demo-modal" class="bg-white dark:bg-slate-900 rounded-2xl max-w-6xl w-full p-0 shadow-2xl border border-slate-200 dark:border-slate-800 backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm transform scale-95 transition-all duration-300 opacity-0 outline-none">
+<dialog id="demo-modal" class="bg-white dark:bg-slate-900 rounded-2xl max-w-6xl w-[calc(100%-2rem)] md:w-full max-h-[calc(100vh-2rem)] md:max-h-[85vh] p-0 shadow-2xl border border-slate-200 dark:border-slate-800 backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm transform scale-95 transition-all duration-300 opacity-0 outline-none m-auto">
     <!-- Content Container -->
-    <div class="flex flex-col md:flex-row h-full min-h-[500px] md:h-[650px] overflow-hidden">
+    <div class="flex flex-col md:flex-row h-full min-h-[350px] md:min-h-[500px] md:h-[650px] overflow-hidden">
         <!-- Sidebar (Steps/Tabs) -->
-        <div class="w-full md:w-80 bg-slate-50 dark:bg-slate-950 p-6 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-850 flex flex-col justify-between">
+        <div class="hidden md:flex w-full md:w-80 bg-slate-50 dark:bg-slate-950 p-6 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-850 flex-col justify-between">
             <div>
                 <!-- Header -->
                 <div class="flex items-center justify-between mb-8">
@@ -393,13 +397,24 @@
 
         <!-- Main Showcase Area (Image display) -->
         <div class="flex-1 bg-slate-100 dark:bg-slate-900 flex flex-col justify-between relative group/showcase">
+            <!-- Mobile Header -->
+            <div class="md:hidden flex items-center justify-between px-6 py-4 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary-container dark:text-white">smart_display</span>
+                    <h2 class="text-sm font-bold text-slate-900 dark:text-slate-50">Tour do Sistema</h2>
+                </div>
+                <button onclick="toggleDemoModal(false)" type="button" class="flex items-center justify-center p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 active:scale-95 transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
             <!-- Close Button (Desktop) -->
             <button onclick="toggleDemoModal(false)" type="button" class="hidden md:flex absolute top-6 right-6 z-10 items-center justify-center w-10 h-10 rounded-full bg-white/90 dark:bg-slate-950/90 hover:bg-white dark:hover:bg-slate-950 text-slate-750 hover:text-slate-900 dark:text-slate-350 dark:hover:text-white transition-all shadow-md active:scale-95 border border-slate-200 dark:border-slate-800">
                 <span class="material-symbols-outlined">close</span>
             </button>
 
             <!-- Slides Container -->
-            <div class="flex-1 flex items-center justify-center p-6 md:p-10">
+            <div class="flex-1 flex items-center justify-center p-4 md:p-10">
                 <div class="relative w-full h-full max-h-[450px] overflow-hidden rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
                     <!-- Step 1 Image -->
                     <img src="{{ asset('images/demo/step1.png') }}" id="demo-img-0" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-100 transition-all duration-500 scale-100" alt="Painel Principal (Dashboard)">
@@ -464,6 +479,24 @@
                 }, 300);
             }
         }
+
+        // Close Support Modal on backdrop click
+        document.getElementById('support-modal').addEventListener('click', (e) => {
+            const modal = document.getElementById('support-modal');
+            if (e.target === modal) {
+                toggleSupportModal(false);
+            }
+        });
+
+        // Close Support Modal on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('support-modal');
+                if (modal && !modal.classList.contains('hidden')) {
+                    toggleSupportModal(false);
+                }
+            }
+        });
 
         /* Demo Modal Scripts */
         let demoInterval = null;
@@ -579,7 +612,7 @@
                 activeImg.classList.add('opacity-100', 'scale-100');
             }
 
-            document.getElementById('slide-title').innerText = demoSlidesData[slideIndex].title;
+            document.getElementById('slide-title').innerText = `${demoSlidesData[slideIndex].title} (${slideIndex + 1}/${totalDemoSlides})`;
             document.getElementById('slide-desc').innerText = demoSlidesData[slideIndex].desc;
 
             if (demoAutoplayActive) {
