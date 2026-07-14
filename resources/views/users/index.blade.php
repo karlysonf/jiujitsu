@@ -107,17 +107,17 @@
                     ID: #{{ str_pad($user->id, 4, '0', STR_PAD_LEFT) }}
                 </div>
                 <div class="flex gap-2">
-                    <a href="{{ route('users.show', $user) }}" class="p-2 bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                    <a href="{{ route('users.show', $user) }}" class="p-2 bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-lg transition-colors" title="Visualizar Aluno">
                         <span class="material-symbols-outlined text-sm">visibility</span>
                     </a>
-                    <a href="{{ route('users.edit', $user) }}" class="p-2 bg-slate-50 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors">
+                    <a href="{{ route('users.edit', $user) }}" class="p-2 bg-amber-50 text-amber-600 hover:bg-amber-100 hover:text-amber-800 rounded-lg transition-colors" title="Editar Aluno">
                         <span class="material-symbols-outlined text-sm">edit</span>
                     </a>
                     @if(auth()->user()->hasAnyRole(['root', 'admin']))
                     <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Excluir este aluno?')">
                         @csrf @method('DELETE')
-                        <button type="submit" class="p-2 bg-slate-50 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
-                            <span class="material-symbols-outlined text-sm">trash</span>
+                        <button type="submit" class="p-2 bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-800 rounded-lg transition-colors" title="Excluir Aluno">
+                            <span class="material-symbols-outlined text-sm">delete</span>
                         </button>
                     </form>
                     @endif
