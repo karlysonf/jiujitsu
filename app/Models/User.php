@@ -110,4 +110,9 @@ class User extends Authenticatable
     public function getPhoneAttribute() { return $this->telefone; }
     public function getBirthDateAttribute() { return $this->data_nascimento; }
     public function getDueDayAttribute() { return $this->vencimento_mensalidade; }
+
+    public function getAvatarUrlAttribute()
+    {
+        return $this->photo ? asset('storage/' . $this->photo) : null;
+    }
 }

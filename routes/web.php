@@ -83,6 +83,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/attendances', [AttendanceController::class, 'index'])->name('attendances.index');
         Route::post('/attendances', [AttendanceController::class, 'store'])->name('attendances.store');
         Route::post('/attendances/bulk', [AttendanceController::class, 'bulkStore'])->name('attendances.bulk');
+        Route::post('/attendances/identify-faces', [AttendanceController::class, 'identifyFaces'])->name('attendances.identify-faces');
         Route::delete('/attendances', [AttendanceController::class, 'destroy'])->name('attendances.destroy');
     });
 

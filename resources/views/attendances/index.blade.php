@@ -44,6 +44,43 @@
         </div>
     </div>
 
+    <!-- Smart Attendance Upload Card -->
+    <div class="bg-white border border-outline-variant p-6 rounded-xl shadow-sm mb-6">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <span class="material-symbols-outlined text-[28px]">face_retouching_natural</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Chamada Inteligente por Foto (IA)</h3>
+                    <p class="text-sm text-on-surface-variant mt-1 leading-relaxed">
+                        Faça upload de uma foto da aula de hoje. A inteligência artificial identificará os alunos presentes e pré-selecionará seus nomes na lista abaixo para sua validação.
+                        <span class="text-xs text-indigo-600 block mt-1 font-semibold">Obs: Alunos devem ter foto cadastrada em seus perfis para serem reconhecidos.</span>
+                    </p>
+                </div>
+            </div>
+            <div class="w-full md:w-auto shrink-0 flex flex-col items-center gap-2">
+                <button type="button" onclick="document.getElementById('photoUploadInput').click()" class="w-full md:w-auto bg-primary text-on-primary px-6 py-3 rounded-xl font-label-bold text-label-bold flex items-center justify-center gap-2 hover:scale-[0.98] transition-transform shadow-md active:opacity-90 cursor-pointer">
+                    <span class="material-symbols-outlined">upload_file</span>
+                    Enviar Foto do Tatame
+                </button>
+                <input type="file" id="photoUploadInput" accept="image/*" class="hidden" onchange="uploadTatamePhoto(this)">
+            </div>
+        </div>
+        
+        <!-- Feedback Alert Container -->
+        <div id="aiFeedbackAlert" class="mt-4 hidden">
+            <!-- Will be populated via JS -->
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-4 hidden">
+        <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-white font-label-bold text-headline-md animate-pulse">Analisando imagem com Inteligência Artificial...</p>
+        <p class="text-slate-300 text-body-md">Isso pode levar alguns segundos.</p>
+    </div>
+
     <!-- Filters Bar -->
     <div class="bg-white border border-outline-variant p-4 rounded-xl mb-6 flex flex-wrap items-center justify-between gap-4">
         <div class="flex-1 min-w-[300px] relative">
@@ -167,6 +204,106 @@
 </div>
 
 <script>
+    window.uploadTatamePhoto = function(input) {
+        if (!input.files || !input.files[0]) return;
+        
+        const file = input.files[0];
+        const formData = new FormData();
+        formData.append('photo', file);
+        
+        // Show loading overlay
+        const overlay = document.getElementById('loadingOverlay');
+        overlay.classList.remove('hidden');
+        
+        // Hide previous alerts
+        const alertBox = document.getElementById('aiFeedbackAlert');
+        alertBox.classList.add('hidden');
+        alertBox.className = "mt-4 p-4 rounded-lg text-sm font-semibold";
+        alertBox.innerHTML = "";
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') 
+            || "{{ csrf_token() }}";
+
+        fetch("{{ route('attendances.identify-faces') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message || 'Erro ao processar imagem.') });
+            }
+            return response.json();
+        })
+        .then(data => {
+            overlay.classList.add('hidden');
+            
+            if (data.success && data.identified_ids) {
+                const identifiedIds = data.identified_ids;
+                
+                // Uncheck all first so we only mark the identified ones
+                const checkboxes = document.querySelectorAll('.student-checkbox');
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        cb.checked = false;
+                        cb.dispatchEvent(new Event('change'));
+                    }
+                });
+
+                // Check the identified ones
+                let checkCount = 0;
+                identifiedIds.forEach(id => {
+                    const cb = document.querySelector(`.student-checkbox[value="${id}"]`);
+                    if (cb) {
+                        cb.checked = true;
+                        cb.dispatchEvent(new Event('change'));
+                        checkCount++;
+                    }
+                });
+
+                // Show success alert
+                alertBox.classList.remove('hidden');
+                if (data.simulation) {
+                    alertBox.className = "mt-4 p-4 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm font-medium flex flex-col gap-1";
+                    alertBox.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base">warning</span>
+                            <span class="font-bold">Modo Simulação Ativo</span>
+                        </div>
+                        <p class="text-xs mt-1">A chave <code class="bg-yellow-100 px-1 py-0.5 rounded font-mono font-bold text-yellow-900">GEMINI_API_KEY</code> não foi encontrada no arquivo <code class="bg-yellow-100 px-1 py-0.5 rounded font-mono font-bold text-yellow-900">.env</code>. Simulamos a presença de <strong>${checkCount} alunos</strong>. Adicione a chave de API para obter reconhecimento facial real por Inteligência Artificial.</p>
+                    `;
+                } else {
+                    alertBox.className = "mt-4 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm font-medium flex flex-col gap-1";
+                    alertBox.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base">check_circle</span>
+                            <span class="font-bold">Reconhecimento IA concluído!</span>
+                        </div>
+                        <p class="text-xs mt-1">Identificamos <strong>${checkCount} alunos</strong> na foto enviada. Verifique as seleções abaixo e clique em <strong>Validar Presenças</strong> para confirmar.</p>
+                    `;
+                }
+            } else {
+                throw new Error(data.message || 'Falha ao identificar rostos.');
+            }
+        })
+        .catch(error => {
+            overlay.classList.add('hidden');
+            alertBox.classList.remove('hidden');
+            alertBox.className = "mt-4 p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm font-medium flex items-center gap-2";
+            alertBox.innerHTML = `
+                <span class="material-symbols-outlined text-base">error</span>
+                <span>Erro: ${error.message}</span>
+            `;
+            console.error(error);
+        })
+        .finally(() => {
+            // Reset input so they can upload same file if they want
+            input.value = "";
+        });
+    };
+
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('studentSearch');
         const filterButtons = document.querySelectorAll('.filter-btn');
