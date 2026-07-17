@@ -93,7 +93,7 @@ class AttendanceController extends Controller
             ->where('status', 'active')
             ->get();
 
-        $apiKey = env('GEMINI_API_KEY');
+        $apiKey = config('services.gemini.key');
         $fallbackMessage = 'Modo Simulação: Adicione GEMINI_API_KEY no .env para reconhecimento facial real por IA.';
 
         if ($apiKey) {
