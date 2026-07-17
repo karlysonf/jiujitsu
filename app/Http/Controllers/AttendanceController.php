@@ -94,8 +94,10 @@ class AttendanceController extends Controller
             ->get();
 
         $apiKey = env('GEMINI_API_KEY');
+        $fallbackMessage = 'Modo Simulação: Adicione GEMINI_API_KEY no .env para reconhecimento facial real por IA.';
 
         if ($apiKey) {
+            $fallbackMessage = 'Modo Simulação: Nenhum aluno ativo possui foto de perfil salva no servidor para usar como referência no reconhecimento.';
             try {
                 $parts = [];
                 $parts[] = ['text' => "Você é um assistente de reconhecimento facial para uma academia de Jiu-Jitsu. Vou lhe enviar as fotos individuais dos alunos (com seus respectivos IDs) e uma foto do grupo no tatame. Sua tarefa é identificar quais dos alunos cadastrados estão presentes na foto do grupo. Retorne estritamente um array JSON contendo os IDs dos alunos que você reconheceu na foto do grupo, no formato: [ID1, ID2, ID3]. Não retorne mais nada além do array JSON bruto (sem marcações markdown ```json ou explicações)."];
@@ -165,9 +167,11 @@ class AttendanceController extends Controller
                     }
                     
                     \Illuminate\Support\Facades\Log::error('Gemini API Error: ' . $response->body());
+                    $fallbackMessage = 'Modo Simulação: A API do Gemini retornou um erro ao processar as fotos.';
                 }
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Face Identification Exception: ' . $e->getMessage());
+                $fallbackMessage = 'Modo Simulação: Ocorreu um erro ao processar o reconhecimento facial: ' . $e->getMessage();
             }
         }
 
@@ -182,7 +186,7 @@ class AttendanceController extends Controller
             'success' => true,
             'identified_ids' => $identifiedIds,
             'simulation' => true,
-            'message' => 'Modo Simulação: Adicione GEMINI_API_KEY no .env para reconhecimento facial real por IA.'
+            'message' => $fallbackMessage
         ]);
     }
 }
