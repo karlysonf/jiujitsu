@@ -93,11 +93,7 @@ class AttendanceController extends Controller
             ->where('status', 'active')
             ->get();
 
-        $apiKey = config('services.gemini.key');
-        $fallbackMessage = 'Modo Simulação: Adicione GEMINI_API_KEY no .env para reconhecimento facial real por IA.';
-
-        if ($apiKey) {
-            $fallbackMessage = 'Modo Simulação: Nenhum aluno ativo possui foto de perfil salva no servidor para usar como referência no reconhecimento.';
+        $fallbackMessage = 'Modo Simulação: Nenhum aluno ativo possui foto de perfil salva no servidor para usar como referência no reconhecimento.';
             try {
                 $referenceData = [];
                 $hasReferencePhotos = false;
@@ -155,8 +151,6 @@ class AttendanceController extends Controller
                 \Illuminate\Support\Facades\Log::error('Face Identification Exception: ' . $e->getMessage());
                 $fallbackMessage = 'Modo Simulação: Ocorreu um erro de comunicação com o microsserviço Python: ' . $e->getMessage();
             }
-        }
-
         // Fallback to Simulation Mode if API key is missing or failed
         $identifiedIds = [];
         if ($users->isNotEmpty()) {
