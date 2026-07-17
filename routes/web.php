@@ -131,6 +131,14 @@ Route::get('/debug-root-user', function () {
         \Artisan::call('permission:cache-reset');
         $cacheStatus = "Cache de permissões limpo!";
 
+        // Cria a ligação simbólica do storage
+        try {
+            \Artisan::call('storage:link');
+            $storageStatus = "Symlink de storage criado!";
+        } catch (\Exception $e) {
+            $storageStatus = "Erro ao criar symlink: " . $e->getMessage();
+        }
+
         // 3. Busca o usuário pelo CPF
         $user = \App\Models\User::withoutGlobalScope(\App\Scopes\TenantScope::class)
             ->where('cpf', '04314745169')
@@ -159,6 +167,7 @@ Route::get('/debug-root-user', function () {
             'message' => 'Processo de depuração concluído com sucesso!',
             'migrations' => $migrationStatus,
             'cache' => $cacheStatus,
+            'storage' => $storageStatus ?? null,
             'tenants_table_columns' => $columns,
             'user' => [
                 'name' => $user->name,
