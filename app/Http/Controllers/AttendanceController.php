@@ -119,9 +119,11 @@ class AttendanceController extends Controller
                 if ($hasReferencePhotos) {
                     $groupPhoto = $request->file('photo');
                     
+                    $faceServiceUrl = env('FACE_SERVICE_URL', 'http://127.0.0.1:8002') . '/recognize';
+                    
                     $response = \Illuminate\Support\Facades\Http::attach(
                         'group_photo', file_get_contents($groupPhoto->getRealPath()), $groupPhoto->getClientOriginalName()
-                    )->post('http://127.0.0.1:8002/recognize', [
+                    )->post($faceServiceUrl, [
                         'reference_data' => json_encode($referenceData)
                     ]);
 
