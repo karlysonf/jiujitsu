@@ -99,23 +99,17 @@ class AttendanceController extends Controller
         if ($apiKey) {
             $fallbackMessage = 'Modo Simulação: Nenhum aluno ativo possui foto de perfil salva no servidor para usar como referência no reconhecimento.';
             try {
-                $parts = [];
-                $parts[] = ['text' => "Você é um assistente de reconhecimento facial para uma academia de Jiu-Jitsu. Vou lhe enviar as fotos individuais dos alunos (com seus respectivos IDs) e uma foto do grupo no tatame. Sua tarefa é identificar quais dos alunos cadastrados estão presentes na foto do grupo. Retorne estritamente um array JSON contendo os IDs dos alunos que você reconheceu na foto do grupo, no formato: [ID1, ID2, ID3]. Não retorne mais nada além do array JSON bruto (sem marcações markdown ```json ou explicações)."];
-
+                $referenceData = [];
                 $hasReferencePhotos = false;
+                
                 foreach ($users as $user) {
                     if ($user->photo) {
                         $photoPath = storage_path('app/public/' . $user->photo);
                         if (file_exists($photoPath)) {
-                            $mime = mime_content_type($photoPath) ?: 'image/jpeg';
                             $data = base64_encode(file_get_contents($photoPath));
-                            
-                            $parts[] = ['text' => "Aluno ID: " . $user->id . ", Nome: " . $user->name];
-                            $parts[] = [
-                                'inlineData' => [
-                                    'mimeType' => $mime,
-                                    'data' => $data
-                                ]
+                            $referenceData[] = [
+                                'id' => $user->id,
+                                'image_base64' => $data
                             ];
                             $hasReferencePhotos = true;
                         }
@@ -123,38 +117,19 @@ class AttendanceController extends Controller
                 }
 
                 if ($hasReferencePhotos) {
-                    // Add the uploaded group photo
                     $groupPhoto = $request->file('photo');
-                    $groupMime = $groupPhoto->getMimeType();
-                    $groupData = base64_encode(file_get_contents($groupPhoto->getRealPath()));
-
-                    $parts[] = ['text' => "Esta é a foto do grupo no tatame. Analise e identifique quais dos alunos listados anteriormente estão presentes nesta foto. Retorne estritamente o array JSON contendo os IDs dos alunos presentes."];
-                    $parts[] = [
-                        'inlineData' => [
-                            'mimeType' => $groupMime,
-                            'data' => $groupData
-                        ]
-                    ];
-
-                    $response = \Illuminate\Support\Facades\Http::withHeaders([
-                        'Content-Type' => 'application/json'
-                    ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey, [
-                        'contents' => [
-                            [
-                                'parts' => $parts
-                            ]
-                        ]
+                    
+                    $response = \Illuminate\Support\Facades\Http::attach(
+                        'group_photo', file_get_contents($groupPhoto->getRealPath()), $groupPhoto->getClientOriginalName()
+                    )->post('http://127.0.0.1:8002/recognize', [
+                        'reference_data' => json_encode($referenceData)
                     ]);
 
                     if ($response->successful()) {
                         $result = $response->json();
-                        \Illuminate\Support\Facades\Log::info('Gemini API Success Response: ' . json_encode($result));
+                        \Illuminate\Support\Facades\Log::info('FaceAPI Success Response: ' . json_encode($result));
 
-                        $text = $result['candidates'][0]['content']['parts'][0]['text'] ?? '[]';
-                        
-                        // Clean markdown blocks if any
-                        $text = preg_replace('/```json\s*|```\s*/', '', trim($text));
-                        $identifiedIds = json_decode($text, true);
+                        $identifiedIds = $result['identified_ids'] ?? [];
 
                         if (is_array($identifiedIds)) {
                             $validIds = $users->pluck('id')->toArray();
@@ -166,17 +141,17 @@ class AttendanceController extends Controller
                                 'simulation' => false
                             ]);
                         } else {
-                            \Illuminate\Support\Facades\Log::error('Gemini JSON Parse Error: Text was - ' . $text);
-                            $fallbackMessage = 'Modo Simulação: Falha ao interpretar resposta do Gemini. Resposta: ' . $text;
+                            \Illuminate\Support\Facades\Log::error('FaceAPI Parse Error: ' . json_encode($result));
+                            $fallbackMessage = 'Modo Simulação: Falha ao processar resposta do microsserviço.';
                         }
                     } else {
-                        \Illuminate\Support\Facades\Log::error('Gemini API Error Status ' . $response->status() . ': ' . $response->body());
-                        $fallbackMessage = 'Modo Simulação: Erro na API do Gemini (Status ' . $response->status() . '). Resposta: ' . $response->body();
+                        \Illuminate\Support\Facades\Log::error('FaceAPI Error Status ' . $response->status() . ': ' . $response->body());
+                        $fallbackMessage = 'Modo Simulação: Erro no microsserviço de face (Status ' . $response->status() . ').';
                     }
                 }
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Face Identification Exception: ' . $e->getMessage());
-                $fallbackMessage = 'Modo Simulação: Ocorreu um erro ao processar o reconhecimento facial: ' . $e->getMessage();
+                $fallbackMessage = 'Modo Simulação: Ocorreu um erro de comunicação com o microsserviço Python: ' . $e->getMessage();
             }
         }
 
