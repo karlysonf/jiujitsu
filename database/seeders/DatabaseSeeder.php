@@ -10,6 +10,18 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // 0. Ensure a tenant exists and bind it
+        $tenant = \App\Models\Tenant::firstOrCreate(
+            ['subdomain' => 'ctdenyson'],
+            [
+                'name' => 'CT Denyson Anderson',
+                'primary_color' => '#3b82f6',
+                'secondary_color' => '#1e3a8a',
+                'status' => 'active',
+            ]
+        );
+        app()->instance('currentTenant', $tenant);
+
         // 1. Cria os cargos (roles) primeiro
         $this->call(RoleSeeder::class);
 

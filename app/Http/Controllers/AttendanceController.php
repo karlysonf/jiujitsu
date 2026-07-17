@@ -148,6 +148,8 @@ class AttendanceController extends Controller
 
                     if ($response->successful()) {
                         $result = $response->json();
+                        \Illuminate\Support\Facades\Log::info('Gemini API Success Response: ' . json_encode($result));
+
                         $text = $result['candidates'][0]['content']['parts'][0]['text'] ?? '[]';
                         
                         // Clean markdown blocks if any
@@ -163,11 +165,14 @@ class AttendanceController extends Controller
                                 'identified_ids' => array_values($identifiedIds),
                                 'simulation' => false
                             ]);
+                        } else {
+                            \Illuminate\Support\Facades\Log::error('Gemini JSON Parse Error: Text was - ' . $text);
+                            $fallbackMessage = 'Modo Simulação: Falha ao interpretar resposta do Gemini. Resposta: ' . $text;
                         }
+                    } else {
+                        \Illuminate\Support\Facades\Log::error('Gemini API Error Status ' . $response->status() . ': ' . $response->body());
+                        $fallbackMessage = 'Modo Simulação: Erro na API do Gemini (Status ' . $response->status() . '). Resposta: ' . $response->body();
                     }
-                    
-                    \Illuminate\Support\Facades\Log::error('Gemini API Error: ' . $response->body());
-                    $fallbackMessage = 'Modo Simulação: A API do Gemini retornou um erro ao processar as fotos.';
                 }
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Face Identification Exception: ' . $e->getMessage());

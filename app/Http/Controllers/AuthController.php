@@ -113,7 +113,7 @@ class AuthController extends Controller
                 $scheme = $request->secure() ? 'https://' : 'http://';
                 $cleanHost = preg_replace('/^(www\.)?/', '', $request->getHost());
                 $newHost = "{$subdomain}.{$cleanHost}";
-                
+
                 return redirect()->to($scheme . $newHost . '/login')
                     ->withInput(['login_identity' => $request->input('login_identity')])
                     ->withErrors(['login_identity' => 'Por favor, faça login através do subdomínio da sua academia.']);
