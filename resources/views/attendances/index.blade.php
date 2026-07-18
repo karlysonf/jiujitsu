@@ -227,13 +227,21 @@
         fetch("{{ route('attendances.identify-faces') }}", {
             method: 'POST',
             headers: {
-                'X-CSRF-TOKEN': csrfToken
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
             },
             body: formData
         })
-        .then(response => {
+        .then(async response => {
             if (!response.ok) {
-                return response.json().then(err => { throw new Error(err.message || 'Erro ao processar imagem.') });
+                let errMessage = 'Erro ao processar imagem.';
+                try {
+                    const errData = await response.json();
+                    errMessage = errData.message || errMessage;
+                } catch (e) {
+                    errMessage = `Erro do servidor (Status ${response.status}). A foto pode ser muito grande ou a sessão expirou.`;
+                }
+                throw new Error(errMessage);
             }
             return response.json();
         })
