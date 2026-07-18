@@ -272,7 +272,7 @@
                             <span class="material-symbols-outlined text-base">warning</span>
                             <span class="font-bold">Modo Simulação Ativo</span>
                         </div>
-                        <p class="text-xs mt-1">Falha ao se comunicar com o serviço de reconhecimento facial (ou serviço configurado incorretamente). Simulamos a presença de <strong>${checkCount} alunos</strong>. Verifique os logs e o serviço em Python para obter reconhecimento facial real.</p>
+                        <p class="text-xs mt-1">${data.message || 'Falha ao se comunicar com o serviço de reconhecimento facial (ou serviço configurado incorretamente). Simulamos a presença de <strong>' + checkCount + ' alunos</strong>.'}</p>
                     `;
                 } else {
                     alertBox.className = "mt-4 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm font-medium flex flex-col gap-1";
