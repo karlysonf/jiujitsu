@@ -34,11 +34,11 @@ def compute_similarity(embedding1, embedding2):
 @app.post("/recognize")
 async def recognize(
     group_photo: UploadFile = File(...),
-    reference_data: str = Form(...)  # Expecting JSON string with students data
+    reference_data: UploadFile = File(...)  # Expecting JSON file with students data
 ):
     """
     Endpoint to recognize students in a group photo.
-    `reference_data` format:
+    `reference_data` format (as JSON file):
     [
         {"id": 1, "image_base64": "base64_string_here"},
         ...
@@ -67,8 +67,9 @@ async def recognize(
         # Parse reference data
         import base64
         try:
-            students = json.loads(reference_data)
-        except json.JSONDecodeError:
+            ref_bytes = await reference_data.read()
+            students = json.loads(ref_bytes.decode('utf-8'))
+        except (json.JSONDecodeError, UnicodeDecodeError):
             raise HTTPException(status_code=400, detail="Invalid reference_data JSON")
 
         identified_ids = set()
@@ -84,8 +85,8 @@ async def recognize(
 
             try:
                 # Decode base64 reference image
-                ref_bytes = base64.b64decode(b64_data)
-                nparr_ref = np.frombuffer(ref_bytes, np.uint8)
+                ref_bytes_img = base64.b64decode(b64_data)
+                nparr_ref = np.frombuffer(ref_bytes_img, np.uint8)
                 ref_img = cv2.imdecode(nparr_ref, cv2.IMREAD_COLOR)
 
                 if ref_img is None:
@@ -116,6 +117,8 @@ async def recognize(
             "identified_ids": list(identified_ids)
         }
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error during recognition: {e}")
         raise HTTPException(status_code=500, detail=str(e))

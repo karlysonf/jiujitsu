@@ -119,9 +119,9 @@ class AttendanceController extends Controller
                     
                     $response = \Illuminate\Support\Facades\Http::attach(
                         'group_photo', file_get_contents($groupPhoto->getRealPath()), $groupPhoto->getClientOriginalName()
-                    )->post($faceServiceUrl, [
-                        'reference_data' => json_encode($referenceData)
-                    ]);
+                    )->attach(
+                        'reference_data', json_encode($referenceData), 'reference.json'
+                    )->post($faceServiceUrl);
 
                     if ($response->successful()) {
                         $result = $response->json();
