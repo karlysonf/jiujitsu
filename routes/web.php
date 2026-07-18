@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DemoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ReportController;
@@ -24,6 +25,12 @@ Route::get('/', function () {
 
 // Webhook Asaas
 Route::post('/webhooks/asaas', [\App\Http\Controllers\Webhooks\AsaasWebhookController::class, 'handle'])->name('webhooks.asaas');
+
+// ─── Demo público ───────────────────────────────────────────────────────────
+Route::get('/demo', [DemoController::class, 'landing'])->name('demo.landing');
+Route::get('/demo/entrar', [DemoController::class, 'login'])->name('demo.login');
+Route::get('/demo/reset', [DemoController::class, 'reset'])->name('demo.reset');
+// ─────────────────────────────────────────────────────────────────────────────
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:5,1')->name('login.post');

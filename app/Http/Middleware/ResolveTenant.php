@@ -48,7 +48,7 @@ class ResolveTenant
                 }
             }
 
-            if ($subdomain && !in_array($subdomain, ['www', 'admin'])) {
+            if ($subdomain && !in_array($subdomain, ['www', 'admin', 'demo'])) {
                 $tenant = Tenant::where('subdomain', $subdomain)->where('status', '!=', 'suspended')->first();
                 
                 if (!$tenant) {
@@ -61,8 +61,11 @@ class ResolveTenant
         if (!$resolvedFromHost && auth()->check()) {
             $user = auth()->user();
             
-            // If the logged-in user is not root, redirect them to their specific subdomain
-            if (!$user->hasRole('root') && $user->tenant && !config('tenant.bypass_redirect', app()->runningUnitTests())) {
+            // Demo user never gets redirected to a subdomain — stays on main domain
+            $isDemo = ($user->email === 'demo@gestao.com');
+
+            // If the logged-in user is not root (and not demo), redirect them to their specific subdomain
+            if (!$isDemo && !$user->hasRole('root') && $user->tenant && !config('tenant.bypass_redirect', app()->runningUnitTests())) {
                 $tenantSubdomain = $user->tenant->subdomain;
                 $scheme = $request->secure() ? 'https://' : 'http://';
                 $cleanHttpHost = preg_replace('/^(www\.)?/', '', $request->getHttpHost());

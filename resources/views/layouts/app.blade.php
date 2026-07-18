@@ -239,8 +239,19 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="w-full md:w-auto md:ml-[280px] flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto overflow-x-hidden">
-            @yield('content')
+        <main class="w-full md:w-auto md:ml-[280px] flex-1 overflow-y-auto overflow-x-hidden">
+            @if(auth()->check() && auth()->user()->email === 'demo@gestao.com')
+            <div class="sticky top-0 z-30 bg-amber-500 text-amber-950 text-sm font-semibold px-4 py-2.5 flex items-center justify-between gap-3 shadow-md">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base">science</span>
+                    <span>🧪 <strong>Modo Demonstração</strong> — Você está navegando no ambiente de demo. Os dados serão resetados toda madrugada.</span>
+                </div>
+                <a href="{{ route('demo.landing') }}" class="text-amber-900 underline underline-offset-2 whitespace-nowrap text-xs hover:text-amber-950">← Voltar à apresentação</a>
+            </div>
+            @endif
+            <div class="p-4 md:p-6 lg:p-8">
+                @yield('content')
+            </div>
         </main>
     </div>
 
