@@ -114,6 +114,17 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        // ─── Banco isolado para o ambiente de demonstração ──────────────────
+        // Completamente separado do banco de produção (PostgreSQL).
+        // Usa SQLite local em storage/app/demo.sqlite — sem riscos aos dados reais.
+        'demo' => [
+            'driver'                  => 'sqlite',
+            'database'                => storage_path('app/demo.sqlite'),
+            'prefix'                  => '',
+            'foreign_key_constraints' => true,
+        ],
+        // ────────────────────────────────────────────────────────────────────
+
     ],
 
     /*

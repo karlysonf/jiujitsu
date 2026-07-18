@@ -41,9 +41,26 @@ Artisan::command('tenant:set-plan {subdomain} {tier}', function ($subdomain, $ti
 // ─── Reset diário do ambiente de demonstração ──────────────────────────────
 Artisan::command('demo:reset', function () {
     $this->info('Iniciando reset do ambiente de demo...');
+
+    // Cria o arquivo SQLite se não existir
+    $demoDbPath = storage_path('app/demo.sqlite');
+    if (!file_exists($demoDbPath)) {
+        touch($demoDbPath);
+        $this->info('Arquivo demo.sqlite criado.');
+    }
+
+    // Ativa a conexão demo
+    \Illuminate\Support\Facades\DB::setDefaultConnection('demo');
+
+    // Migrations no banco demo se necessário
+    if (!\Illuminate\Support\Facades\Schema::connection('demo')->hasTable('users')) {
+        $this->call('migrate', ['--database' => 'demo', '--force' => true]);
+        $this->info('Migrations aplicadas ao banco demo.');
+    }
+
     $this->call('db:seed', ['--class' => 'DemoSeeder', '--force' => true]);
-    $this->info('✅ Ambiente de demo resetado com sucesso!');
-})->purpose('Reseta os dados fictícios do ambiente de demonstração');
+    $this->info('✅ Ambiente de demo resetado com sucesso! (banco: storage/app/demo.sqlite)');
+})->purpose('Reseta os dados fictícios do ambiente de demonstração (SQLite isolado)');
 
 // Agenda o reset todo dia às 03:00
 Schedule::command('demo:reset')->dailyAt('03:00');
