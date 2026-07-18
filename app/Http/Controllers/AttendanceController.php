@@ -131,7 +131,9 @@ class AttendanceController extends Controller
                     
                     $faceServiceUrl = env('FACE_SERVICE_URL', 'http://127.0.0.1:8002') . '/recognize';
                     
-                    $response = \Illuminate\Support\Facades\Http::attach(
+                    set_time_limit(120);
+                    
+                    $response = \Illuminate\Support\Facades\Http::timeout(120)->attach(
                         'group_photo', file_get_contents($groupPhoto->getRealPath()), $groupPhoto->getClientOriginalName()
                     )->attach(
                         'reference_data', json_encode($referenceData), 'reference.json'
