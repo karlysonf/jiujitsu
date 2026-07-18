@@ -50,7 +50,9 @@ class DemoSeeder extends Seeder
                 'start_date' => Carbon::now()->subYears(10),
             ]
         );
-        $demoAdmin->syncRoles([$adminRole]);
+        if (!$demoAdmin->hasRole($adminRole)) {
+            $demoAdmin->assignRole($adminRole);
+        }
 
         // 4. Planos
         $plans = [
@@ -108,7 +110,9 @@ class DemoSeeder extends Seeder
             );
 
             if ($data['status'] === 'active') {
-                $student->syncRoles([$alunoRole]);
+                if (!$student->hasRole($alunoRole)) {
+                    $student->assignRole($alunoRole);
+                }
 
                 // Histórico de pagamentos: últimos 5 meses
                 for ($mOffset = 4; $mOffset >= 0; $mOffset--) {
