@@ -8,24 +8,45 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Troca silenciosamente a conexão padrão do banco de dados para o SQLite de demo
- * quando o usuário atual está em modo de demonstração.
+ * Detecta modo demo via cookie e troca a conexão de banco para o SQLite isolado.
  *
- * Isso garante isolamento total: nenhuma operação do usuário demo toca o banco de produção.
+ * IMPORTANTE: Este middleware roda com PREPEND para executar antes de StartSession.
+ * Por isso, não podemos usar session() aqui. Usamos um cookie com HMAC assinado
+ * manualmente para autenticar o flag sem depender do EncryptCookies middleware.
+ *
+ * O cookie 'demo_mode_raw' é setado como texto puro (não criptografado pelo Laravel),
+ * com um HMAC SHA-256 para impedir falsificação.
  */
 class SetDemoConnection
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Verifica via sessão se é uma sessão de demo
-        if (session('is_demo_session') === true) {
-            // Troca a conexão padrão para o SQLite isolado
+        if ($this->isDemoRequest($request)) {
             DB::setDefaultConnection('demo');
-
-            // Garante que o Spatie Permission também use a conexão correta
             app('db')->setDefaultConnection('demo');
         }
 
         return $next($request);
+    }
+
+    private function isDemoRequest(Request $request): bool
+    {
+        $cookie = $request->cookies->get('demo_mode_raw');
+        if (!$cookie) {
+            return false;
+        }
+
+        // Formato: "active|HMAC"
+        $parts = explode('|', $cookie, 2);
+        if (count($parts) !== 2) {
+            return false;
+        }
+
+        [$payload, $signature] = $parts;
+
+        $secret = config('app.key');
+        $expected = hash_hmac('sha256', $payload, $secret);
+
+        return $payload === 'active' && hash_equals($expected, $signature);
     }
 }

@@ -23,6 +23,11 @@ class DemoController extends Controller
      */
     public function login()
     {
+        // 0. Garante que qualquer sessão anterior (usuário real) seja encerrada
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+
         // 1. Garante que o arquivo demo.sqlite existe
         $demoDbPath = storage_path('app/demo.sqlite');
         if (!file_exists($demoDbPath)) {
@@ -64,10 +69,17 @@ class DemoController extends Controller
         // 5. Faz login com o usuário demo
         Auth::login($demoUser);
 
-        // 6. Marca a sessão como demo para que o middleware ative o SQLite em cada request
-        session(['is_demo_session' => true]);
+        // 6. Seta um cookie HMAC assinado (raw, fora do sistema de criptografia do Laravel)
+        //    para que o SetDemoConnection middleware possa lê-lo ANTES da sessão ser iniciada.
+        $secret    = config('app.key');
+        $payload   = 'active';
+        $signature = hash_hmac('sha256', $payload, $secret);
+        $cookieValue = "{$payload}|{$signature}";
 
-        return redirect()->route('dashboard');
+        // Cookie de sessão (sem httponly=false para ser lido pelo middleware de forma raw)
+        // expira em 8 horas, seguro via HTTPS em produção
+        return redirect()->route('dashboard')
+            ->withCookie(cookie('demo_mode_raw', $cookieValue, 480, '/', null, false, false));
     }
 
     /**

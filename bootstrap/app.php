@@ -20,12 +20,18 @@ return Application::configure(basePath: dirname(__DIR__))
             Request::HEADER_X_FORWARDED_PROTO |
             Request::HEADER_X_FORWARDED_AWS_ELB);
 
-        // Troca para o banco SQLite de demo antes de qualquer resolução de tenant/auth
+        // SetDemoConnection precisa rodar ANTES de StartSession e do auth guard.
+        // Usa cookie HMAC assinado (não criptografado) para detectar o modo demo
+        // sem depender da sessão ou do EncryptCookies.
         $middleware->web(prepend: [
             \App\Http\Middleware\SetDemoConnection::class,
         ]);
 
-        // Resolve o Tenant ativo com base no domínio/subdomínio após a inicialização da sessão/auth
+        // Exclui o cookie de flag de demo da criptografia do Laravel
+        // (ele é assinado com HMAC, não precisa de criptografia simétrica)
+        $middleware->encryptCookies(except: ['demo_mode_raw']);
+
+        // ResolveTenant roda depois da sessão, usando a conexão já trocada se for demo
         $middleware->web(append: [
             \App\Http\Middleware\ResolveTenant::class,
         ]);
