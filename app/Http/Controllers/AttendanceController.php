@@ -85,9 +85,23 @@ class AttendanceController extends Controller
     {
         Gate::authorize('manage-attendance');
         
-        $request->validate([
-            'photo' => 'required|image|mimes:jpeg,jpg,png,webp|max:10240'
+        \Illuminate\Support\Facades\Log::info('identifyFaces request received', [
+            'has_file' => $request->hasFile('photo'),
+            'file_valid' => $request->hasFile('photo') ? $request->file('photo')->isValid() : false,
+            'file_mime' => $request->hasFile('photo') ? $request->file('photo')->getMimeType() : null,
+            'file_size' => $request->hasFile('photo') ? $request->file('photo')->getSize() : null,
+            'file_extension' => $request->hasFile('photo') ? $request->file('photo')->getClientOriginalExtension() : null,
+            'post_size' => $_SERVER['CONTENT_LENGTH'] ?? null
         ]);
+
+        try {
+            $request->validate([
+                'photo' => 'required|image|mimes:jpeg,jpg,png,webp|max:10240'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Illuminate\Support\Facades\Log::error('Validation failed', $e->errors());
+            throw $e;
+        }
 
         $users = User::role(['aluno', 'professor', 'instrutor'])
             ->where('status', 'active')

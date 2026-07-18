@@ -5,7 +5,9 @@ from typing import List
 
 import cv2
 import numpy as np
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from insightface.app import FaceAnalysis
 from numpy.linalg import norm
 
@@ -15,6 +17,15 @@ logger = logging.getLogger(__name__)
 
 # Initialize FastAPI App
 app = FastAPI(title="Face Recognition API", description="API for detecting and matching faces using InsightFace.")
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error(f"Validation error: {exc.errors()}")
+    logger.error(f"Body: {exc.body}")
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors(), "body": str(exc.body)},
+    )
 
 # Initialize InsightFace Model
 logger.info("Loading InsightFace model...")
