@@ -21,65 +21,64 @@ class DemoController extends Controller
     /**
      * Realiza login automático no ambiente de demo com banco SQLite isolado.
      */
-    public function login()
+    public function login(Request $request)
     {
-        // 0. Garante que qualquer sessão anterior (usuário real) seja encerrada
+        $demoDbPath = storage_path('app/demo.sqlite');
+        $needsInit = false;
+
+        // Verifica se precisamos inicializar o banco e o cookie
+        if (!$request->cookies->has('demo_mode_raw')) {
+            $needsInit = true;
+        } elseif (!file_exists($demoDbPath)) {
+            $needsInit = true;
+        }
+
+        if ($needsInit) {
+            if (!file_exists($demoDbPath)) {
+                touch($demoDbPath);
+            }
+            
+            DB::setDefaultConnection('demo');
+            app('db')->setDefaultConnection('demo');
+            
+            if (!Schema::connection('demo')->hasTable('users')) {
+                Artisan::call('migrate', ['--database' => 'demo', '--force' => true]);
+                Artisan::call('db:seed', ['--class' => 'DemoSeeder', '--force' => true]);
+            }
+
+            $secret    = config('app.key');
+            $payload   = 'active';
+            $signature = hash_hmac('sha256', $payload, $secret);
+            $cookieValue = "{$payload}|{$signature}";
+
+            // Redireciona para si mesmo para forçar os middlewares (SetDemoConnection e StartSession)
+            // a rodarem com o banco SQLite JÁ CRIADO e o cookie JÁ PRESENTE.
+            return redirect()->route('demo.login')
+                ->withCookie(cookie('demo_mode_raw', $cookieValue, 480, '/', null, false, false));
+        }
+
+        // =========================================================
+        // Se chegou aqui, o cookie JÁ EXISTE e o BANCO JÁ EXISTE.
+        // O middleware SetDemoConnection já trocou a conexão para 'demo',
+        // e o StartSession já instanciou o driver de sessão apontando pro SQLite!
+        // =========================================================
+
         Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
 
-        // 1. Garante que o arquivo demo.sqlite existe
-        $demoDbPath = storage_path('app/demo.sqlite');
-        if (!file_exists($demoDbPath)) {
-            touch($demoDbPath);
-        }
-
-        // 2. Ativa a conexão demo ANTES de qualquer operação de banco
-        DB::setDefaultConnection('demo');
-        app('db')->setDefaultConnection('demo');
-
-        // 3. Roda migrations no banco demo se ainda não foram aplicadas
-        if (!Schema::connection('demo')->hasTable('users')) {
-            Artisan::call('migrate', [
-                '--database' => 'demo',
-                '--force'    => true,
-            ]);
-        }
-
-        // 4. Roda o seeder de demo se o usuário demo ainda não existe
         $demoUser = \App\Models\User::on('demo')->where('email', 'demo@gestao.com')->first();
+        
         if (!$demoUser) {
-            Artisan::call('db:seed', [
-                '--class' => 'DemoSeeder',
-                '--force' => true,
-            ]);
-            $demoUser = \App\Models\User::on('demo')->where('email', 'demo@gestao.com')->first();
+            // Fallback de segurança se algo der errado
+            DB::setDefaultConnection(config('database.default') === 'demo' ? env('DB_CONNECTION', 'pgsql') : config('database.default'));
+            return redirect()->route('demo.landing')->with('error', 'Ambiente de demonstração temporariamente indisponível.');
         }
 
-        if (!$demoUser) {
-            // Volta para a conexão real em caso de falha
-            DB::setDefaultConnection(config('database.default') === 'demo'
-                ? env('DB_CONNECTION', 'pgsql')
-                : config('database.default'));
-
-            return redirect()->route('demo.landing')
-                ->with('error', 'Ambiente de demonstração temporariamente indisponível.');
-        }
-
-        // 5. Faz login com o usuário demo
+        // Faz login. Como a sessão está apontando pro SQLite, vai salvar lá.
         Auth::login($demoUser);
 
-        // 6. Seta um cookie HMAC assinado (raw, fora do sistema de criptografia do Laravel)
-        //    para que o SetDemoConnection middleware possa lê-lo ANTES da sessão ser iniciada.
-        $secret    = config('app.key');
-        $payload   = 'active';
-        $signature = hash_hmac('sha256', $payload, $secret);
-        $cookieValue = "{$payload}|{$signature}";
-
-        // Cookie de sessão (sem httponly=false para ser lido pelo middleware de forma raw)
-        // expira em 8 horas, seguro via HTTPS em produção
-        return redirect()->route('dashboard')
-            ->withCookie(cookie('demo_mode_raw', $cookieValue, 480, '/', null, false, false));
+        return redirect()->route('dashboard');
     }
 
     /**
