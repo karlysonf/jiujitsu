@@ -428,16 +428,16 @@
             </div>
 
             <!-- Navigation Controls Footer -->
-            <div class="p-6 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 flex-wrap">
-                <div class="min-w-0 flex-1">
+            <div class="p-5 md:p-6 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="w-full md:flex-1 md:min-w-0">
                     <h4 class="text-sm font-bold text-slate-850 dark:text-slate-100" id="slide-title">Painel Principal</h4>
                     <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5" id="slide-desc">Indicadores financeiros e de frequência em tempo real.</p>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
+                <div class="flex items-center justify-between md:justify-end gap-2 w-full md:w-auto shrink-0">
                     <a href="{{ route('demo.login') }}" id="demo-modal-cta-btn"
-                       class="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/30">
+                       class="flex-1 md:flex-none flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/30">
                         <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
-                        Experimentar agora
+                        <span class="whitespace-nowrap">Experimentar agora</span>
                     </a>
                     <button onclick="prevSlide()" type="button" class="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 transition-all active:scale-95">
                         <span class="material-symbols-outlined">chevron_left</span>
