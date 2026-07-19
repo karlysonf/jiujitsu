@@ -271,6 +271,36 @@
             font-size: .8rem;
         }
 
+        /* ─── RESPONSIVIDADE (Mobile & Tablet) ──────────── */
+        @media (max-width: 768px) {
+            .hero { padding-top: 6rem; padding-bottom: 3rem; }
+            .hero h1 { font-size: clamp(2rem, 8vw, 2.6rem); }
+            .hero-cta { flex-direction: column; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; }
+            .hero-cta a { width: 100%; justify-content: center; }
+            
+            .trust-bar { padding: 1.5rem 1.5rem; gap: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; }
+            .trust-item { font-size: .8rem; align-items: flex-start; }
+            
+            .section { padding: 3.5rem 1.5rem; }
+            .section-title { font-size: 1.8rem; }
+            
+            .stats-section { padding: 3rem 1.5rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 1.5rem; }
+            .stat-number { font-size: 2.2rem; }
+            
+            .demo-cta { padding: 3.5rem 1.5rem; }
+            .demo-box { padding: 2rem 1.25rem; border-radius: 20px; }
+            .demo-credentials { width: 100%; }
+            #cta-demo-btn { width: 100%; justify-content: center; padding: 1rem 1rem; font-size: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .trust-bar { grid-template-columns: 1fr; }
+            .navbar { padding: .75rem 1rem; }
+            .navbar-brand { font-size: 1rem; }
+            .navbar-btn { padding: .5rem 1rem; font-size: .8rem; }
+        }
+
         /* ─── ANIMATIONS ────────────────────────────────── */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
