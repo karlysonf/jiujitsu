@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ['cpf' => '04314745169'],
             [
                 'name' => 'Felipe Santos',
+                'login' => 'karlysonf',
                 'email' => 'kfbasantos@gmail.com',
                 'password' => Hash::make('KF2404ba'),
                 'telefone' => '11999999999',
