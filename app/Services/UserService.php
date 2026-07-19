@@ -209,6 +209,12 @@ class UserService
                     abort(403, 'Você não tem permissão para atribuir papéis administrativos.');
                 }
                 $user->syncRoles([$data['user_role']]);
+                
+                // Mantém a coluna role_id sincronizada com o Spatie
+                $roleId = Role::where('name', $data['user_role'])->value('id');
+                if ($roleId) {
+                    $user->update(['role_id' => $roleId]);
+                }
             }
 
             DB::commit();

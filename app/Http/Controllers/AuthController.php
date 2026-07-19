@@ -122,7 +122,15 @@ class AuthController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
-            $route = $user->hasRole('aluno') ? 'portal.dashboard' : 'dashboard';
+            // Se o usuário tem perfil de gestão (root, admin, professor, instrutor) ele vai pro dashboard.
+            // Apenas se ele for EXCLUSIVAMENTE aluno ele vai para o portal.
+            $route = $user->hasAnyRole(['root', 'admin', 'professor', 'instrutor']) ? 'dashboard' : 'portal.dashboard';
+            
+            // Fallback caso as roles do Spatie estejam dessincronizadas com a coluna role_id (ex: alteração manual no banco)
+            if ($user->role_id && $user->role_id != 5 && !$user->hasAnyRole(['root', 'admin', 'professor', 'instrutor'])) {
+                $route = 'dashboard';
+            }
+
             return redirect()->route($route);
         }
 
