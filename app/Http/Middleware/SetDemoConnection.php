@@ -36,6 +36,12 @@ class SetDemoConnection
             return false;
         }
 
+        // Se o arquivo SQLite sumiu (ex: novo deploy na Railway), invalidamos o cookie
+        // para não quebrar a leitura de sessão (a tabela sessions não existiria).
+        if (!file_exists(storage_path('app/demo.sqlite'))) {
+            return false;
+        }
+
         // Formato: "active|HMAC"
         $parts = explode('|', $cookie, 2);
         if (count($parts) !== 2) {
