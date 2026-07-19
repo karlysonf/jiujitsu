@@ -84,7 +84,7 @@ async def recognize(
             raise HTTPException(status_code=400, detail="Invalid reference_data JSON")
 
         identified_ids = set()
-        threshold = 0.35  # Relaxed threshold to identify more students in crowded/lower resolution photos
+        threshold = 0.27  # Relaxed threshold to identify more students in crowded/lower resolution photos
 
         # Detect reference faces
         for student in students:
