@@ -231,10 +231,12 @@
                             <span class="material-symbols-outlined text-[20px]">support_agent</span>
                             Suporte
                         </button>
+                        <!--
                         <button onclick="toggleDemoModal(true)" type="button" class="flex items-center gap-xs text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-container-high px-md py-xs rounded-full transition-colors">
                             <span class="material-symbols-outlined text-[20px]">play_circle</span>
                             Demonstração
                         </button>
+                        -->
                     </div>
                 </footer>
             </div>
