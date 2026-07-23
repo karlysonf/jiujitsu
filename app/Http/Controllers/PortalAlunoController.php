@@ -79,6 +79,8 @@ class PortalAlunoController extends Controller
         
         $user->update(['photo' => $path]);
 
+        app(\App\Services\FaceRecognitionService::class)->extractAndSaveEmbedding($user);
+
         return back()->with('success', 'Foto de perfil atualizada com sucesso!');
     }
 

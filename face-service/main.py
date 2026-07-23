@@ -31,16 +31,54 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 logger.info("Loading InsightFace model...")
 # Using buffalo_l or buffalo_s. If not downloaded, it will download automatically.
 try:
-    face_app = FaceAnalysis(name="buffalo_l", providers=['CPUExecutionProvider'])
+    face_app = FaceAnalysis(name="buffalo_s", providers=['CPUExecutionProvider'])
     face_app.prepare(ctx_id=0, det_size=(640, 640))
-    logger.info("Model loaded successfully.")
+    logger.info("Model buffalo_s loaded successfully.")
 except Exception as e:
-    logger.error(f"Failed to load model: {e}")
-    face_app = None
+    logger.warning(f"Failed to load buffalo_s, trying buffalo_l: {e}")
+    try:
+        face_app = FaceAnalysis(name="buffalo_l", providers=['CPUExecutionProvider'])
+        face_app.prepare(ctx_id=0, det_size=(640, 640))
+        logger.info("Model buffalo_l loaded successfully.")
+    except Exception as ex:
+        logger.error(f"Failed to load face model: {ex}")
+        face_app = None
 
 def compute_similarity(embedding1, embedding2):
     """Compute cosine similarity between two embeddings."""
     return np.dot(embedding1, embedding2) / (norm(embedding1) * norm(embedding2))
+
+@app.post("/extract-embedding")
+async def extract_embedding(photo: UploadFile = File(...)):
+    """
+    Endpoint to extract face embedding from a single student reference photo.
+    """
+    if face_app is None:
+        raise HTTPException(status_code=500, detail="Face model not initialized")
+
+    try:
+        photo_bytes = await photo.read()
+        nparr = np.frombuffer(photo_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+        if img is None:
+            raise HTTPException(status_code=400, detail="Invalid photo format")
+
+        faces = face_app.get(img)
+        if not faces:
+            return {"success": False, "message": "No face found in photo"}
+
+        # Sort faces by area (width * height of bbox) descending to get largest face
+        faces = sorted(faces, key=lambda f: (f.bbox[2] - f.bbox[0]) * (f.bbox[3] - f.bbox[1]), reverse=True)
+        embedding = faces[0].embedding.tolist()
+
+        return {
+            "success": True,
+            "embedding": embedding
+        }
+    except Exception as e:
+        logger.error(f"Error extracting embedding: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/recognize")
 async def recognize(
@@ -51,8 +89,8 @@ async def recognize(
     Endpoint to recognize students in a group photo.
     `reference_data` format (as JSON file):
     [
-        {"id": 1, "image_base64": "base64_string_here"},
-        ...
+        {"id": 1, "embedding": [0.01, -0.05, ...]},
+        {"id": 2, "image_base64": "base64_string_here"} // Fallback
     ]
     """
     if face_app is None:
@@ -86,42 +124,45 @@ async def recognize(
         identified_ids = set()
         threshold = 0.27  # Relaxed threshold to identify more students in crowded/lower resolution photos
 
-        # Detect reference faces
+        # Process reference students
         for student in students:
             student_id = student.get("id")
-            b64_data = student.get("image_base64")
-
-            if not student_id or not b64_data:
+            if not student_id:
                 continue
 
-            try:
-                # Decode base64 reference image
-                ref_bytes_img = base64.b64decode(b64_data)
-                nparr_ref = np.frombuffer(ref_bytes_img, np.uint8)
-                ref_img = cv2.imdecode(nparr_ref, cv2.IMREAD_COLOR)
+            ref_embedding = None
 
-                if ref_img is None:
-                    continue
+            # 1. Check if pre-computed embedding is provided
+            embedding_list = student.get("embedding")
+            if embedding_list and isinstance(embedding_list, list):
+                ref_embedding = np.array(embedding_list, dtype=np.float32)
 
-                # Get embedding for reference photo
-                ref_faces = face_app.get(ref_img)
-                if not ref_faces:
-                    logger.warning(f"No face found in reference photo for student {student_id}")
-                    continue
-                
-                # Assume the largest/most prominent face is the student
-                ref_embedding = ref_faces[0].embedding
+            # 2. Fallback to image_base64 if no embedding provided
+            if ref_embedding is None:
+                b64_data = student.get("image_base64")
+                if b64_data:
+                    try:
+                        ref_bytes_img = base64.b64decode(b64_data)
+                        nparr_ref = np.frombuffer(ref_bytes_img, np.uint8)
+                        ref_img = cv2.imdecode(nparr_ref, cv2.IMREAD_COLOR)
 
-                # Compare with all faces in the group photo
-                for face in group_faces:
-                    sim = compute_similarity(ref_embedding, face.embedding)
-                    if sim > threshold:
-                        identified_ids.add(student_id)
-                        break  # Found this student, move to next reference photo
+                        if ref_img is not None:
+                            ref_faces = face_app.get(ref_img)
+                            if ref_faces:
+                                ref_faces = sorted(ref_faces, key=lambda f: (f.bbox[2] - f.bbox[0]) * (f.bbox[3] - f.bbox[1]), reverse=True)
+                                ref_embedding = ref_faces[0].embedding
+                    except Exception as ex:
+                        logger.error(f"Error processing reference image for student {student_id}: {ex}")
 
-            except Exception as ex:
-                logger.error(f"Error processing reference for student {student_id}: {ex}")
+            if ref_embedding is None:
                 continue
+
+            # Compare with all faces in the group photo
+            for face in group_faces:
+                sim = compute_similarity(ref_embedding, face.embedding)
+                if sim > threshold:
+                    identified_ids.add(student_id)
+                    break  # Found this student, move to next reference photo
 
         return {
             "success": True,
@@ -133,3 +174,4 @@ async def recognize(
     except Exception as e:
         logger.error(f"Error during recognition: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+

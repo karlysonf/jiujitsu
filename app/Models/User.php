@@ -54,6 +54,7 @@ class User extends Authenticatable
         'status',
         'user_status',
         'photo',
+        'face_embedding',
         'custom_price',
         'asaas_customer_id',
     ];
@@ -80,6 +81,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'data_nascimento' => 'date',
             'start_date' => 'date',
+            'face_embedding' => 'array',
         ];
     }
 

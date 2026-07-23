@@ -112,6 +112,10 @@ class UserService
             $user = User::create($userData);
             $user->syncRoles([$roleName]);
 
+            if ($photoPath) {
+                app(\App\Services\FaceRecognitionService::class)->extractAndSaveEmbedding($user);
+            }
+
             // 3. Gerar o primeiro pagamento pendente (apenas se ativo e não for Cortesia)
             if ($user->status === 'active' && (!$user->plan || $user->plan->name !== 'Cortesia')) {
                 \App\Models\Payment::create([
@@ -201,6 +205,10 @@ class UserService
             }
 
             $user->update($userData);
+
+            if (isset($data['photo'])) {
+                app(\App\Services\FaceRecognitionService::class)->extractAndSaveEmbedding($user);
+            }
 
             if (isset($data['user_role'])) {
                 // Segurança: Impede que um usuário sem privilégios promova alguém a admin ou root

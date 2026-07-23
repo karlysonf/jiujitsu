@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Gate;
 class AttendanceController extends Controller
 {
     protected $attendanceService;
+    protected $faceRecognitionService;
 
-    public function __construct(AttendanceService $attendanceService)
+    public function __construct(AttendanceService $attendanceService, \App\Services\FaceRecognitionService $faceRecognitionService)
     {
         $this->attendanceService = $attendanceService;
+        $this->faceRecognitionService = $faceRecognitionService;
     }
 
     public function index(Request $request)
@@ -107,67 +109,15 @@ class AttendanceController extends Controller
             ->where('status', 'active')
             ->get();
 
-        $fallbackMessage = 'Modo Simulação: Nenhum aluno ativo possui foto de perfil salva no servidor para usar como referência no reconhecimento.';
-            try {
-                $referenceData = [];
-                $hasReferencePhotos = false;
-                
-                foreach ($users as $user) {
-                    if ($user->photo) {
-                        $photoPath = storage_path('app/public/' . $user->photo);
-                        if (file_exists($photoPath)) {
-                            $data = base64_encode(file_get_contents($photoPath));
-                            $referenceData[] = [
-                                'id' => $user->id,
-                                'image_base64' => $data
-                            ];
-                            $hasReferencePhotos = true;
-                        }
-                    }
-                }
+        $result = $this->faceRecognitionService->recognizeGroupPhoto($request->file('photo'), $users);
 
-                if ($hasReferencePhotos) {
-                    $groupPhoto = $request->file('photo');
-                    
-                    $faceServiceUrl = env('FACE_SERVICE_URL', 'http://127.0.0.1:8002') . '/recognize';
-                    
-                    set_time_limit(120);
-                    
-                    $response = \Illuminate\Support\Facades\Http::timeout(120)->attach(
-                        'group_photo', file_get_contents($groupPhoto->getRealPath()), $groupPhoto->getClientOriginalName()
-                    )->attach(
-                        'reference_data', json_encode($referenceData), 'reference.json'
-                    )->post($faceServiceUrl);
+        if (!empty($result['success'])) {
+            return response()->json($result);
+        }
 
-                    if ($response->successful()) {
-                        $result = $response->json();
-                        \Illuminate\Support\Facades\Log::info('FaceAPI Success Response: ' . json_encode($result));
+        $fallbackMessage = $result['message'] ?? 'Modo Simulação: Ocorreu um erro no serviço de reconhecimento.';
 
-                        $identifiedIds = $result['identified_ids'] ?? [];
-
-                        if (is_array($identifiedIds)) {
-                            $validIds = $users->pluck('id')->toArray();
-                            $identifiedIds = array_intersect($identifiedIds, $validIds);
-
-                            return response()->json([
-                                'success' => true,
-                                'identified_ids' => array_values($identifiedIds),
-                                'simulation' => false
-                            ]);
-                        } else {
-                            \Illuminate\Support\Facades\Log::error('FaceAPI Parse Error: ' . json_encode($result));
-                            $fallbackMessage = 'Modo Simulação: Falha ao processar resposta do microsserviço.';
-                        }
-                    } else {
-                        \Illuminate\Support\Facades\Log::error('FaceAPI Error Status ' . $response->status() . ': ' . $response->body());
-                        $fallbackMessage = 'Modo Simulação: Erro no microsserviço de face (Status ' . $response->status() . ').';
-                    }
-                }
-            } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Face Identification Exception: ' . $e->getMessage());
-                $fallbackMessage = 'Modo Simulação: Ocorreu um erro de comunicação com o microsserviço Python: ' . $e->getMessage();
-            }
-        // Fallback to Simulation Mode if API key is missing or failed
+        // Fallback para Modo Simulação se falhar ou não houver fotos
         $identifiedIds = [];
         if ($users->isNotEmpty()) {
             $count = min(rand(3, 5), $users->count());
