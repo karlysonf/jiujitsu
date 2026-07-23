@@ -12,7 +12,7 @@ class UserService
 {
     public function getAllUsers($search = null)
     {
-        return User::role(['aluno', 'professor', 'instrutor', 'admin'])
+        return User::role(['root', 'admin', 'aluno', 'professor', 'instrutor'])
             ->with('plan')
             ->when($search, function ($query, $search) {
                 $query->where(function($q) use ($search) {
