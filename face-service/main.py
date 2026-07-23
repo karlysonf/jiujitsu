@@ -105,6 +105,15 @@ async def recognize(
         if group_img is None:
             raise HTTPException(status_code=400, detail="Invalid group photo format")
 
+        # Auto-resize group photo if dimensions exceed 1280px to speed up CPU inference
+        max_dim = 1280
+        h, w = group_img.shape[:2]
+        if max(h, w) > max_dim:
+            scale = max_dim / float(max(h, w))
+            new_w, new_h = int(w * scale), int(h * scale)
+            group_img = cv2.resize(group_img, (new_w, new_h), interpolation=cv2.INTER_AREA)
+            logger.info(f"Resized group photo from {w}x{h} to {new_w}x{new_h} for CPU performance.")
+
         # Detect faces in group photo
         logger.info("Detecting faces in group photo...")
         group_faces = face_app.get(group_img)

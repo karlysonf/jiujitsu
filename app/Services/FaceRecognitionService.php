@@ -64,6 +64,10 @@ class FaceRecognitionService
      */
     public function recognizeGroupPhoto(UploadedFile $groupPhoto, $users): array
     {
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(120);
+        }
+
         $referenceData = [];
         $hasReferenceData = false;
 
