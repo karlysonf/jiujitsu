@@ -17,17 +17,49 @@ class FaceRecognitionService
     }
 
     /**
+     * Obtém o conteúdo em bytes da foto do usuário (localmente no Storage ou via URL se executado remotamente).
+     */
+    protected function getUserPhotoContent(User $user): ?string
+    {
+        if (!$user->photo) {
+            return null;
+        }
+
+        // 1. Tenta ler do sistema de arquivos local
+        $photoPath = storage_path('app/public/' . ltrim($user->photo, '/'));
+        if (file_exists($photoPath)) {
+            return file_get_contents($photoPath);
+        }
+
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($user->photo)) {
+            return \Illuminate\Support\Facades\Storage::disk('public')->get($user->photo);
+        }
+
+        // 2. Fallback: Se executado via `railway run` no computador local, busca a foto pela URL pública
+        $appUrl = config('app.url');
+        if ($appUrl && filter_var($appUrl, FILTER_VALIDATE_URL)) {
+            $photoUrl = rtrim($appUrl, '/') . '/storage/' . ltrim($user->photo, '/');
+            try {
+                $response = Http::timeout(10)->get($photoUrl);
+                if ($response->successful()) {
+                    return $response->body();
+                }
+            } catch (\Exception $e) {
+                Log::warning("Falha ao baixar foto via URL {$photoUrl}: " . $e->getMessage());
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Extrai o embedding facial da foto de perfil de um usuário e salva no banco de dados.
      */
     public function extractAndSaveEmbedding(User $user): bool
     {
-        if (!$user->photo) {
-            return false;
-        }
-
-        $photoPath = storage_path('app/public/' . $user->photo);
-        if (!file_exists($photoPath)) {
-            Log::warning("Foto do usuário {$user->id} não encontrada em: {$photoPath}");
+        $fileContent = $this->getUserPhotoContent($user);
+        if (!$fileContent) {
+            Log::warning("Foto do usuário #{$user->id} não foi encontrada no disco local nem via URL.");
             return false;
         }
 
@@ -35,7 +67,7 @@ class FaceRecognitionService
             $url = rtrim($this->faceServiceUrl, '/') . '/extract-embedding';
             
             $response = Http::timeout(30)->attach(
-                'photo', file_get_contents($photoPath), basename($photoPath)
+                'photo', $fileContent, basename($user->photo)
             )->post($url);
 
             if ($response->successful()) {
@@ -82,12 +114,11 @@ class FaceRecognitionService
             } 
             // 2. Fallback: Foto base64 se ainda não tiver embedding extraído
             elseif ($user->photo) {
-                $photoPath = storage_path('app/public/' . $user->photo);
-                if (file_exists($photoPath)) {
-                    $data = base64_encode(file_get_contents($photoPath));
+                $content = $this->getUserPhotoContent($user);
+                if ($content) {
                     $referenceData[] = [
                         'id' => $user->id,
-                        'image_base64' => $data
+                        'image_base64' => base64_encode($content)
                     ];
                     $hasReferenceData = true;
                 }
