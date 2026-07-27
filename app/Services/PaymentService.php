@@ -96,7 +96,7 @@ class PaymentService
      */
     protected function generateIdempotencyKey(array $data): string
     {
-        return md5(implode('|', [
+        return hash('sha256', implode('|', [
             $data['user_id'] ?? $data['student_id'] ?? '',
             $data['amount'],
             $data['reference_month'],

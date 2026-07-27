@@ -88,7 +88,7 @@ class DemoController extends Controller
     public function reset(Request $request)
     {
         $secret = config('app.demo_reset_secret');
-        if ($secret && $request->get('secret') !== $secret) {
+        if (empty($secret) || $request->get('secret') !== $secret) {
             abort(403);
         }
 

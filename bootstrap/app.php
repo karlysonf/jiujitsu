@@ -34,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // ResolveTenant roda depois da sessão, usando a conexão já trocada se for demo
         $middleware->web(append: [
             \App\Http\Middleware\ResolveTenant::class,
+            \App\Http\Middleware\SecurityHeaders::class,
         ]);
 
         // Ignora verificação CSRF no webhook do Asaas

@@ -39,4 +39,12 @@ return [
         'key' => env('GEMINI_API_KEY'),
     ],
 
+    'face_recognition' => [
+        'url' => env('FACE_SERVICE_URL', 'http://127.0.0.1:8002'),
+    ],
+
+    'asaas' => [
+        'webhook_token' => env('ASAAS_WEBHOOK_TOKEN'),
+    ],
+
 ];

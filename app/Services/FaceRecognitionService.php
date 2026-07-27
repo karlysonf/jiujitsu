@@ -13,7 +13,7 @@ class FaceRecognitionService
 
     public function __construct()
     {
-        $this->faceServiceUrl = env('FACE_SERVICE_URL', 'http://127.0.0.1:8002');
+        $this->faceServiceUrl = config('services.face_recognition.url', 'http://127.0.0.1:8002');
     }
 
     /**

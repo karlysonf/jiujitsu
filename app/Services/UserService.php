@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
 class UserService
@@ -29,7 +30,9 @@ class UserService
         DB::beginTransaction();
         try {
             if (empty($data['password'])) {
-                $data['password'] = Hash::make('mudar123');
+                // Senha padrão = CPF do aluno (sem formatação)
+                $cpfDigits = preg_replace('/[^0-9]/', '', $data['cpf'] ?? '');
+                $data['password'] = Hash::make($cpfDigits ?: Str::random(12));
             } else {
                 $data['password'] = Hash::make($data['password']);
             }

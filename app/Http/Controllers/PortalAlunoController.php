@@ -87,6 +87,7 @@ class PortalAlunoController extends Controller
     public function changePassword(Request $request)
     {
         $request->validate([
+            'current_password' => 'required|current_password',
             'password' => 'required|string|min:8|confirmed',
         ]);
 

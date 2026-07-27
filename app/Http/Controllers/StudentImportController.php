@@ -121,7 +121,7 @@ class StudentImportController extends Controller
                 'faixa' => $faixa,
                 'grau' => $grau,
                 'plan_id' => $defaultPlan ? $defaultPlan->id : null,
-                'password' => Hash::make($cpf ?: '123456'), // Default pass is CPF or 123456
+                'password' => Hash::make($cpf ?: \Illuminate\Support\Str::random(12)),
                 'status' => 'active',
             ]);
 
