@@ -1,89 +1,28 @@
 <!DOCTYPE html>
-<html class="light" lang="pt-br">
+<html class="dark" lang="pt-br">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Acesso do Instrutor - {{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "primary": "#000000",
-                        "primary-container": "#131b2e",
-                        "secondary-container": "#fed65b",
-                        "on-primary-container": "#7c839b",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-container-high": "#e6e8ea",
-                        "surface-bright": "#f7f9fb",
-                        "outline-variant": "#c6c6cd",
-                        "on-surface": "#191c1e",
-                        "on-surface-variant": "#45464d",
-                        "tertiary-container": "#00174b",
-                        "on-tertiary-fixed": "#00174b",
-                        "background": "#f7f9fb",
+                    colors: {
+                        obsidian: "#090d16",
+                        card: "#111726",
+                        cardLight: "#182234",
+                        crimson: "#e11d48",
+                        cyanTech: "#06b6d4",
                     },
-                    "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
-                    },
-                    "spacing": {
-                        "xs": "4px",
-                        "xl": "64px",
-                        "lg": "40px",
-                        "base": "8px",
-                        "gutter": "24px",
-                        "margin": "32px",
-                        "sm": "12px",
-                        "md": "24px"
-                    },
-                    "fontFamily": {
-                        "body-md": ["Lexend"],
-                        "headline-lg": ["Lexend"],
-                        "label-sm": ["Lexend"],
-                        "label-bold": ["Lexend"],
-                        "body-lg": ["Lexend"],
-                        "headline-md": ["Lexend"],
-                        "display-xl": ["Lexend"]
-                    },
-                    "fontSize": {
-                        "body-md": ["16px", {
-                            "lineHeight": "24px",
-                            "fontWeight": "400"
-                        }],
-                        "headline-lg": ["32px", {
-                            "lineHeight": "40px",
-                            "letterSpacing": "-0.01em",
-                            "fontWeight": "700"
-                        }],
-                        "label-sm": ["12px", {
-                            "lineHeight": "16px",
-                            "fontWeight": "500"
-                        }],
-                        "label-bold": ["14px", {
-                            "lineHeight": "20px",
-                            "fontWeight": "600"
-                        }],
-                        "body-lg": ["18px", {
-                            "lineHeight": "28px",
-                            "fontWeight": "400"
-                        }],
-                        "headline-md": ["24px", {
-                            "lineHeight": "32px",
-                            "fontWeight": "700"
-                        }],
-                        "display-xl": ["48px", {
-                            "lineHeight": "56px",
-                            "letterSpacing": "-0.02em",
-                            "fontWeight": "800"
-                        }]
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
                     }
                 },
             },
@@ -95,65 +34,83 @@
             vertical-align: middle;
         }
 
-        .bg-login-texture {
-            background-color: #f7f9fb;
-            background-image: radial-gradient(#e0e3e5 0.5px, transparent 0.5px);
-            background-size: 24px 24px;
+        body {
+            background-color: #090d16;
+            font-family: 'Inter', sans-serif;
+            color: #f8fafc;
         }
     </style>
 </head>
 
-<body class="bg-login-texture font-body-md text-on-background min-h-screen flex items-center justify-center p-md">
-    <main class="w-full max-w-[1200px] grid grid-cols-1 md:grid-cols-2 bg-surface-container-lowest rounded-xl overflow-hidden shadow-2xl min-h-[700px] border border-outline-variant">
+<body class="bg-[#090d16] font-sans text-slate-100 min-h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-x-hidden selection:bg-rose-500 selection:text-white">
+    <!-- Ambient Glow Effects -->
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-rose-600/15 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/15 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <main class="w-full max-w-[1100px] grid grid-cols-1 md:grid-cols-2 bg-[#111726] rounded-3xl overflow-hidden shadow-2xl min-h-[640px] border border-white/10 relative z-10">
         <!-- Left Side: Visual Narrative -->
-        <section class="hidden md:flex flex-col relative bg-primary-container p-lg justify-between">
-            <div class="z-10">
-                <div class="flex items-center gap-sm mb-lg">
-                    <div class="w-10 h-10 bg-secondary-container rounded flex items-center justify-center">
+        <section class="hidden md:flex flex-col relative bg-[#111726] p-8 md:p-12 justify-between border-r border-white/10 overflow-hidden">
+            <!-- Background image with gradient overlay -->
+            <div class="absolute inset-0 z-0">
+                <img alt="Luta de Jiu-Jitsu no Tatame" class="w-full h-full object-cover brightness-50 contrast-125 hover:scale-105 transition-transform duration-700" src="{{ asset('images/jiujitsu_login_bg.jpg') }}" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[#111726] via-[#111726]/75 to-[#111726]/30"></div>
+            </div>
+
+            <!-- Content Top -->
+            <div class="z-10 relative">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-600 to-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-600/30">
                         @if(isset($currentTenant))
-                        <span class="material-symbols-outlined text-on-secondary-container">sports_martial_arts</span>
+                        <span class="material-symbols-outlined text-xl">sports_martial_arts</span>
                         @else
-                        <span class="material-symbols-outlined text-on-secondary-container">admin_panel_settings</span>
+                        <span class="material-symbols-outlined text-xl">admin_panel_settings</span>
                         @endif
                     </div>
-                    <h1 class="text-white font-headline-md text-headline-md tracking-tight">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</h1>
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-cyan-400 block">Gestão Combate</span>
+                        <h1 class="text-white font-['Outfit'] font-black text-xl tracking-tight leading-none">{{ isset($currentTenant) ? $currentTenant->name : 'CT Combate' }}</h1>
+                    </div>
                 </div>
-                <div class="mt-xl">
+
+                <div class="mt-8">
                     @if(isset($currentTenant))
-                    <h2 class="text-white font-display-xl text-display-xl mb-md">Domine o fluxo da sua <span class="text-secondary-container">Academia</span>.</h2>
-                    <p class="text-on-primary-container font-body-lg text-body-lg max-w-[400px]">A precisão de um faixa preta, agora para suas operações. Experimente a gestão de elite.</p>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-bold uppercase tracking-wider mb-3">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                        Alta Performance
+                    </div>
+                    <h2 class="text-white font-['Outfit'] font-black text-3xl md:text-4xl leading-tight mb-3">Domine o fluxo da sua <span class="bg-gradient-to-r from-rose-500 to-rose-400 bg-clip-text text-transparent">Academia</span>.</h2>
+                    <p class="text-slate-400 text-xs md:text-sm leading-relaxed max-w-md">A precisão de um faixa preta, agora para suas operações. Experimente a gestão de elite em combates e modalidades.</p>
                     @else
-                    <h2 class="text-white font-display-xl text-display-xl mb-md">Painel Administrativo <span class="text-secondary-container">Global</span>.</h2>
-                    <p class="text-on-primary-container font-body-lg text-body-lg max-w-[400px]">Central de controle do Gestão Combate. Monitore inquilinos, planos e faturamento global.</p>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-3">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                        Global Admin
+                    </div>
+                    <h2 class="text-white font-['Outfit'] font-black text-3xl md:text-4xl leading-tight mb-3">Painel Administrativo <span class="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Global</span>.</h2>
+                    <p class="text-slate-400 text-xs md:text-sm leading-relaxed max-w-md">Central de controle do Gestão Combate. Monitore inquilinos, planos e faturamento global.</p>
                     @endif
                 </div>
             </div>
-            <div class="absolute inset-0 z-0 opacity-40">
-                @if(isset($currentTenant))
-                <img alt="Martial arts training environment" class="w-full h-full object-cover grayscale brightness-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBM07F_jJUvlHvLVXx8StEv_Wq15sjdWylwYOUF7n-Pk9C1yPZr9KNVMhnQO-mMr3yukvDzl1dS4XLdcegZvJbxgLJgK79-MepGh90fk8U_qLvOGYPNLld0sqateslLitaH__Y5Si2cgH2i2sNI-fgZEzfP4vndKrNZq9vQyXNF3X6p0tni0XIc9ql4txIAz-Bbt9ap7JCOeuH9y72crfv2QnSxKBBV5QnCSnUunHvb2OXhhyjjLDi5HsWSUVi5CvwTzNQ19s6IkcRL" />
-                @else
-                <img alt="Technology dashboard overview" class="w-full h-full object-cover grayscale brightness-50" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" />
-                @endif
-            </div>
-            <div class="z-10">
-                <div class="flex gap-md">
+
+            <!-- Content Bottom: Bento Widgets -->
+            <div class="z-10 relative pt-8">
+                <div class="grid grid-cols-2 gap-3">
                     @if(isset($currentTenant))
-                    <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
-                        <span class="text-secondary-container font-headline-md block">1.2k+</span>
-                        <span class="text-white/60 font-label-sm uppercase">Alunos Matriculados</span>
+                    <div class="bg-white/5 backdrop-blur-md p-3.5 rounded-2xl border border-white/10">
+                        <span class="text-cyan-400 font-['Outfit'] font-extrabold text-xl block">1.2k+</span>
+                        <span class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Alunos Matriculados</span>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
-                        <span class="text-secondary-container font-headline-md block">98%</span>
-                        <span class="text-white/60 font-label-sm uppercase">Taxa de Retenção</span>
+                    <div class="bg-white/5 backdrop-blur-md p-3.5 rounded-2xl border border-white/10">
+                        <span class="text-rose-400 font-['Outfit'] font-extrabold text-xl block">98%</span>
+                        <span class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Taxa de Retenção</span>
                     </div>
                     @else
-                    <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
-                        <span class="text-secondary-container font-headline-md block">SaaS</span>
-                        <span class="text-white/60 font-label-sm uppercase">Multi-Inquilino</span>
+                    <div class="bg-white/5 backdrop-blur-md p-3.5 rounded-2xl border border-white/10">
+                        <span class="text-cyan-400 font-['Outfit'] font-extrabold text-xl block">SaaS Multi</span>
+                        <span class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Multi-Inquilino</span>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-md p-sm rounded border border-white/20">
-                        <span class="text-secondary-container font-headline-md block">Seguro</span>
-                        <span class="text-white/60 font-label-sm uppercase">Painel Criptografado</span>
+                    <div class="bg-white/5 backdrop-blur-md p-3.5 rounded-2xl border border-white/10">
+                        <span class="text-rose-400 font-['Outfit'] font-extrabold text-xl block">Seguro</span>
+                        <span class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Painel Criptografado</span>
                     </div>
                     @endif
                 </div>
@@ -161,79 +118,86 @@
         </section>
 
         <!-- Right Side: Login Form -->
-        <section class="flex flex-col justify-center p-8 md:p-12 lg:p-16 bg-surface-container-lowest">
-            <div class="max-w-[440px] mx-auto w-full">
+        <section class="flex flex-col justify-center p-6 sm:p-10 md:p-12 lg:p-14 bg-[#111726] relative">
+            <div class="max-w-[400px] mx-auto w-full">
                 <!-- Mobile Logo -->
-                <div class="md:hidden flex items-center gap-sm mb-lg">
-                    <div class="w-10 h-10 bg-primary-container rounded flex items-center justify-center">
-                        <span class="material-symbols-outlined text-white">sports_martial_arts</span>
+                <div class="md:hidden flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-600 to-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-600/30">
+                        <span class="material-symbols-outlined text-xl">sports_martial_arts</span>
                     </div>
-                    <h1 class="text-primary font-headline-md text-headline-md">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</h1>
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-cyan-400 block">Gestão Combate</span>
+                        <h1 class="text-white font-['Outfit'] font-black text-lg">{{ isset($currentTenant) ? $currentTenant->name : 'CT Combate' }}</h1>
+                    </div>
                 </div>
-                <header class="mb-lg">
-                    <h3 class="text-primary font-headline-lg text-headline-lg mb-xs">Acesso do Instrutor</h3>
-                    <p class="text-on-surface-variant font-body-md text-body-md">Insira suas credenciais para acessar o painel de gerenciamento.</p>
+
+                <header class="mb-8">
+                    <h3 class="text-white font-['Outfit'] font-black text-2xl md:text-3xl tracking-tight mb-1">Acesso do Instrutor</h3>
+                    <p class="text-slate-400 text-xs sm:text-sm">Insira suas credenciais para acessar o painel de gerenciamento.</p>
                 </header>
 
                 @if ($errors->any())
-                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-medium">
+                <div class="mb-6 p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl text-rose-300 text-xs font-medium">
                     <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-base">error</span>
+                        <span class="material-symbols-outlined text-sm text-rose-400">error</span>
                         {{ $errors->first() }}
                     </div>
                 </div>
                 @endif
 
-                <form action="{{ route('login.post') }}" method="POST" class="space-y-md">
+                <form action="{{ route('login.post') }}" method="POST" class="space-y-4">
                     @csrf
                     <!-- CPF Field -->
-                    <div class="space-y-xs">
-                        <label class="text-on-surface font-label-bold text-label-bold block" for="login_identity">CPF ou Usuário</label>
+                    <div class="space-y-1.5">
+                        <label class="text-slate-300 font-semibold text-xs block" for="login_identity">CPF ou Usuário</label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none text-outline group-focus-within:text-tertiary-container transition-colors">
-                                <span class="material-symbols-outlined">badge</span>
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500 group-focus-within:text-rose-400 transition-colors">
+                                <span class="material-symbols-outlined text-sm">badge</span>
                             </div>
-                            <input class="block w-full pl-[56px] pr-md py-md bg-surface-bright border border-outline-variant rounded-lg font-body-md text-on-surface placeholder:text-outline focus:ring-2 focus:ring-tertiary-container/20 focus:border-tertiary-container transition-all outline-none" id="login_identity" name="login_identity" placeholder="CPF ou Usuário" type="text" value="{{ old('login_identity') }}" required autofocus />
+                            <input class="block w-full pl-10 pr-4 py-3 bg-[#090d16] border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all outline-none" id="login_identity" name="login_identity" placeholder="CPF ou Usuário" type="text" value="{{ old('login_identity') }}" required autofocus />
                         </div>
                     </div>
+
                     <!-- Password Field -->
-                    <div class="space-y-xs">
-                        <label class="text-on-surface font-label-bold text-label-bold block" for="password">Senha</label>
+                    <div class="space-y-1.5">
+                        <label class="text-slate-300 font-semibold text-xs block" for="password">Senha</label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none text-outline group-focus-within:text-tertiary-container transition-colors">
-                                <span class="material-symbols-outlined">lock</span>
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500 group-focus-within:text-rose-400 transition-colors">
+                                <span class="material-symbols-outlined text-sm">lock</span>
                             </div>
-                            <input class="block w-full pl-[56px] pr-md py-md bg-surface-bright border border-outline-variant rounded-lg font-body-md text-on-surface placeholder:text-outline focus:ring-2 focus:ring-tertiary-container/20 focus:border-tertiary-container transition-all outline-none" id="password" name="password" placeholder="••••••••••••" type="password" required />
-                            <button class="absolute inset-y-0 right-0 pr-md flex items-center text-outline hover:text-on-surface transition-colors" type="button" onclick="togglePassword()">
-                                <span class="material-symbols-outlined" id="password-toggle-icon">visibility</span>
+                            <input class="block w-full pl-10 pr-10 py-3 bg-[#090d16] border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all outline-none" id="password" name="password" placeholder="••••••••••••" type="password" required />
+                            <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-white transition-colors" type="button" onclick="togglePassword()">
+                                <span class="material-symbols-outlined text-sm" id="password-toggle-icon">visibility</span>
                             </button>
                         </div>
                     </div>
+
                     <!-- Remember & Forgot -->
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center gap-xs cursor-pointer group">
-                            <input class="w-5 h-5 rounded border-outline-variant text-primary-container focus:ring-tertiary-container cursor-pointer transition-all" type="checkbox" name="remember" />
-                            <span class="text-on-surface-variant font-label-bold text-label-bold group-hover:text-primary transition-colors ml-2">Lembrar-me</span>
+                    <div class="flex items-center justify-between pt-1">
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input class="w-4 h-4 rounded border-white/20 bg-[#090d16] text-rose-600 focus:ring-rose-500 cursor-pointer transition-all" type="checkbox" name="remember" />
+                            <span class="text-slate-400 text-xs font-medium group-hover:text-white transition-colors">Lembrar-me</span>
                         </label>
-                        <a class="text-tertiary-container font-label-bold text-label-bold hover:underline" href="{{ route('password.request') }}">Esqueceu a senha?</a>
+                        <a class="text-xs text-rose-400 font-semibold hover:text-rose-300 transition-colors" href="{{ route('password.request') }}">Esqueceu a senha?</a>
                     </div>
+
                     <!-- Login Button -->
-                    <button class="w-full bg-primary-container text-white py-md rounded-lg font-label-bold text-body-md hover:bg-black transition-all active:scale-[0.98] shadow-lg shadow-primary-container/10 flex items-center justify-center gap-sm mt-md" type="submit">
-                        Entrar
-                        <span class="material-symbols-outlined">arrow_forward</span>
+                    <button class="w-full bg-gradient-to-r from-rose-600 to-rose-700 text-white py-3.5 rounded-xl font-['Outfit'] font-bold text-sm hover:shadow-lg hover:shadow-rose-600/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2 mt-2" type="submit">
+                        Entrar no Sistema
+                        <span class="material-symbols-outlined text-base">arrow_forward</span>
                     </button>
                 </form>
 
                 <!-- Footer Actions -->
-                <footer class="mt-xl pt-lg border-t border-surface-container-high flex flex-col items-center gap-md">
-                    <div class="flex flex-wrap justify-center gap-md">
-                        <button onclick="toggleSupportModal(true)" type="button" class="flex items-center gap-xs text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-container-high px-md py-xs rounded-full transition-colors">
-                            <span class="material-symbols-outlined text-[20px]">support_agent</span>
+                <footer class="mt-8 pt-6 border-t border-white/10 flex flex-col items-center gap-3">
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <button onclick="toggleSupportModal(true)" type="button" class="flex items-center gap-1.5 text-slate-400 hover:text-white text-xs font-semibold px-4 py-2 rounded-xl bg-[#182234] border border-white/10 hover:bg-white/10 transition-all">
+                            <span class="material-symbols-outlined text-base text-cyan-400">support_agent</span>
                             Suporte
                         </button>
                         <!--
-                        <button onclick="toggleDemoModal(true)" type="button" class="flex items-center gap-xs text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-container-high px-md py-xs rounded-full transition-colors">
-                            <span class="material-symbols-outlined text-[20px]">play_circle</span>
+                        <button onclick="toggleDemoModal(true)" type="button" class="flex items-center gap-1.5 text-slate-400 hover:text-white text-xs font-semibold px-4 py-2 rounded-xl bg-[#182234] border border-white/10 hover:bg-white/10 transition-all">
+                            <span class="material-symbols-outlined text-base text-rose-400">play_circle</span>
                             Demonstração
                         </button>
                         -->
@@ -244,217 +208,178 @@
     </main>
 
     <!-- Support Modal Overlay -->
-    <div id="support-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 overflow-y-auto p-4 hidden opacity-0 transition-opacity duration-300 flex justify-center items-start sm:items-center">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full p-6 md:p-8 shadow-2xl relative border border-slate-200 dark:border-slate-800 transform scale-95 transition-transform duration-300 my-8 sm:my-auto">
+    <div id="support-modal" class="fixed inset-0 bg-[#090d16]/80 backdrop-blur-md z-50 overflow-y-auto p-4 hidden opacity-0 transition-opacity duration-300 flex justify-center items-start sm:items-center">
+        <div class="bg-[#111726] rounded-2xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative border border-white/10 transform scale-95 transition-transform duration-300 my-8 sm:my-auto text-white">
             <!-- Close Button -->
-            <button onclick="toggleSupportModal(false)" type="button" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-850 transition-colors" aria-label="Fechar">
+            <button onclick="toggleSupportModal(false)" type="button" class="absolute top-4 right-4 p-2 rounded-xl hover:bg-white/10 text-slate-400 hover:text-white transition-colors" aria-label="Fechar">
                 <span class="material-symbols-outlined">close</span>
             </button>
 
             <!-- Header -->
-            <div class="flex items-center gap-4 mb-6">
-                <button onclick="toggleSupportModal(false)" type="button" class="flex items-center justify-center p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-850 transition-colors">
-                    <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+            <div class="flex items-center gap-3 mb-6">
+                <button onclick="toggleSupportModal(false)" type="button" class="flex items-center justify-center p-2 rounded-xl bg-[#182234] border border-white/10 text-slate-300 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
                 </button>
-                <h2 class="text-xl font-bold text-slate-900 dark:text-slate-50">Suporte ao Usuário</h2>
+                <h2 class="text-xl font-['Outfit'] font-bold text-white">Suporte ao Usuário</h2>
             </div>
 
             <!-- Canais de Atendimento Section -->
             <div class="mb-6">
-                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">Canais de Atendimento</h3>
-                <p class="text-sm text-slate-500 mt-1">Selecione o canal mais adequado para sua dúvida</p>
+                <h3 class="text-base font-['Outfit'] font-bold text-white">Canais de Atendimento</h3>
+                <p class="text-xs text-slate-400 mt-1">Selecione o canal mais adequado para sua dúvida</p>
             </div>
 
             <!-- Grid of Email and Phone Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <!-- Email Card -->
-                <a href="mailto:karlysonsantosdev@gmail.com" class="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl hover:border-slate-400 hover:shadow-md transition-all text-center group">
-                    <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-3xl mb-2 group-hover:scale-110 transition-transform">mail</span>
-                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200">E-mail</span>
-                    <span class="text-xs text-slate-500 mt-1 font-mono">karlysonsantosdev@gmail.com</span>
+                <a href="mailto:karlysonsantosdev@gmail.com" class="flex flex-col items-center justify-center p-5 bg-[#182234] border border-white/10 rounded-2xl hover:border-cyan-500/50 transition-all text-center group">
+                    <span class="material-symbols-outlined text-cyan-400 text-3xl mb-2 group-hover:scale-110 transition-transform">mail</span>
+                    <span class="text-xs font-bold text-white">E-mail</span>
+                    <span class="text-xs text-slate-400 mt-1 font-mono">karlysonsantosdev@gmail.com</span>
                 </a>
 
                 <!-- Phone Card -->
-                <a href="tel:82987532852" class="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl hover:border-slate-400 hover:shadow-md transition-all text-center group">
-                    <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-3xl mb-2 group-hover:scale-110 transition-transform">call</span>
-                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200">Telefone</span>
-                    <span class="text-xs text-slate-500 mt-1 font-mono">(82) 98753-2852</span>
+                <a href="tel:82987532852" class="flex flex-col items-center justify-center p-5 bg-[#182234] border border-white/10 rounded-2xl hover:border-cyan-500/50 transition-all text-center group">
+                    <span class="material-symbols-outlined text-cyan-400 text-3xl mb-2 group-hover:scale-110 transition-transform">call</span>
+                    <span class="text-xs font-bold text-white">Telefone</span>
+                    <span class="text-xs text-slate-400 mt-1 font-mono">(82) 98753-2852</span>
                 </a>
             </div>
 
             <!-- WhatsApp Card -->
-            <div class="p-6 bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl flex flex-col md:flex-row items-center gap-6 justify-between">
+            <div class="p-6 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex flex-col md:flex-row items-center gap-6 justify-between">
                 <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">chat</span>
-                        <h4 class="text-base font-bold text-emerald-800 dark:text-emerald-300">Atendimento via WhatsApp</h4>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined text-emerald-400">chat</span>
+                        <h4 class="text-sm font-['Outfit'] font-bold text-emerald-300">Atendimento via WhatsApp</h4>
                     </div>
-                    <p class="text-sm text-slate-600 dark:text-slate-450 leading-relaxed mb-4">
-                        Clique no botão abaixo para falar com nossa equipe diretamente no WhatsApp ou aponte a câmera do seu celular para o QR Code ao lado para iniciar no seu dispositivo móvel.
+                    <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                        Clique no botão abaixo para falar com nossa equipe diretamente no WhatsApp ou aponte a câmera do celular para o QR Code.
                     </p>
-                    <a href="https://wa.me/5582987532852" target="_blank" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-600/10">
+                    <a href="https://wa.me/5582987532852" target="_blank" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-lg text-xs">
                         <span class="material-symbols-outlined text-sm">chat</span>
                         Falar no WhatsApp
                     </a>
                 </div>
 
-            <!-- QR Code Section -->
-            <div class="flex flex-col items-center justify-center p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-850 rounded-xl shadow-sm min-w-[170px]">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwa.me%2F5582987532852" alt="WhatsApp QR Code" class="w-32 h-32 object-contain" />
-                <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-2 tracking-wider">Escaneie o QR Code</span>
+                <!-- QR Code Section -->
+                <div class="flex flex-col items-center justify-center p-3 bg-white rounded-xl shadow-md shrink-0">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwa.me%2F5582987532852" alt="WhatsApp QR Code" class="w-28 h-28 object-contain" />
+                    <span class="text-[9px] font-bold text-slate-700 uppercase mt-1 tracking-wider">Escaneie o QR Code</span>
+                </div>
             </div>
         </div>
-
     </div>
-</div>
 
-<!-- Demo Modal Overlay (using native dialog) -->
-<dialog id="demo-modal" class="bg-white dark:bg-slate-900 rounded-2xl max-w-6xl w-[calc(100%-2rem)] md:w-full max-h-[calc(100vh-2rem)] md:max-h-[85vh] p-0 shadow-2xl border border-slate-200 dark:border-slate-800 backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm transform scale-95 transition-all duration-300 opacity-0 outline-none m-auto">
-    <!-- Content Container -->
-    <div class="flex flex-col md:flex-row h-full min-h-[350px] md:min-h-[500px] md:h-[650px] overflow-hidden">
-        <!-- Sidebar (Steps/Tabs) -->
-        <div class="hidden md:flex w-full md:w-80 bg-slate-50 dark:bg-slate-950 p-6 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-850 flex-col justify-between">
-            <div>
-                <!-- Header -->
-                <div class="flex items-center justify-between mb-8">
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary-container dark:text-white">smart_display</span>
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-50">Tour do Sistema</h2>
+    <!-- Demo Modal Overlay -->
+    <dialog id="demo-modal" class="bg-[#111726] rounded-2xl max-w-5xl w-[calc(100%-2rem)] md:w-full p-0 shadow-2xl border border-white/10 backdrop:bg-[#090d16]/80 backdrop:backdrop-blur-md transform scale-95 transition-all duration-300 opacity-0 outline-none m-auto text-white">
+        <div class="flex flex-col md:flex-row h-full min-h-[350px] md:min-h-[500px] md:h-[600px] overflow-hidden">
+            <!-- Sidebar (Steps) -->
+            <div class="hidden md:flex w-full md:w-72 bg-[#0d1320] p-6 border-r border-white/10 flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-rose-400">smart_display</span>
+                            <h2 class="text-base font-['Outfit'] font-bold text-white">Tour do Sistema</h2>
+                        </div>
                     </div>
-                    <button onclick="toggleDemoModal(false)" type="button" class="md:hidden flex items-center justify-center p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
+
+                    <div class="space-y-3">
+                        <button onclick="goToSlide(0)" id="demo-step-0" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-white/5 transition-all flex items-start gap-3 group">
+                            <div class="p-2 rounded-lg bg-rose-500/10 text-rose-400">
+                                <span class="material-symbols-outlined text-lg">dashboard</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xs font-bold text-white">Painel Principal</h3>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Indicadores em tempo real.</p>
+                                <div class="w-full bg-[#182234] h-1 rounded-full mt-2 overflow-hidden relative">
+                                    <div id="demo-progress-0" class="bg-rose-500 h-full w-0 transition-all duration-100 ease-linear"></div>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="goToSlide(1)" id="demo-step-1" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-white/5 transition-all flex items-start gap-3 group">
+                            <div class="p-2 rounded-lg bg-rose-500/10 text-rose-400">
+                                <span class="material-symbols-outlined text-lg">group</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xs font-bold text-white">Gestão de Alunos</h3>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Listagem visual e faixas.</p>
+                                <div class="w-full bg-[#182234] h-1 rounded-full mt-2 overflow-hidden relative">
+                                    <div id="demo-progress-1" class="bg-rose-500 h-full w-0 transition-all duration-100 ease-linear"></div>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="goToSlide(2)" id="demo-step-2" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-white/5 transition-all flex items-start gap-3 group">
+                            <div class="p-2 rounded-lg bg-rose-500/10 text-rose-400">
+                                <span class="material-symbols-outlined text-lg">person_add</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xs font-bold text-white">Cadastro de Aluno</h3>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Formulário inteligente.</p>
+                                <div class="w-full bg-[#182234] h-1 rounded-full mt-2 overflow-hidden relative">
+                                    <div id="demo-progress-2" class="bg-rose-500 h-full w-0 transition-all duration-100 ease-linear"></div>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button onclick="goToSlide(3)" id="demo-step-3" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-white/5 transition-all flex items-start gap-3 group">
+                            <div class="p-2 rounded-lg bg-rose-500/10 text-rose-400">
+                                <span class="material-symbols-outlined text-lg">checklist</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xs font-bold text-white">Controle de Presença</h3>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Chamada inteligente por IA.</p>
+                                <div class="w-full bg-[#182234] h-1 rounded-full mt-2 overflow-hidden relative">
+                                    <div id="demo-progress-3" class="bg-rose-500 h-full w-0 transition-all duration-100 ease-linear"></div>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Steps List -->
-                <div class="space-y-4">
-                    <!-- Step 1 Button -->
-                    <button onclick="goToSlide(0)" id="demo-step-0" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all flex items-start gap-3 group">
-                        <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
-                            <span class="material-symbols-outlined text-[22px]">dashboard</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">Painel Principal</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5">Indicadores financeiros e de frequência em tempo real.</p>
-                            <!-- Progress bar -->
-                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-1 rounded-full mt-2 overflow-hidden relative">
-                                <div id="demo-progress-0" class="bg-indigo-650 h-full w-0 transition-all duration-100 ease-linear"></div>
-                            </div>
-                        </div>
+                <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
+                    <button onclick="toggleAutoplay()" type="button" class="flex items-center gap-1 bg-[#182234] px-3 py-1.5 rounded-full text-xs font-semibold text-white">
+                        <span class="material-symbols-outlined text-sm" id="autoplay-icon">pause</span>
+                        <span id="autoplay-text">Autoplay</span>
                     </button>
-
-                    <!-- Step 2 Button -->
-                    <button onclick="goToSlide(1)" id="demo-step-1" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all flex items-start gap-3 group">
-                        <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
-                            <span class="material-symbols-outlined text-[22px]">group</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">Gestão de Alunos</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5">Listagem visual de alunos ativos, inativos e graduações.</p>
-                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-1 rounded-full mt-2 overflow-hidden relative">
-                                <div id="demo-progress-1" class="bg-indigo-650 h-full w-0 transition-all duration-100 ease-linear"></div>
-                            </div>
-                        </div>
-                    </button>
-
-                    <!-- Step 3 Button -->
-                    <button onclick="goToSlide(2)" id="demo-step-2" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all flex items-start gap-3 group">
-                        <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
-                            <span class="material-symbols-outlined text-[22px]">person_add</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">Cadastro de Aluno</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5">Formulário inteligente com seleção de plano e graduação.</p>
-                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-1 rounded-full mt-2 overflow-hidden relative">
-                                <div id="demo-progress-2" class="bg-indigo-650 h-full w-0 transition-all duration-100 ease-linear"></div>
-                            </div>
-                        </div>
-                    </button>
-
-                    <!-- Step 4 Button -->
-                    <button onclick="goToSlide(3)" id="demo-step-3" class="w-full text-left p-3 rounded-xl border border-transparent hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all flex items-start gap-3 group">
-                        <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
-                            <span class="material-symbols-outlined text-[22px]">checklist</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">Controle de Presença</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5">Chamada eletrônica rápida com status de presença.</p>
-                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-1 rounded-full mt-2 overflow-hidden relative">
-                                <div id="demo-progress-3" class="bg-indigo-650 h-full w-0 transition-all duration-100 ease-linear"></div>
-                            </div>
-                        </div>
-                    </button>
+                    <span class="font-mono text-[10px]">Setas ➔ ⬅</span>
                 </div>
             </div>
 
-            <!-- Footer Autoplay Controls & Keyboard Helper -->
-            <div class="mt-8 pt-4 border-t border-slate-200 dark:border-slate-850 flex items-center justify-between text-xs text-slate-450">
-                <button onclick="toggleAutoplay()" type="button" class="flex items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors bg-slate-200/50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full font-semibold">
-                    <span class="material-symbols-outlined text-sm" id="autoplay-icon">pause</span>
-                    <span id="autoplay-text">Autoplay</span>
+            <!-- Showcase Area -->
+            <div class="flex-1 bg-[#111726] flex flex-col justify-between relative">
+                <button onclick="toggleDemoModal(false)" type="button" class="hidden md:flex absolute top-4 right-4 z-10 items-center justify-center w-9 h-9 rounded-full bg-[#182234] border border-white/10 text-slate-400 hover:text-white transition-all">
+                    <span class="material-symbols-outlined text-sm">close</span>
                 </button>
-                <span class="hidden md:inline font-mono">Use ➔ ou ⬅</span>
-            </div>
-        </div>
 
-        <!-- Main Showcase Area (Image display) -->
-        <div class="flex-1 bg-slate-100 dark:bg-slate-900 flex flex-col justify-between relative group/showcase">
-            <!-- Mobile Header -->
-            <div class="md:hidden flex items-center justify-between px-6 py-4 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary-container dark:text-white">smart_display</span>
-                    <h2 class="text-sm font-bold text-slate-900 dark:text-slate-50">Tour do Sistema</h2>
+                <div class="flex-1 flex items-center justify-center p-6">
+                    <div class="relative w-full h-full max-h-[420px] overflow-hidden rounded-xl border border-white/10 bg-[#090d16]">
+                        <img src="{{ asset('images/demo/step1.png') }}" id="demo-img-0" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-100 transition-all duration-500" alt="Painel Principal">
+                        <img src="{{ asset('images/demo/step3.png') }}" id="demo-img-1" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-0 transition-all duration-500 pointer-events-none" alt="Gestão de Alunos">
+                        <img src="{{ asset('images/demo/step2.png') }}" id="demo-img-2" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-0 transition-all duration-500 pointer-events-none" alt="Cadastro de Aluno">
+                        <img src="{{ asset('images/demo/step4.png') }}" id="demo-img-3" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-0 transition-all duration-500 pointer-events-none" alt="Controle de Presença">
+                    </div>
                 </div>
-                <button onclick="toggleDemoModal(false)" type="button" class="flex items-center justify-center p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 active:scale-95 transition-all">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
 
-            <!-- Close Button (Desktop) -->
-            <button onclick="toggleDemoModal(false)" type="button" class="hidden md:flex absolute top-6 right-6 z-10 items-center justify-center w-10 h-10 rounded-full bg-white/90 dark:bg-slate-950/90 hover:bg-white dark:hover:bg-slate-950 text-slate-750 hover:text-slate-900 dark:text-slate-350 dark:hover:text-white transition-all shadow-md active:scale-95 border border-slate-200 dark:border-slate-800">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-
-            <!-- Slides Container -->
-            <div class="flex-1 flex items-center justify-center p-4 md:p-10">
-                <div class="relative w-full h-full max-h-[450px] overflow-hidden rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
-                    <!-- Step 1 Image -->
-                    <img src="{{ asset('images/demo/step1.png') }}" id="demo-img-0" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-100 transition-all duration-500 scale-100" alt="Painel Principal (Dashboard)">
-                    <!-- Step 2 Image -->
-                    <img src="{{ asset('images/demo/step3.png') }}" id="demo-img-1" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-0 transition-all duration-500 scale-95 pointer-events-none" alt="Gestão de Alunos">
-                    <!-- Step 3 Image -->
-                    <img src="{{ asset('images/demo/step2.png') }}" id="demo-img-2" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-0 transition-all duration-500 scale-95 pointer-events-none" alt="Cadastro de Aluno">
-                    <!-- Step 4 Image -->
-                    <img src="{{ asset('images/demo/step4.png') }}" id="demo-img-3" class="demo-slide w-full h-full object-contain absolute inset-0 opacity-0 transition-all duration-500 scale-95 pointer-events-none" alt="Controle de Presença">
-                </div>
-            </div>
-
-            <!-- Navigation Controls Footer -->
-            <div class="p-5 md:p-6 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div class="w-full md:flex-1 md:min-w-0">
-                    <h4 class="text-sm font-bold text-slate-850 dark:text-slate-100" id="slide-title">Painel Principal</h4>
-                    <p class="text-xs text-slate-500 dark:text-slate-450 mt-0.5" id="slide-desc">Indicadores financeiros e de frequência em tempo real.</p>
-                </div>
-                <div class="flex items-center justify-between md:justify-end gap-2 w-full md:w-auto shrink-0">
-                    <a href="{{ route('demo.login') }}" id="demo-modal-cta-btn"
-                       class="flex-1 md:flex-none flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/30">
-                        <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
-                        <span class="whitespace-nowrap">Experimentar agora</span>
-                    </a>
-                    <button onclick="prevSlide()" type="button" class="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 transition-all active:scale-95">
-                        <span class="material-symbols-outlined">chevron_left</span>
-                    </button>
-                    <button onclick="nextSlide()" type="button" class="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 transition-all active:scale-95">
-                        <span class="material-symbols-outlined">chevron_right</span>
-                    </button>
+                <div class="p-4 md:p-6 bg-[#0d1320] border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h4 class="text-xs font-bold text-white" id="slide-title">Painel Principal</h4>
+                        <p class="text-[11px] text-slate-400 mt-0.5" id="slide-desc">Indicadores financeiros e de frequência em tempo real.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="prevSlide()" type="button" class="p-2 rounded-xl bg-[#182234] border border-white/10 text-slate-300 hover:text-white transition-all">
+                            <span class="material-symbols-outlined text-sm">chevron_left</span>
+                        </button>
+                        <button onclick="nextSlide()" type="button" class="p-2 rounded-xl bg-[#182234] border border-white/10 text-slate-300 hover:text-white transition-all">
+                            <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</dialog>
-
-        </div>
-    </div>
+    </dialog>
 
     <script>
         function togglePassword() {
@@ -487,7 +412,6 @@
             }
         }
 
-        // Close Support Modal on backdrop click
         document.getElementById('support-modal').addEventListener('click', (e) => {
             const modal = document.getElementById('support-modal');
             if (e.target === modal) {
@@ -495,7 +419,6 @@
             }
         });
 
-        // Close Support Modal on ESC key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 const modal = document.getElementById('support-modal');
@@ -552,7 +475,6 @@
             }
         }
 
-        // Close on backdrop click
         document.getElementById('demo-modal').addEventListener('click', (e) => {
             const dialog = document.getElementById('demo-modal');
             const dialogDimensions = dialog.getBoundingClientRect();
@@ -566,13 +488,11 @@
             }
         });
 
-        // Close on ESC key
         document.getElementById('demo-modal').addEventListener('cancel', (e) => {
             e.preventDefault();
             toggleDemoModal(false);
         });
 
-        // Keyboard navigation (left/right arrow keys)
         document.addEventListener('keydown', (e) => {
             const dialog = document.getElementById('demo-modal');
             if (dialog && dialog.open) {
@@ -588,7 +508,7 @@
             for (let i = 0; i < totalDemoSlides; i++) {
                 const btn = document.getElementById(`demo-step-${i}`);
                 if (btn) {
-                    btn.classList.remove('bg-white', 'dark:bg-slate-900', 'border-slate-200', 'dark:border-slate-800', 'shadow-sm');
+                    btn.classList.remove('bg-white/10', 'border-white/10');
                     btn.classList.add('border-transparent');
                 }
                 
@@ -609,7 +529,7 @@
             
             const activeBtn = document.getElementById(`demo-step-${slideIndex}`);
             if (activeBtn) {
-                activeBtn.classList.add('bg-white', 'dark:bg-slate-900', 'border-slate-200', 'dark:border-slate-800', 'shadow-sm');
+                activeBtn.classList.add('bg-white/10', 'border-white/10');
                 activeBtn.classList.remove('border-transparent');
             }
             

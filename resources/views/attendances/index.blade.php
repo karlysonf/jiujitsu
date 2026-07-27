@@ -3,64 +3,72 @@
 @section('content')
 <div class="max-w-[1600px] mx-auto pb-24">
     <!-- Header Section -->
-    <div class="mb-10">
-        <h1 class="font-headline-lg text-headline-lg text-primary mb-2">Controle de Presença</h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant">Gerencie a frequência dos alunos nas aulas de hoje ({{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}).</p>
+    <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                Presença e Frequência
+            </div>
+            <h1 class="font-['Outfit'] font-black text-2xl md:text-4xl text-white tracking-tight">Controle de Presença no Tatame</h1>
+            <p class="text-slate-400 text-xs md:text-sm mt-0.5">Gerencie a frequência dos alunos nas aulas de hoje ({{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}).</p>
+        </div>
     </div>
 
     <!-- Summary Bento Grid Section -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-10">
-        <div class="bg-white border border-outline-variant p-md rounded-xl shadow-sm flex flex-col gap-2">
-            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Total de Alunos</span>
-            <div class="flex items-baseline gap-2">
-                <span class="text-display-xl font-display-xl text-primary">{{ $users->count() }}</span>
-                <span class="text-label-bold font-label-bold text-on-surface-variant">Ativos hoje</span>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-[#111726] border border-white/10 p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total de Alunos</span>
+            <div class="flex items-baseline gap-2 mt-2">
+                <span class="font-['Outfit'] font-extrabold text-3xl text-white">{{ $users->count() }}</span>
+                <span class="text-xs text-slate-400 font-medium">Ativos no cadastro</span>
             </div>
-            <div class="mt-4 h-1 w-full bg-surface-container rounded-full overflow-hidden">
-                <div class="h-full bg-primary" style="width: 100%"></div>
-            </div>
-        </div>
-        <div class="bg-white border border-outline-variant p-md rounded-xl shadow-sm flex flex-col gap-2">
-            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Presenças Confirmadas</span>
-            <div class="flex items-baseline gap-2">
-                <span class="text-display-xl font-display-xl text-tertiary-container">{{ $attendances->count() }}</span>
-                <span class="text-label-bold font-label-bold text-tertiary-container">Alunos</span>
-            </div>
-            <div class="mt-4 h-1 w-full bg-surface-container rounded-full overflow-hidden">
-                <div class="h-full bg-tertiary-container" style="width: {{ $users->count() > 0 ? ($attendances->count() / $users->count()) * 100 : 0 }}%"></div>
+            <div class="mt-4 h-1.5 w-full bg-[#182234] rounded-full overflow-hidden">
+                <div class="h-full bg-rose-500" style="width: 100%"></div>
             </div>
         </div>
-        <div class="bg-white border border-outline-variant p-md rounded-xl shadow-sm flex flex-col gap-2 relative overflow-hidden group">
+
+        <div class="bg-[#111726] border border-white/10 p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Presenças Confirmadas</span>
+            <div class="flex items-baseline gap-2 mt-2">
+                <span class="font-['Outfit'] font-extrabold text-3xl text-cyan-400">{{ $attendances->count() }}</span>
+                <span class="text-xs text-cyan-400/80 font-medium">Alunos em aula</span>
+            </div>
+            <div class="mt-4 h-1.5 w-full bg-[#182234] rounded-full overflow-hidden">
+                <div class="h-full bg-cyan-400" style="width: {{ $users->count() > 0 ? ($attendances->count() / $users->count()) * 100 : 0 }}%"></div>
+            </div>
+        </div>
+
+        <div class="bg-[#111726] border border-white/10 p-6 rounded-2xl shadow-xl flex flex-col justify-between relative overflow-hidden group">
             <div class="relative z-10">
-                <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Taxa de Ocupação</span>
-                <div class="flex items-baseline gap-2">
-                    <span class="text-display-xl font-display-xl text-secondary">{{ $users->count() > 0 ? round(($attendances->count() / $users->count()) * 100) : 0 }}%</span>
-                    <span class="text-label-bold font-label-bold text-on-surface-variant">Capacidade</span>
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Taxa de Ocupação</span>
+                <div class="flex items-baseline gap-2 mt-2">
+                    <span class="font-['Outfit'] font-extrabold text-3xl text-rose-400">{{ $users->count() > 0 ? round(($attendances->count() / $users->count()) * 100) : 0 }}%</span>
+                    <span class="text-xs text-slate-400 font-medium">Capacidade do Tatame</span>
                 </div>
             </div>
-            <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                <span class="material-symbols-outlined text-[120px]">analytics</span>
+            <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+                <span class="material-symbols-outlined text-[120px] text-white">analytics</span>
             </div>
         </div>
     </div>
 
     <!-- Smart Attendance Upload Card -->
-    <div class="bg-white border border-outline-variant p-6 rounded-xl shadow-sm mb-6">
+    <div class="bg-gradient-to-r from-[#111726] via-[#182234] to-[#111726] border border-cyan-500/30 p-6 rounded-2xl shadow-xl mb-6">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 shadow-lg shadow-cyan-500/10">
                     <span class="material-symbols-outlined text-[28px]">face_retouching_natural</span>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900">Chamada Inteligente por Foto (IA)</h3>
-                    <p class="text-sm text-on-surface-variant mt-1 leading-relaxed">
+                    <h3 class="text-lg font-['Outfit'] font-bold text-white">Chamada Inteligente por Foto (IA)</h3>
+                    <p class="text-xs text-slate-300 mt-1 leading-relaxed max-w-3xl">
                         Faça upload de uma foto da aula de hoje. A inteligência artificial identificará os alunos presentes e pré-selecionará seus nomes na lista abaixo para sua validação.
-                        <span class="text-xs text-indigo-600 block mt-1 font-semibold">Obs: Alunos devem ter foto cadastrada em seus perfis para serem reconhecidos.</span>
+                        <span class="text-cyan-400 block mt-1 font-semibold">Obs: Alunos devem ter foto cadastrada em seus perfis para serem reconhecidos pela IA.</span>
                     </p>
                 </div>
             </div>
             <div class="w-full md:w-auto shrink-0 flex flex-col items-center gap-2">
-                <button type="button" onclick="document.getElementById('photoUploadInput').click()" class="w-full md:w-auto bg-primary text-on-primary px-6 py-3 rounded-xl font-label-bold text-label-bold flex items-center justify-center gap-2 hover:scale-[0.98] transition-transform shadow-md active:opacity-90 cursor-pointer">
+                <button type="button" onclick="document.getElementById('photoUploadInput').click()" class="w-full md:w-auto bg-gradient-to-r from-rose-600 to-rose-700 text-white px-6 py-3 rounded-xl font-['Outfit'] font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-rose-600/30 transition-all cursor-pointer">
                     <span class="material-symbols-outlined">upload_file</span>
                     Enviar Foto do Tatame
                 </button>
@@ -75,29 +83,29 @@
     </div>
 
     <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-4 hidden">
-        <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-        <p class="text-white font-label-bold text-headline-md animate-pulse">Analisando imagem com Inteligência Artificial...</p>
-        <p class="text-slate-300 text-body-md">Isso pode levar alguns segundos.</p>
+    <div id="loadingOverlay" class="fixed inset-0 bg-[#090d16]/90 backdrop-blur-md z-50 flex flex-col items-center justify-center gap-4 hidden">
+        <div class="w-16 h-16 border-4 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-white font-['Outfit'] font-bold text-xl animate-pulse">Analisando imagem com Inteligência Artificial...</p>
+        <p class="text-slate-400 text-xs">Isso pode levar alguns segundos.</p>
     </div>
 
     <!-- Filters Bar -->
-    <div class="bg-white border border-outline-variant p-4 rounded-xl mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex-1 min-w-[300px] relative">
-            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-            <input id="studentSearch" class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded focus:border-tertiary-container focus:ring-2 focus:ring-tertiary-container/20 outline-none transition-all font-body-md text-body-md" placeholder="Buscar aluno pelo nome..." type="text"/>
+    <div class="bg-[#111726] border border-white/10 p-4 rounded-2xl mb-6 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+        <div class="flex-1 min-w-[280px] relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+            <input id="studentSearch" class="w-full pl-10 pr-4 py-2 bg-[#090d16] border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 transition-all" placeholder="Buscar aluno pelo nome..." type="text"/>
         </div>
         <div class="flex items-center gap-4 flex-wrap">
             <div class="flex items-center gap-2">
-                <span class="text-label-bold font-label-bold text-on-surface">Data da Aula:</span>
-                <input type="date" id="attendanceDate" value="{{ $date }}" class="px-3 py-1.5 rounded border border-outline-variant bg-surface-container-low focus:border-tertiary-container focus:ring-2 focus:ring-tertiary-container/20 outline-none transition-all font-body-md text-body-md text-primary cursor-pointer" onchange="window.location.href = '{{ route('attendances.index') }}?date=' + this.value">
+                <span class="text-xs font-semibold text-slate-300">Data da Aula:</span>
+                <input type="date" id="attendanceDate" value="{{ $date }}" class="px-3 py-2 rounded-xl border border-white/10 bg-[#090d16] text-white text-xs cursor-pointer focus:outline-none focus:border-rose-500" onchange="window.location.href = '{{ route('attendances.index') }}?date=' + this.value">
             </div>
             <div class="flex items-center gap-2">
-                <span class="text-label-bold font-label-bold text-on-surface">Status:</span>
-                <div class="inline-flex rounded-lg border border-outline-variant p-1 bg-surface-container-low" id="statusFilters">
-                    <button data-status="all" class="filter-btn px-4 py-1.5 rounded bg-white shadow-sm text-label-bold font-label-bold text-primary">Todos</button>
-                    <button data-status="present" class="filter-btn px-4 py-1.5 rounded text-label-bold font-label-bold text-on-surface-variant hover:bg-white/50 transition-colors">Presente</button>
-                    <button data-status="absent" class="filter-btn px-4 py-1.5 rounded text-label-bold font-label-bold text-on-surface-variant hover:bg-white/50 transition-colors">Ausente</button>
+                <span class="text-xs font-semibold text-slate-300">Status:</span>
+                <div class="inline-flex rounded-xl border border-white/10 p-1 bg-[#090d16]" id="statusFilters">
+                    <button data-status="all" class="filter-btn px-3 py-1 rounded-lg bg-rose-600 text-white font-bold text-xs">Todos</button>
+                    <button data-status="present" class="filter-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white font-semibold text-xs transition-colors">Presente</button>
+                    <button data-status="absent" class="filter-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white font-semibold text-xs transition-colors">Ausente</button>
                 </div>
             </div>
         </div>
@@ -107,73 +115,60 @@
     <form action="{{ route('attendances.bulk') }}" method="POST" id="attendanceForm">
         @csrf
         <input type="hidden" name="date" value="{{ $date }}">
-        <div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm mb-6">
+        <div class="bg-[#111726] border border-white/10 rounded-2xl overflow-hidden shadow-xl mb-6">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[600px] md:min-w-full">
                 <thead>
-                    <tr class="bg-surface-container-low border-b border-outline-variant">
+                    <tr class="border-b border-white/10 text-slate-400 text-xs font-bold uppercase tracking-wider bg-[#0d1320]/60">
                         <th class="px-6 py-4 w-16 text-center">
-                            <input type="checkbox" id="selectAll" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer">
+                            <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-white/20 bg-[#090d16] text-rose-600 focus:ring-rose-500 transition-all cursor-pointer">
                         </th>
-                        <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Aluno</th>
-                        <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Graduação</th>
-                        <th class="px-6 py-4 font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4">Aluno</th>
+                        <th class="px-6 py-4">Graduação</th>
+                        <th class="px-6 py-4">Status</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-outline-variant" id="attendanceTableBody">
+                <tbody class="divide-y divide-white/5" id="attendanceTableBody">
                     @foreach($users as $user)
                         @php
                             $hasAttended = $attendances->where('user_id', $user->id)->isNotEmpty();
                             $beltColor = match(strtolower($user->faixa)) {
-                                'branca' => 'bg-slate-200',
-                                'cinza' => 'bg-slate-400',
-                                'cinza/branca' => 'bg-slate-300',
-                                'cinza/preta' => 'bg-slate-600',
-                                'amarela' => 'bg-yellow-400',
-                                'amarela/branca' => 'bg-yellow-200',
-                                'amarela/preta' => 'bg-yellow-600',
-                                'laranja' => 'bg-orange-400',
-                                'laranja/branca' => 'bg-orange-200',
-                                'laranja/preta' => 'bg-orange-600',
-                                'verde' => 'bg-green-500',
-                                'verde/branca' => 'bg-green-200',
-                                'verde/preta' => 'bg-green-700',
-                                'azul' => 'bg-blue-600',
-                                'roxa' => 'bg-purple-600',
-                                'marrom' => 'bg-amber-800',
-                                'preta' => 'bg-slate-900',
-                                default => 'bg-slate-400'
+                                'branca' => 'bg-slate-200 text-slate-900',
+                                'cinza' => 'bg-slate-500 text-white',
+                                'amarela' => 'bg-yellow-400 text-yellow-950 font-bold',
+                                'laranja' => 'bg-orange-500 text-white',
+                                'verde' => 'bg-emerald-600 text-white',
+                                'azul' => 'bg-blue-600 text-white',
+                                'roxa' => 'bg-purple-600 text-white',
+                                'marrom' => 'bg-amber-900 text-white',
+                                'preta' => 'bg-slate-900 text-white border border-slate-700',
+                                default => 'bg-slate-800 text-slate-300'
                             };
                         @endphp
-                        <tr class="hover:bg-slate-50 transition-colors group attendance-row" data-name="{{ strtolower($user->name) }}" data-present="{{ $hasAttended ? 'true' : 'false' }}">
+                        <tr class="hover:bg-white/5 transition-colors group attendance-row" data-name="{{ strtolower($user->name) }}" data-present="{{ $hasAttended ? 'true' : 'false' }}">
                             <td class="px-6 py-4 text-center">
-                                <input type="checkbox" name="present_users[]" value="{{ $user->id }}" {{ $hasAttended ? 'checked' : '' }} class="student-checkbox w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer">
+                                <input type="checkbox" name="present_users[]" value="{{ $user->id }}" {{ $hasAttended ? 'checked' : '' }} class="student-checkbox w-4 h-4 rounded border-white/20 bg-[#090d16] text-rose-600 focus:ring-rose-500 transition-all cursor-pointer">
                             </td>
                             <td class="px-6 py-4">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-outline overflow-hidden">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-[#182234] border border-white/10 flex items-center justify-center text-rose-400 overflow-hidden font-bold text-xs">
                                         @if($user->avatar_url)
                                             <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
                                         @else
-                                            <span class="material-symbols-outlined text-3xl">person</span>
+                                            {{ strtoupper(substr($user->name, 0, 2)) }}
                                         @endif
                                     </div>
                                     <div>
-                                        <div class="font-label-bold text-label-bold text-primary">{{ $user->name }}</div>
-                                        <div class="text-label-sm font-label-sm text-on-surface-variant">Ult. aula: {{ $user->attendances->first()?->date?->diffForHumans() ?? 'Nenhuma registrada' }}</div>
+                                        <div class="font-semibold text-sm text-white">{{ $user->name }}</div>
+                                        <div class="text-[11px] text-slate-400">Últ. aula: {{ $user->attendances->first()?->date?->diffForHumans() ?? 'Nenhuma registrada' }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="flex items-center gap-2">
-                                    <div class="h-2 w-16 bg-surface-container rounded-full overflow-hidden">
-                                        <div class="h-full {{ $beltColor }}" style="width: 100%"></div>
-                                    </div>
-                                    <span class="text-label-sm font-label-sm text-on-surface-variant">Faixa {{ $user->faixa }}</span>
-                                </div>
+                                <span class="px-2.5 py-1 {{ $beltColor }} rounded-md text-[10px] font-bold tracking-wider uppercase">FAIXA {{ strtoupper($user->faixa) }}</span>
                             </td>
                             <td class="px-6 py-4 status-cell">
-                                <span class="status-badge px-3 py-1 rounded-full text-label-sm font-label-bold transition-all duration-200 {{ $hasAttended ? 'bg-secondary-container text-on-secondary-container' : 'bg-error-container text-on-error-container' }}">
+                                <span class="status-badge px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 {{ $hasAttended ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-rose-500/10 border border-rose-500/30 text-rose-400' }}">
                                     {{ $hasAttended ? 'Confirmado' : 'Ausente' }}
                                 </span>
                             </td>
@@ -182,21 +177,21 @@
                 </tbody>
                 </table>
             </div>
-            <div class="px-6 py-4 bg-surface-container-low flex items-center justify-between">
-                <span class="text-label-sm font-label-sm text-on-surface-variant" id="showingText">Mostrando {{ $users->count() }} de {{ $users->count() }} alunos</span>
+            <div class="px-6 py-4 bg-[#0d1320] flex items-center justify-between border-t border-white/10 text-xs text-slate-400">
+                <span id="showingText">Mostrando {{ $users->count() }} de {{ $users->count() }} alunos</span>
             </div>
         </div>
 
         <!-- Sticky Bottom Bar for bulk actions -->
-        <div class="sticky bottom-4 bg-white dark:bg-slate-900 border border-outline-variant py-4 px-6 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] z-20 mt-6 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="sticky bottom-4 bg-[#111726]/90 backdrop-blur-md border border-white/10 py-4 px-6 shadow-2xl z-20 mt-6 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary text-[24px]">checklist</span>
-                <span class="text-body-md text-primary font-label-bold" id="selectedCountText">
+                <span class="material-symbols-outlined text-rose-500 text-xl">checklist</span>
+                <span class="text-sm font-semibold text-white" id="selectedCountText">
                     0 de {{ $users->count() }} presenças marcadas
                 </span>
             </div>
-            <button type="submit" class="w-full sm:w-auto bg-primary text-on-primary px-8 py-3.5 rounded-xl font-label-bold text-label-bold flex items-center justify-center gap-2 hover:scale-[0.98] transition-transform shadow-md active:opacity-90">
-                <span class="material-symbols-outlined text-[20px]">save</span>
+            <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-rose-700 text-white px-8 py-3 rounded-xl font-['Outfit'] font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-rose-600/30 transition-all">
+                <span class="material-symbols-outlined text-base">save</span>
                 Validar Presenças
             </button>
         </div>
@@ -218,7 +213,7 @@
         // Hide previous alerts
         const alertBox = document.getElementById('aiFeedbackAlert');
         alertBox.classList.add('hidden');
-        alertBox.className = "mt-4 p-4 rounded-lg text-sm font-semibold";
+        alertBox.className = "mt-4 p-4 rounded-xl text-xs font-semibold";
         alertBox.innerHTML = "";
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') 
@@ -248,165 +243,135 @@
         .then(data => {
             overlay.classList.add('hidden');
             
-            if (data.success && data.identified_ids) {
-                const identifiedIds = data.identified_ids;
+            if (data.matched_user_ids && data.matched_user_ids.length > 0) {
+                alertBox.className = "mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-medium";
+                alertBox.innerHTML = `<strong>✨ IA Reconhecimento Facial:</strong> ${data.matched_user_ids.length} aluno(s) identificado(s) e selecionado(s) na lista abaixo!`;
+                alertBox.classList.remove('hidden');
                 
-                // Uncheck all first so we only mark the identified ones
-                const checkboxes = document.querySelectorAll('.student-checkbox');
-                checkboxes.forEach(cb => {
-                    if (cb.checked) {
-                        cb.checked = false;
-                        cb.dispatchEvent(new Event('change'));
-                    }
-                });
-
-                // Check the identified ones
-                let checkCount = 0;
-                identifiedIds.forEach(id => {
+                // Select checkboxes
+                data.matched_user_ids.forEach(id => {
                     const cb = document.querySelector(`.student-checkbox[value="${id}"]`);
                     if (cb) {
                         cb.checked = true;
-                        cb.dispatchEvent(new Event('change'));
-                        checkCount++;
+                        const row = cb.closest('tr');
+                        if (row) {
+                            row.dataset.present = "true";
+                            const badge = row.querySelector('.status-badge');
+                            if (badge) {
+                                badge.textContent = "Confirmado";
+                                badge.className = "status-badge px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400";
+                            }
+                        }
                     }
                 });
-
-                // Show success alert
-                alertBox.classList.remove('hidden');
-                if (data.simulation) {
-                    alertBox.className = "mt-4 p-4 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm font-medium flex flex-col gap-1";
-                    alertBox.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-base">warning</span>
-                            <span class="font-bold">Modo Simulação Ativo</span>
-                        </div>
-                        <p class="text-xs mt-1">${data.message || 'Falha ao se comunicar com o serviço de reconhecimento facial (ou serviço configurado incorretamente). Simulamos a presença de <strong>' + checkCount + ' alunos</strong>.'}</p>
-                    `;
-                } else {
-                    alertBox.className = "mt-4 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm font-medium flex flex-col gap-1";
-                    alertBox.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-base">check_circle</span>
-                            <span class="font-bold">Reconhecimento IA concluído!</span>
-                        </div>
-                        <p class="text-xs mt-1">Identificamos <strong>${checkCount} alunos</strong> na foto enviada. Verifique as seleções abaixo e clique em <strong>Validar Presenças</strong> para confirmar.</p>
-                    `;
-                }
+                updateSelectedCount();
             } else {
-                throw new Error(data.message || 'Falha ao identificar rostos.');
+                alertBox.className = "mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-medium";
+                alertBox.innerHTML = `<strong>⚠️ IA:</strong> Nenhum aluno foi reconhecido na imagem enviada. Certifique-se de que os alunos possuem fotos cadastradas no perfil.`;
+                alertBox.classList.remove('hidden');
             }
         })
-        .catch(error => {
+        .catch(err => {
             overlay.classList.add('hidden');
+            alertBox.className = "mt-4 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-medium";
+            alertBox.innerHTML = `<strong>❌ Erro:</strong> ${err.message}`;
             alertBox.classList.remove('hidden');
-            alertBox.className = "mt-4 p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm font-medium flex items-center gap-2";
-            alertBox.innerHTML = `
-                <span class="material-symbols-outlined text-base">error</span>
-                <span>Erro: ${error.message}</span>
-            `;
-            console.error(error);
-        })
-        .finally(() => {
-            // Reset input so they can upload same file if they want
-            input.value = "";
         });
     };
 
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('studentSearch');
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const rows = document.querySelectorAll('.attendance-row');
-        const showingText = document.getElementById('showingText');
+        const checkboxes = document.querySelectorAll('.student-checkbox');
         const selectAll = document.getElementById('selectAll');
+        const selectedCountText = document.getElementById('selectedCountText');
+        const studentSearch = document.getElementById('studentSearch');
+        const rows = document.querySelectorAll('.attendance-row');
+        const filterBtns = document.querySelectorAll('.filter-btn');
 
-        let currentStatus = 'all';
-        let currentSearch = '';
+        function updateSelectedCount() {
+            const checked = document.querySelectorAll('.student-checkbox:checked').length;
+            const total = checkboxes.length;
+            if (selectedCountText) {
+                selectedCountText.textContent = `${checked} de ${total} presenças marcadas`;
+            }
+            if (selectAll) {
+                selectAll.checked = checked === total && total > 0;
+            }
+        }
 
-        function updateFilters() {
-            let visibleCount = 0;
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                const row = this.closest('tr');
+                const badge = row.querySelector('.status-badge');
+                if (this.checked) {
+                    row.dataset.present = 'true';
+                    if (badge) {
+                        badge.textContent = 'Confirmado';
+                        badge.className = 'status-badge px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400';
+                    }
+                } else {
+                    row.dataset.present = 'false';
+                    if (badge) {
+                        badge.textContent = 'Ausente';
+                        badge.className = 'status-badge px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 bg-rose-500/10 border border-rose-500/30 text-rose-400';
+                    }
+                }
+                updateSelectedCount();
+            });
+        });
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                checkboxes.forEach(cb => {
+                    cb.checked = this.checked;
+                    cb.dispatchEvent(new Event('change'));
+                });
+            });
+        }
+
+        let currentStatusFilter = 'all';
+
+        function filterRows() {
+            const search = studentSearch.value.toLowerCase();
+            let count = 0;
             rows.forEach(row => {
-                const name = row.getAttribute('data-name');
-                const isPresent = row.getAttribute('data-present') === 'true';
-                
-                const matchesSearch = name.includes(currentSearch.toLowerCase());
-                const matchesStatus = currentStatus === 'all' || 
-                                    (currentStatus === 'present' && isPresent) || 
-                                    (currentStatus === 'absent' && !isPresent);
+                const name = row.dataset.name;
+                const isPresent = row.dataset.present === 'true';
+                const matchesSearch = name.includes(search);
+                let matchesStatus = true;
+                if (currentStatusFilter === 'present') matchesStatus = isPresent;
+                if (currentStatusFilter === 'absent') matchesStatus = !isPresent;
 
                 if (matchesSearch && matchesStatus) {
                     row.style.display = '';
-                    visibleCount++;
+                    count++;
                 } else {
                     row.style.display = 'none';
                 }
             });
-            showingText.textContent = `Mostrando ${visibleCount} de ${rows.length} alunos`;
-        }
 
-        function updateSelectedCount() {
-            const totalChecked = document.querySelectorAll('.student-checkbox:checked').length;
-            const countText = document.getElementById('selectedCountText');
-            if (countText) {
-                countText.textContent = `${totalChecked} de ${rows.length} presenças marcadas`;
+            const showingText = document.getElementById('showingText');
+            if (showingText) {
+                showingText.textContent = `Mostrando ${count} de ${rows.length} alunos`;
             }
         }
 
-        searchInput.addEventListener('input', (e) => {
-            currentSearch = e.target.value;
-            updateFilters();
-        });
-
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterButtons.forEach(b => {
-                    b.classList.remove('bg-white', 'shadow-sm', 'text-primary');
-                    b.classList.add('text-on-surface-variant');
-                });
-                btn.classList.add('bg-white', 'shadow-sm', 'text-primary');
-                btn.classList.remove('text-on-surface-variant');
-                
-                currentStatus = btn.getAttribute('data-status');
-                updateFilters();
-            });
-        });
-
-        // Checkbox toggle logic
-        rows.forEach(row => {
-            const checkbox = row.querySelector('.student-checkbox');
-            const statusBadge = row.querySelector('.status-badge');
-            if (checkbox && statusBadge) {
-                checkbox.addEventListener('change', function() {
-                    row.setAttribute('data-present', this.checked ? 'true' : 'false');
-                    
-                    if (this.checked) {
-                        statusBadge.textContent = 'Confirmado';
-                        statusBadge.className = 'status-badge px-3 py-1 rounded-full text-label-sm font-label-bold bg-secondary-container text-on-secondary-container';
-                    } else {
-                        statusBadge.textContent = 'Ausente';
-                        statusBadge.className = 'status-badge px-3 py-1 rounded-full text-label-sm font-label-bold bg-error-container text-on-error-container';
-                    }
-                    
-                    updateSelectedCount();
-                });
-            }
-        });
-
-        // Select all logic for visible rows
-        if (selectAll) {
-            selectAll.addEventListener('change', function() {
-                rows.forEach(row => {
-                    if (row.style.display !== 'none') {
-                        const checkbox = row.querySelector('.student-checkbox');
-                        if (checkbox && checkbox.checked !== selectAll.checked) {
-                            checkbox.checked = selectAll.checked;
-                            checkbox.dispatchEvent(new Event('change'));
-                        }
-                    }
-                });
-            });
+        if (studentSearch) {
+            studentSearch.addEventListener('input', filterRows);
         }
 
-        // Initialize count
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-rose-600', 'text-white');
+                    b.classList.add('text-slate-400');
+                });
+                this.classList.add('bg-rose-600', 'text-white');
+                this.classList.remove('text-slate-400');
+                currentStatusFilter = this.dataset.status;
+                filterRows();
+            });
+        });
+
         updateSelectedCount();
     });
 </script>

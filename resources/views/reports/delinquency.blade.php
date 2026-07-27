@@ -2,155 +2,124 @@
 
 @section('content')
 <!-- Page Canvas -->
-<div class="p-gutter max-w-[1600px] w-full mx-auto">
+<div class="max-w-[1600px] w-full mx-auto">
     <!-- Header Section -->
-    <div class="mb-lg flex justify-between items-end">
+    <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-            <h1 class="font-headline-lg text-primary mb-2 text-headline-lg">Relatório de Inadimplência</h1>
-            <p class="font-body-md text-on-surface-variant max-w-2xl text-body-md">
-                Monitore e gerencie as mensalidades em atraso. Utilize as ferramentas de cobrança para manter a saúde financeira da academia e reduzir a taxa de cancelamento.
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider mb-2">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                Inadimplência & Cobrança
+            </div>
+            <h1 class="font-['Outfit'] font-black text-2xl md:text-4xl text-white tracking-tight">Relatório de Inadimplência</h1>
+            <p class="text-slate-400 text-xs md:text-sm mt-0.5">
+                Monitore mensalidades em atraso e utilize as ferramentas de cobrança para manter o fluxo de caixa ativo.
             </p>
         </div>
         <div class="flex gap-3">
-            <button class="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-lg font-label-bold text-slate-700 hover:bg-slate-50 transition-all">
-                <span class="material-symbols-outlined text-[20px]">file_download</span>
-                Exportar Excel
-            </button>
-            <button class="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-lg font-label-bold text-slate-700 hover:bg-slate-50 transition-all">
-                <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
-                Exportar PDF
+            <button onclick="window.print()" class="flex items-center gap-2 bg-[#182234] border border-white/10 px-4 py-2 rounded-xl font-bold text-xs text-white hover:bg-white/10 transition-all shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">print</span>
+                Imprimir Relatório
             </button>
         </div>
     </div>
 
     <!-- Summary Bento Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-lg">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <!-- Total Overdue -->
-        <div class="bg-white border border-slate-200 p-gutter rounded-xl shadow-sm group hover:border-on-tertiary-container transition-all">
+        <div class="bg-[#111726] border border-rose-500/30 p-6 rounded-2xl shadow-xl">
             <div class="flex justify-between items-start mb-4">
-                <div class="p-3 bg-error/10 rounded-lg text-error">
+                <div class="p-3 bg-rose-500/10 rounded-xl border border-rose-500/30 text-rose-400">
                     <span class="material-symbols-outlined">payments</span>
                 </div>
-                <span class="text-xs font-label-bold text-error bg-error/5 px-2 py-1 rounded">+8% vs mês passado</span>
+                <span class="text-xs font-bold text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">Em Atraso</span>
             </div>
-            <p class="text-on-surface-variant font-label-sm uppercase tracking-wider text-label-sm">Valor Total em Atraso</p>
-            <h3 class="font-display-xl text-primary mt-1 text-display-xl">R$ {{ number_format($totalOverdue, 2, ',', '.') }}</h3>
+            <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Valor Total em Atraso</p>
+            <h3 class="font-['Outfit'] font-extrabold text-2xl md:text-3xl text-rose-400 mt-1">R$ {{ number_format($totalOverdue, 2, ',', '.') }}</h3>
         </div>
         <!-- Overdue Students -->
-        <div class="bg-white border border-slate-200 p-gutter rounded-xl shadow-sm group hover:border-on-tertiary-container transition-all">
+        <div class="bg-[#111726] border border-white/10 p-6 rounded-2xl shadow-xl">
             <div class="flex justify-between items-start mb-4">
-                <div class="p-3 bg-secondary-container/20 rounded-lg text-on-secondary-container">
+                <div class="p-3 bg-amber-500/10 rounded-xl border border-amber-500/30 text-amber-400">
                     <span class="material-symbols-outlined">person_off</span>
                 </div>
-                <span class="text-xs font-label-bold text-on-surface-variant bg-slate-100 px-2 py-1 rounded">{{ $overdueCount }} Alunos</span>
+                <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">{{ $overdueCount }} Alunos</span>
             </div>
-            <p class="text-on-surface-variant font-label-sm uppercase tracking-wider text-label-sm">Alunos Inadimplentes</p>
-            <h3 class="font-display-xl text-primary mt-1 text-display-xl">{{ $overdueCount }}</h3>
+            <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Alunos Inadimplentes</p>
+            <h3 class="font-['Outfit'] font-extrabold text-2xl md:text-3xl text-white mt-1">{{ $overdueCount }} Atletas</h3>
         </div>
         <!-- Recovery Rate -->
-        <div class="bg-white border border-slate-200 p-gutter rounded-xl shadow-sm group hover:border-on-tertiary-container transition-all">
+        <div class="bg-[#111726] border border-cyan-500/30 p-6 rounded-2xl shadow-xl">
             <div class="flex justify-between items-start mb-4">
-                <div class="p-3 bg-on-tertiary-container/10 rounded-lg text-on-tertiary-container">
+                <div class="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/30 text-cyan-400">
                     <span class="material-symbols-outlined">trending_up</span>
                 </div>
-                <span class="text-xs font-label-bold text-on-tertiary-container bg-on-tertiary-container/5 px-2 py-1 rounded">Meta: 20%</span>
+                <span class="text-xs font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">Saúde Financeira</span>
             </div>
-            <p class="text-on-surface-variant font-label-sm uppercase tracking-wider text-label-sm">Taxa de Recuperação</p>
-            <h3 class="font-display-xl text-primary mt-1 text-display-xl">15%</h3>
+            <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Status Geral</p>
+            <h3 class="font-['Outfit'] font-extrabold text-2xl md:text-3xl text-cyan-400 mt-1">Ação Requerida</h3>
         </div>
-    </div>
-
-    <!-- Filters & Search Bar -->
-    <div class="bg-white border border-slate-200 rounded-xl p-md mb-md flex flex-wrap items-center gap-gutter">
-        <div class="flex-1 min-w-[300px] relative">
-            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-            <input class="w-full border-slate-200 rounded-lg pl-12 py-3 focus:border-on-tertiary-container focus:ring-1 focus:ring-on-tertiary-container outline-none transition-all" placeholder="Filtrar por nome do aluno..." type="text" />
-        </div>
-        <div class="flex items-center gap-3">
-            <span class="text-on-surface-variant font-label-bold whitespace-nowrap text-label-bold">Tempo de Atraso:</span>
-            <div class="flex bg-slate-100 p-1 rounded-lg">
-                <button class="px-4 py-2 text-sm font-label-bold text-slate-600 hover:text-slate-900 rounded-md transition-all">Todos</button>
-                <button class="px-4 py-2 text-sm font-label-bold bg-white text-on-tertiary-container shadow-sm rounded-md transition-all">30 dias</button>
-                <button class="px-4 py-2 text-sm font-label-bold text-slate-600 hover:text-slate-900 rounded-md transition-all">60 dias</button>
-                <button class="px-4 py-2 text-sm font-label-bold text-slate-600 hover:text-slate-900 rounded-md transition-all">90+ dias</button>
-            </div>
-        </div>
-        <button class="flex items-center gap-2 text-on-tertiary-container font-label-bold px-4 py-3 hover:bg-on-tertiary-container/5 rounded-lg transition-all text-label-bold">
-            <span class="material-symbols-outlined">filter_list</span>
-            Mais Filtros
-        </button>
     </div>
 
     <!-- Overdue Students Table -->
-    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50 border-b border-slate-200">
-                    <th class="px-6 py-4 font-label-bold text-slate-600 text-label-bold">Aluno</th>
-                    <th class="px-6 py-4 font-label-bold text-slate-600 text-label-bold">Dias de Atraso</th>
-                    <th class="px-6 py-4 font-label-bold text-slate-600 text-label-bold">Valor Pendente</th>
-                    <th class="px-6 py-4 font-label-bold text-slate-600 text-label-bold">Plano</th>
-                    <th class="px-6 py-4 font-label-bold text-slate-600 text-right text-label-bold">Ações</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100">
-                @forelse($overduePayments as $payment)
-                @php
-                    $daysOverdue = $payment->due_date->diffInDays(now());
-                    $statusClass = 'bg-secondary-container/20 text-on-secondary-container';
-                    if ($daysOverdue >= 90) $statusClass = 'bg-error-container text-on-error-container';
-                    elseif ($daysOverdue >= 60) $statusClass = 'bg-orange-100 text-orange-700';
-                @endphp
-                <tr class="hover:bg-slate-50/50 transition-colors">
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-600">
-                                {{ strtoupper(substr($payment->user->name, 0, 2)) }}
-                            </div>
-                            <div>
-                                <div class="font-label-bold text-slate-900 text-label-bold">{{ $payment->user->name }}</div>
-                                <div class="text-xs text-slate-500">ID: #{{ $payment->user->id }}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-label-bold {{ $statusClass }} text-label-bold">
-                            {{ $daysOverdue }} dias
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 font-body-md text-slate-900 text-body-md">R$ {{ number_format($payment->amount, 2, ',', '.') }}</td>
-                    <td class="px-6 py-4 text-sm text-slate-600">{{ $payment->user->plan->name ?? 'N/A' }}</td>
-                    <td class="px-6 py-4">
-                        <div class="flex justify-end gap-2">
-                            <button class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-all" title="Cobrar WhatsApp">
-                                <span class="material-symbols-outlined text-[20px]">chat</span>
-                            </button>
-                            <button class="flex items-center gap-1 text-sm font-label-bold text-on-tertiary-container hover:bg-on-tertiary-container/5 px-3 py-2 rounded-lg transition-all text-label-bold">
-                                Negociar
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="5" class="px-6 py-8 text-center text-slate-500">
-                        Nenhum aluno inadimplente encontrado.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-        <!-- Pagination Placeholder -->
-        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-            <span class="text-sm text-slate-500 font-label-sm">Mostrando {{ $overduePayments->count() }} de {{ $overdueCount }} alunos inadimplentes</span>
+    <div class="bg-[#111726] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+        <div class="p-5 border-b border-white/10 bg-[#182234]/50">
+            <h3 class="font-['Outfit'] font-bold text-lg text-white">Listagem de Faturas em Atraso</h3>
         </div>
-    </div>
-    <!-- Footnote / Help -->
-    <div class="mt-gutter p-md bg-on-tertiary-container/5 rounded-xl border border-on-tertiary-container/10 flex items-center gap-4">
-        <span class="material-symbols-outlined text-on-tertiary-container">info</span>
-        <p class="text-sm text-slate-600">
-            <strong class="text-on-tertiary-container">Dica:</strong> Alunos com mais de 90 dias de atraso são movidos automaticamente para o fluxo de "Suspensão de Matrícula". Entre em contato para negociar antes do bloqueio.
-        </p>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-white/10 text-slate-400 text-xs font-bold uppercase tracking-wider bg-[#0d1320]/60">
+                        <th class="px-6 py-4">Aluno</th>
+                        <th class="px-6 py-4">Dias de Atraso</th>
+                        <th class="px-6 py-4">Valor Pendente</th>
+                        <th class="px-6 py-4">Vencimento</th>
+                        <th class="px-6 py-4 text-right">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    @forelse($overduePayments as $payment)
+                    @php
+                        $daysOverdue = $payment->due_date->diffInDays(now());
+                    @endphp
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-[#182234] border border-white/10 flex items-center justify-center font-bold text-xs text-rose-400">
+                                    {{ strtoupper(substr($payment->user->name, 0, 2)) }}
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-sm text-white">{{ $payment->user->name }}</p>
+                                    <p class="text-[11px] text-slate-400">{{ $payment->user->email }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/10 border border-rose-500/30 text-rose-400">
+                                {{ $daysOverdue }} dia(s) em atraso
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 font-['Outfit'] font-extrabold text-white text-base">
+                            R$ {{ number_format($payment->amount, 2, ',', '.') }}
+                        </td>
+                        <td class="px-6 py-4 text-xs text-slate-300">
+                            {{ $payment->due_date->format('d/m/Y') }}
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="window.location='{{ route('payments.index') }}'" class="px-3 py-1.5 bg-gradient-to-r from-rose-600 to-rose-700 text-white rounded-xl text-xs font-bold hover:shadow-lg hover:shadow-rose-600/30 transition-all">
+                                Receber Baixa
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-12 text-center text-slate-500 italic">
+                            Nenhum aluno em atraso registrado neste momento. Excelente gestão!
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection

@@ -3,11 +3,11 @@
 @section('content')
 <style>
     :root {
-        --card-border: #E2E8F0;
-        --input-bg: #FFFFFF;
-        --input-border: #CBD5E1;
-        --input-focus: #2563EB;
-        --section-title: #475569;
+        --card-border: rgba(255, 255, 255, 0.1);
+        --input-bg: #090d16;
+        --input-border: rgba(255, 255, 255, 0.1);
+        --input-focus: #e11d48;
+        --section-title: #f8fafc;
     }
 
     .registration-container {
@@ -24,14 +24,15 @@
     }
 
     .registration-title h1 {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: #1E293B;
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.75rem;
+        font-weight: 900;
+        color: #ffffff;
         margin-bottom: 0.25rem;
     }
 
     .registration-title p {
-        color: #64748B;
+        color: #94a3b8;
         font-size: 0.9375rem;
     }
 
@@ -41,28 +42,46 @@
     }
 
     .btn-cancel {
-        background: white;
-        color: #475569;
+        background: #182234;
+        color: #f8fafc;
         border: 1px solid var(--card-border);
         padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
+        border-radius: 0.75rem;
         font-weight: 600;
         transition: all 0.2s;
     }
 
     .btn-cancel:hover {
-        background: #F8FAFC;
+        background: rgba(255,255,255,0.1);
     }
 
     .btn-save {
-        background: #0F172A;
+        background: linear-gradient(135deg, #e11d48, #be123c);
         color: white;
         border: none;
+        border-radius: 0.75rem;
         padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        transition: all 0.2s;
+        font-weight: 700;
+        box-shadow: 0 0 20px rgba(225, 29, 72, 0.3);
         display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .card-section {
+        background: #111726 !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        color: #f8fafc !important;
+        border-radius: 1rem !important;
+    }
+    input, select, textarea {
+        background-color: #090d16 !important;
+        color: #ffffff !important;
+        border-color: rgba(255,255,255,0.1) !important;
+    }
+    label {
+        color: #94a3b8 !important;
+    }
+</style>
         align-items: center;
         gap: 0.5rem;
     }

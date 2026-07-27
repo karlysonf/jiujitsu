@@ -13,7 +13,11 @@ use App\Traits\BelongsToTenant;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, SoftDeletes, BelongsToTenant;
+    use HasFactory, Notifiable, SoftDeletes, BelongsToTenant;
+    use HasRoles {
+        hasRole as spatieHasRole;
+        hasAnyRole as spatieHasAnyRole;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -98,6 +102,41 @@ class User extends Authenticatable
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
+    }
+
+    /**
+     * Safe override for hasRole to prevent RoleDoesNotExist exceptions when roles are missing in DB.
+     */
+    public function hasRole($roles, string $guard = null): bool
+    {
+        try {
+            return $this->spatieHasRole($roles, $guard);
+        } catch (\Spatie\Permission\Exceptions\RoleDoesNotExist $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Safe override for hasAnyRole to prevent RoleDoesNotExist exceptions.
+     */
+    public function hasAnyRole(...$roles): bool
+    {
+        try {
+            return $this->spatieHasAnyRole(...$roles);
+        } catch (\Spatie\Permission\Exceptions\RoleDoesNotExist $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Safe override for scopeRole to query roles directly without throwing RoleDoesNotExist.
+     */
+    public function scopeRole(\Illuminate\Database\Eloquent\Builder $query, $roles, $guard = null): \Illuminate\Database\Eloquent\Builder
+    {
+        $roleNames = is_array($roles) ? $roles : (is_string($roles) ? explode('|', $roles) : [$roles]);
+        return $query->whereHas('roles', function (\Illuminate\Database\Eloquent\Builder $subQuery) use ($roleNames) {
+            $subQuery->whereIn('name', $roleNames);
+        });
     }
 
     public function payments()

@@ -20,7 +20,7 @@ Route::get('/', function () {
         }
         return redirect()->route('dashboard');
     }
-    return redirect()->route('login');
+    return view('welcome');
 })->name('home');
 
 // Webhook Asaas

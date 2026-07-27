@@ -12,16 +12,6 @@
     .belt-brown { background: linear-gradient(90deg, #78350f 0%, #b45309 100%); }
     .belt-black { background: linear-gradient(90deg, #000000 0%, #374151 100%); }
     
-    /* Faixas com listras */
-    .belt-cinza-branca { background: linear-gradient(90deg, #9ca3af 50%, #ffffff 50%); border: 1px solid #d1d5db; }
-    .belt-cinza-preta { background: linear-gradient(90deg, #9ca3af 50%, #000000 50%); }
-    .belt-amarela-branca { background: linear-gradient(90deg, #facc15 50%, #ffffff 50%); border: 1px solid #d1d5db; }
-    .belt-amarela-preta { background: linear-gradient(90deg, #facc15 50%, #000000 50%); }
-    .belt-laranja-branca { background: linear-gradient(90deg, #fb923c 50%, #ffffff 50%); border: 1px solid #d1d5db; }
-    .belt-laranja-preta { background: linear-gradient(90deg, #fb923c 50%, #000000 50%); }
-    .belt-verde-branca { background: linear-gradient(90deg, #4ade80 50%, #ffffff 50%); border: 1px solid #d1d5db; }
-    .belt-verde-preta { background: linear-gradient(90deg, #4ade80 50%, #000000 50%); }
-    
     .belt-stripe { background: #ffffff; width: 8px; height: 100%; border-radius: 1px; }
     .bento-grid {
         display: grid;
@@ -38,31 +28,35 @@
 <div class="max-w-[1600px] mx-auto">
     <div class="bento-grid">
         <!-- Welcome & Student Profile Section -->
-        <section class="col-span-12 lg:col-span-8 space-y-gutter">
-            <div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <span class="material-symbols-outlined text-[120px]">fitness_center</span>
+        <section class="col-span-12 lg:col-span-8 space-y-6">
+            <div class="bg-[#111726] p-6 md:p-8 rounded-2xl border border-white/10 shadow-xl relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <span class="material-symbols-outlined text-[140px] text-white">sports_mma</span>
                 </div>
                 <div class="relative z-10 flex flex-col md:flex-row md:items-center gap-8">
                     <div class="relative">
-                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-50 ring-2 ring-blue-600">
+                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-[#182234] ring-2 ring-rose-500 shadow-xl shadow-rose-500/20">
                             @if($user->photo)
                                 <img class="w-full h-full object-cover" src="{{ Storage::disk('public')->url($user->photo) }}" alt="{{ $user->name }}">
                             @else
-                                <img class="w-full h-full object-cover" src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=0D8ABC&color=fff&size=128" alt="{{ $user->name }}">
+                                <img class="w-full h-full object-cover" src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=E11D48&color=fff&size=128" alt="{{ $user->name }}">
                             @endif
                         </div>
                     </div>
                     <div>
-                        <h1 class="font-headline-lg text-slate-900 mb-xs">Bem-vindo de volta, {{ explode(' ', $user->name)[0] }}</h1>
-                        <div class="flex flex-wrap gap-4">
-                            <div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant">
-                                <span class="material-symbols-outlined text-on-tertiary-fixed-variant text-lg">location_on</span>
-                                <span class="font-label-bold text-slate-900">Unidade: Matriz Central</span>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-2">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                            Atleta de Elite
+                        </div>
+                        <h1 class="font-['Outfit'] font-black text-2xl md:text-4xl text-white mb-2 tracking-tight">Bem-vindo de volta, {{ explode(' ', $user->name)[0] }}</h1>
+                        <div class="flex flex-wrap gap-3 mt-4">
+                            <div class="flex items-center gap-2 bg-[#182234] px-4 py-2 rounded-xl border border-white/10 text-slate-300 text-xs font-semibold">
+                                <span class="material-symbols-outlined text-rose-500 text-base">location_on</span>
+                                <span>Unidade: Matriz Central</span>
                             </div>
-                            <div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant">
-                                <span class="material-symbols-outlined text-on-tertiary-fixed-variant text-lg">calendar_today</span>
-                                <span class="font-label-bold text-slate-900">Membro desde: {{ $user->start_date ? $user->start_date->format('M Y') : 'N/A' }}</span>
+                            <div class="flex items-center gap-2 bg-[#182234] px-4 py-2 rounded-xl border border-white/10 text-slate-300 text-xs font-semibold">
+                                <span class="material-symbols-outlined text-cyan-400 text-base">calendar_today</span>
+                                <span>Membro desde: {{ $user->start_date ? $user->start_date->format('M Y') : 'N/A' }}</span>
                             </div>
                         </div>
                     </div>
@@ -70,46 +64,43 @@
             </div>
 
             <!-- Belt Progress Bento Item -->
-            <div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm">
+            <div class="bg-[#111726] p-6 md:p-8 rounded-2xl border border-white/10 shadow-xl">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="font-label-bold text-slate-900 uppercase tracking-wider">Status de Graduação</h3>
-                    <span class="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-100">
+                    <h3 class="font-['Outfit'] font-bold text-lg text-white uppercase tracking-wider">Status de Graduação</h3>
+                    <span class="text-xs font-bold bg-rose-500/10 border border-rose-500/30 text-rose-400 px-3 py-1 rounded-full uppercase">
                         Faixa {{ $user->faixa ?? 'Branca' }} - {{ $user->grau ?? 0 }} Graus
                     </span>
                 </div>
                 <div class="flex items-center gap-4 mb-8">
                     @php
                         $belt = $user->faixa ?? 'Branca';
-                        $beltSlug = str_replace(['/', ' '], ['-', '-'], strtolower(strtr(utf8_decode($belt), utf8_decode('áàâãéèêíïóôõöúçÑÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ'), 'aaaaeeeiiiooooucnAAAAEEEIIIOOOOUCN')));
-                        $beltClass = 'belt-' . $beltSlug;
-                        
-                        // Fallback cases for exact matches if needed
-                        if ($belt == 'Branca') $beltClass = 'belt-white';
-                        if ($belt == 'Cinza') $beltClass = 'belt-gray';
+                        $beltClass = 'belt-white';
+                        if (strtolower($belt) == 'azul') $beltClass = 'belt-blue';
+                        if (strtolower($belt) == 'preta') $beltClass = 'belt-black';
                     @endphp
-                    <div class="h-16 flex-1 {{ $beltClass }} rounded-lg flex items-center justify-end px-12 gap-3 shadow-inner relative overflow-hidden border border-slate-200">
+                    <div class="h-16 flex-1 {{ $beltClass }} rounded-xl flex items-center justify-end px-12 gap-3 shadow-inner relative overflow-hidden border border-white/20">
                         @for($i = 0; $i < ($user->grau ?? 0); $i++)
                             <div class="belt-stripe"></div>
                         @endfor
                         <div class="w-8 h-full bg-slate-900 absolute left-0 opacity-40"></div>
                     </div>
                     <div class="text-right">
-                        <p class="text-display-xl font-bold text-slate-900 leading-none">65%</p>
-                        <p class="text-label-sm text-on-surface-variant">Concluído</p>
+                        <p class="font-['Outfit'] font-extrabold text-3xl text-cyan-400 leading-none">65%</p>
+                        <p class="text-xs text-slate-400 mt-1">Concluído</p>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-gutter">
-                    <div class="bg-surface-container-lowest p-4 rounded border border-slate-100 text-center">
-                        <p class="text-label-sm text-on-surface-variant uppercase mb-1">Aulas Totais</p>
-                        <p class="font-headline-md text-slate-900">{{ $attendancesCount }}</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="bg-[#182234] p-4 rounded-xl border border-white/10 text-center">
+                        <p class="text-xs text-slate-400 uppercase tracking-wider mb-1 font-semibold">Aulas Totais</p>
+                        <p class="font-['Outfit'] font-extrabold text-2xl text-white">{{ $attendancesCount }}</p>
                     </div>
-                    <div class="bg-surface-container-lowest p-4 rounded border border-slate-100 text-center">
-                        <p class="text-label-sm text-on-surface-variant uppercase mb-1">Este Mês</p>
-                        <p class="font-headline-md text-slate-900">{{ $attendancesThisMonth }}</p>
+                    <div class="bg-[#182234] p-4 rounded-xl border border-white/10 text-center">
+                        <p class="text-xs text-slate-400 uppercase tracking-wider mb-1 font-semibold">Este Mês</p>
+                        <p class="font-['Outfit'] font-extrabold text-2xl text-rose-400">{{ $attendancesThisMonth }}</p>
                     </div>
-                    <div class="bg-surface-container-lowest p-4 rounded border border-slate-100 text-center">
-                        <p class="text-label-sm text-on-surface-variant uppercase mb-1">Frequência</p>
-                        <p class="font-headline-md text-blue-600">
+                    <div class="bg-[#182234] p-4 rounded-xl border border-white/10 text-center">
+                        <p class="text-xs text-slate-400 uppercase tracking-wider mb-1 font-semibold">Frequência</p>
+                        <p class="font-['Outfit'] font-extrabold text-2xl text-cyan-400">
                             {{ $attendancesCount > 0 ? round(($attendancesThisMonth / max(1, now()->day)) * 100) : 0 }}%
                         </p>
                     </div>
@@ -118,67 +109,67 @@
         </section>
 
         <!-- Sidebar Content Section -->
-        <section class="col-span-12 lg:col-span-4 space-y-gutter">
+        <section class="col-span-12 lg:col-span-4 space-y-6">
             <!-- Check-in Card -->
-            <div class="bg-primary-container p-lg rounded-xl shadow-lg border border-slate-800 text-white flex flex-col justify-between min-h-[320px]">
+            <div class="bg-gradient-to-br from-[#182234] via-[#111726] to-[#090d16] p-6 rounded-2xl shadow-xl border border-rose-500/30 text-white flex flex-col justify-between min-h-[320px]">
                 <div>
                     <div class="flex items-center gap-2 mb-4">
-                        <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-                        <span class="text-label-bold text-blue-100 uppercase tracking-widest">Treino de Hoje</span>
+                        <span class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></span>
+                        <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest">Treino de Hoje</span>
                     </div>
-                    <h2 class="font-headline-md mb-2">Treino Coletivo</h2>
-                    <p class="text-on-primary-container text-sm">Disponível para check-in agora</p>
+                    <h2 class="font-['Outfit'] font-extrabold text-2xl text-white mb-1">Treino Coletivo</h2>
+                    <p class="text-slate-300 text-sm">Disponível para check-in no tatame agora</p>
                 </div>
-                <div class="space-y-4">
+                <div class="space-y-4 mt-6">
                     @if(!$hasCheckedInToday)
                     <form action="{{ route('dashboard.checkin') }}" method="POST">
                         @csrf
-                        <button type="submit" class="w-full bg-secondary-container text-on-secondary-fixed font-headline-md py-4 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-md">
+                        <button type="submit" class="w-full bg-gradient-to-r from-rose-600 to-rose-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-rose-600/40 active:scale-95 transition-all">
                             <span class="material-symbols-outlined">how_to_reg</span>
                             Confirmar Presença
                         </button>
                     </form>
                     @else
-                    <div class="w-full bg-green-100 text-green-800 font-headline-md py-4 rounded-xl flex items-center justify-center gap-3 shadow-md border border-green-200">
+                    <div class="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold py-4 rounded-xl flex items-center justify-center gap-3 shadow-md">
                         <span class="material-symbols-outlined">check_circle</span>
                         Presença Confirmada
                     </div>
                     @endif
-                    <p class="text-center text-label-sm text-blue-300 italic">Check-in disponível até as 22h</p>
+                    <p class="text-center text-xs text-slate-400 italic">Check-in disponível até as 22h</p>
                 </div>
             </div>
 
             <!-- Financial Status Card -->
-            <div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm">
-                <h3 class="font-label-bold text-slate-900 uppercase tracking-wider mb-6 flex items-center justify-between">
+            <div class="bg-[#111726] p-6 rounded-2xl border border-white/10 shadow-xl">
+                <h3 class="font-['Outfit'] font-bold text-white uppercase tracking-wider mb-6 flex items-center justify-between">
                     Situação Financeira
-                    <span class="material-symbols-outlined text-on-surface-variant text-lg">account_balance_wallet</span>
+                    <span class="material-symbols-outlined text-rose-400">account_balance_wallet</span>
                 </h3>
                 <div class="flex items-center gap-4 mb-6">
                     @if($isFinancialOk)
-                    <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-600">
-                        <span class="material-symbols-outlined" data-weight="fill">verified</span>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                        <span class="material-symbols-outlined">verified</span>
                     </div>
                     <div>
-                        <p class="font-headline-md text-green-600 leading-none">Em Dia</p>
-                        <p class="text-label-sm text-on-surface-variant">
+                        <p class="font-['Outfit'] font-bold text-xl text-emerald-400 leading-none">Em Dia</p>
+                        <p class="text-xs text-slate-400 mt-1">
                             Próximo: {{ $nextPayment ? $nextPayment->due_date->format('d/m') : 'N/A' }}
                         </p>
                     </div>
                     @else
-                    <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center text-red-600">
-                        <span class="material-symbols-outlined" data-weight="fill">warning</span>
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                        <span class="material-symbols-outlined">warning</span>
                     </div>
                     <div>
-                        <p class="font-headline-md text-red-600 leading-none">Pendente</p>
-                        <p class="text-label-sm text-on-surface-variant">Regularize seu plano</p>
+                        <p class="font-['Outfit'] font-bold text-xl text-rose-400 leading-none">Pendente</p>
+                        <p class="text-xs text-slate-400 mt-1">Regularize seu plano</p>
                     </div>
                     @endif
                 </div>
                 <div class="flex flex-col gap-2">
-                    <a class="flex justify-between items-center p-3 rounded hover:bg-surface-container-low transition-colors group" href="#">
-                        <span class="text-body-md text-slate-700">Ver histórico de pagamentos</span>
-                        <span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+                    <a class="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 text-slate-300 transition-colors group text-sm font-medium" href="{{ route('portal.payments.index') }}">
+                        <span>Ver histórico de pagamentos</span>
+                        <span class="material-symbols-outlined text-slate-400 group-hover:translate-x-1 transition-transform">chevron_right</span>
                     </a>
                 </div>
             </div>
@@ -186,28 +177,28 @@
 
         <!-- Recent Classes Section -->
         <section class="col-span-12">
-            <div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm">
-                <div class="flex justify-between items-center mb-8">
-                    <h3 class="font-label-bold text-slate-900 uppercase tracking-wider">Histórico de Aulas Recentes</h3>
+            <div class="bg-[#111726] p-6 rounded-2xl border border-white/10 shadow-xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-['Outfit'] font-bold text-lg text-white uppercase tracking-wider">Histórico de Aulas Recentes</h3>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                     @forelse($recentAttendances as $attendance)
-                    <div class="flex items-start gap-4 p-4 rounded-xl border border-slate-100 hover:border-blue-200 transition-colors">
-                        <div class="bg-blue-50 text-blue-600 p-3 rounded-lg flex flex-col items-center justify-center min-w-[64px]">
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-[#182234] border border-white/10 hover:border-cyan-500/40 transition-all">
+                        <div class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 p-3 rounded-xl flex flex-col items-center justify-center min-w-[64px]">
                             <span class="text-xs font-bold uppercase">{{ $attendance->date->translatedFormat('M') }}</span>
-                            <span class="text-xl font-bold">{{ $attendance->date->day }}</span>
+                            <span class="text-xl font-bold font-['Outfit']">{{ $attendance->date->day }}</span>
                         </div>
                         <div class="flex-1">
-                            <p class="font-label-bold text-slate-900">Treino de Jiu-Jitsu</p>
-                            <p class="text-label-sm text-on-surface-variant mb-2">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</p>
-                            <div class="flex items-center gap-1 text-[10px] font-bold text-green-600 uppercase">
+                            <p class="font-bold text-white text-sm">Treino de Jiu-Jitsu</p>
+                            <p class="text-xs text-slate-400 mb-2">{{ isset($currentTenant) ? $currentTenant->name : 'Gestão Combate' }}</p>
+                            <div class="flex items-center gap-1 text-[10px] font-bold text-emerald-400 uppercase">
                                 <span class="material-symbols-outlined text-sm">check_circle</span>
                                 Presença Confirmada
                             </div>
                         </div>
                     </div>
                     @empty
-                    <div class="col-span-12 text-center py-8 text-slate-400 italic">
+                    <div class="col-span-12 text-center py-8 text-slate-500 italic">
                         Nenhum treino registrado recentemente.
                     </div>
                     @endforelse

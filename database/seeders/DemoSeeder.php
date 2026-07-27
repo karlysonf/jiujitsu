@@ -33,9 +33,11 @@ class DemoSeeder extends Seeder
         app()->instance('currentTenant', $tenant);
 
         // 2. Garante que os papéis existem no banco demo
-        $alunoRole    = Role::on('demo')->firstOrCreate(['name' => 'aluno',    'guard_name' => 'web']);
-        $adminRole    = Role::on('demo')->firstOrCreate(['name' => 'admin',    'guard_name' => 'web']);
+        $rootRole      = Role::on('demo')->firstOrCreate(['name' => 'root',      'guard_name' => 'web']);
+        $alunoRole     = Role::on('demo')->firstOrCreate(['name' => 'aluno',     'guard_name' => 'web']);
+        $adminRole     = Role::on('demo')->firstOrCreate(['name' => 'admin',     'guard_name' => 'web']);
         $professorRole = Role::on('demo')->firstOrCreate(['name' => 'professor', 'guard_name' => 'web']);
+        $instrutorRole = Role::on('demo')->firstOrCreate(['name' => 'instrutor', 'guard_name' => 'web']);
 
         // 3. Usuário demo fixo (admin)
         $demoAdmin = User::updateOrCreate(
