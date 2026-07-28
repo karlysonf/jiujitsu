@@ -81,10 +81,6 @@
     label {
         color: #94a3b8 !important;
     }
-</style>
-        align-items: center;
-        gap: 0.5rem;
-    }
 
     .btn-save:hover {
         background: #1E293B;

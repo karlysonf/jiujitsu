@@ -20,6 +20,12 @@ Route::get('/', function () {
         }
         return redirect()->route('dashboard');
     }
+
+    // Se for acesso via subdomínio/domínio de academia (ex: ctdenyson.gestaocombate.com.br)
+    if (app()->bound('currentTenant')) {
+        return redirect()->route('login');
+    }
+
     return view('welcome');
 })->name('home');
 

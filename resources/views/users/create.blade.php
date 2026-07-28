@@ -63,6 +63,9 @@
         padding: 0.75rem 1.5rem;
         font-weight: 700;
         box-shadow: 0 0 20px rgba(225, 29, 72, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
     .card-section {
         background: #111726 !important;
@@ -77,15 +80,6 @@
     }
     label {
         color: #94a3b8 !important;
-    }
-</style>
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
     }
 
     .btn-save:hover {
