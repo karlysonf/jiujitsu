@@ -13,16 +13,27 @@ class DashboardService
         $today = now()->toDateString();
 
         // Financial Metrics
-        $totalReceived = Payment::where('status', 'paid')
-            ->where('reference_month', $currentMonth)
-            ->sum('amount');
+        $totalReceived = (float) Payment::where('status', 'paid')
+            ->where(function ($q) use ($currentMonth) {
+                $q->where('reference_month', $currentMonth)
+                  ->orWhere(function ($sub) {
+                      $sub->whereYear('payment_date', now()->year)
+                          ->whereMonth('payment_date', now()->month);
+                  });
+            })->sum('amount');
 
-        $totalPending = Payment::where('status', 'pending')
-            ->where('reference_month', $currentMonth)
+        $totalPending = (float) Payment::where('status', 'pending')
+            ->where(function ($q) use ($currentMonth) {
+                $q->where('reference_month', $currentMonth)
+                  ->orWhere(function ($sub) {
+                      $sub->whereYear('due_date', now()->year)
+                          ->whereMonth('due_date', now()->month);
+                  });
+            })
             ->where('due_date', '>=', $today)
             ->sum('amount');
 
-        $totalLate = Payment::where(function ($q) use ($today) {
+        $totalLate = (float) Payment::where(function ($q) use ($today) {
             $q->where('status', 'late')
               ->orWhere(function ($q2) use ($today) {
                   $q2->where('status', 'pending')
@@ -31,7 +42,13 @@ class DashboardService
         })->sum('amount');
 
         $pendingCount = Payment::where('status', 'pending')
-            ->where('reference_month', $currentMonth)
+            ->where(function ($q) use ($currentMonth) {
+                $q->where('reference_month', $currentMonth)
+                  ->orWhere(function ($sub) {
+                      $sub->whereYear('due_date', now()->year)
+                          ->whereMonth('due_date', now()->month);
+                  });
+            })
             ->where('due_date', '>=', $today)
             ->count();
 
@@ -57,9 +74,32 @@ class DashboardService
         for ($i = 5; $i >= 0; $i--) {
             $month = now()->subMonths($i);
             $monthStr = $month->format('Y-m');
+
+            $monthReceived = (float) Payment::where('status', 'paid')
+                ->where(function ($query) use ($monthStr, $month) {
+                    $query->where('reference_month', $monthStr)
+                          ->orWhere(function ($sub) use ($month) {
+                              $sub->whereYear('payment_date', $month->year)
+                                  ->whereMonth('payment_date', $month->month);
+                          });
+                })->sum('amount');
+
+            $monthPending = (float) Payment::where('status', '!=', 'paid')
+                ->where(function ($query) use ($monthStr, $month) {
+                    $query->where('reference_month', $monthStr)
+                          ->orWhere(function ($sub) use ($month) {
+                              $sub->whereYear('due_date', $month->year)
+                                  ->whereMonth('due_date', $month->month);
+                          });
+                })->sum('amount');
+
             $monthlyFlow[] = [
-                'label' => $month->translatedFormat('M'),
-                'value' => Payment::where('status', 'paid')->where('reference_month', $monthStr)->sum('amount'),
+                'label'        => ucfirst(rtrim($month->translatedFormat('M'), '.')),
+                'month_full'   => ucfirst($month->translatedFormat('F Y')),
+                'year_month'   => $monthStr,
+                'value'        => $monthReceived,
+                'pending'      => $monthPending,
+                'total_billed' => $monthReceived + $monthPending,
             ];
         }
 

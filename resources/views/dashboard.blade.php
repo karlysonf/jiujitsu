@@ -90,25 +90,49 @@
     <!-- Monthly Flow Chart -->
     @if(auth()->user()->hasAnyRole(['root', 'admin']) || in_array(auth()->user()->role_id, [1, 2]))
     <div class="lg:col-span-2 bg-[#111726] rounded-2xl p-6 border border-white/10 shadow-xl flex flex-col justify-between">
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <div>
                 <h4 class="font-['Outfit'] font-bold text-xl text-white">Fluxo Mensal de Pagamentos</h4>
-                <p class="text-slate-400 text-xs mt-0.5">Performance financeira do último semestre</p>
+                <p class="text-slate-400 text-xs mt-0.5">Receita arrecadada nos últimos 6 meses</p>
             </div>
-            <span class="text-xs text-rose-400 font-bold bg-rose-500/10 border border-rose-500/20 px-3 py-1 rounded-full">Financeiro</span>
+            <div class="flex items-center gap-3">
+                <div class="text-right">
+                    <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">Total Semestre</span>
+                    <span class="font-['Outfit'] font-bold text-base text-emerald-400">R$ {{ number_format(collect($monthly_flow)->sum('value'), 2, ',', '.') }}</span>
+                </div>
+                <a href="{{ route('reports.index') }}" class="text-xs text-rose-400 font-bold bg-rose-500/10 border border-rose-500/20 px-3 py-1 rounded-full hover:bg-rose-500/20 transition-colors">Relatórios</a>
+            </div>
         </div>
+
         <!-- Visual Representation of a Bar Chart -->
-        <div class="h-[280px] flex items-end justify-between gap-4 px-2 pt-4">
-            @php $maxFlow = collect($monthly_flow)->max('value') ?: 1; @endphp
+        <div class="h-[280px] flex items-end justify-between gap-3 md:gap-4 px-2 pt-6 pb-2">
+            @php 
+                $maxFlow = collect($monthly_flow)->max('value') ?: 1; 
+            @endphp
             @foreach($monthly_flow as $flow)
-            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-                <div class="w-full bg-[#182234] rounded-t-xl h-full relative group flex items-end">
-                    <div class="w-full bg-gradient-to-t from-rose-700 to-rose-500 rounded-t-xl transition-all duration-500 shadow-lg shadow-rose-500/20 group-hover:from-rose-600 group-hover:to-rose-400" style="height: {{ max(($flow['value'] / $maxFlow) * 100, 5) }}%"></div>
-                    <div class="opacity-0 group-hover:opacity-100 absolute -top-9 left-1/2 -translate-x-1/2 bg-[#090d16] border border-rose-500/30 text-rose-300 text-[10px] font-bold px-2 py-1 rounded-md whitespace-nowrap transition-opacity shadow-lg z-20">
-                        R$ {{ number_format($flow['value'], 0, ',', '.') }}
+            @php
+                $pct = $maxFlow > 0 ? ($flow['value'] / $maxFlow) * 100 : 0;
+                $heightPct = $flow['value'] > 0 ? max($pct, 12) : 4;
+            @endphp
+            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                <!-- Value displayed clearly above the bar -->
+                <span class="text-[10px] md:text-xs font-bold {{ $flow['value'] > 0 ? 'text-emerald-400' : 'text-slate-600' }} text-center transition-colors">
+                    R$ {{ $flow['value'] >= 1000 ? number_format($flow['value'] / 1000, 1, ',', '') . 'k' : number_format($flow['value'], 0, ',', '.') }}
+                </span>
+
+                <div class="w-full bg-[#182234] rounded-t-xl h-[180px] relative flex items-end overflow-visible border border-white/5 group-hover:border-rose-500/30 transition-all">
+                    <!-- Background bar track with gradient fill -->
+                    <div class="w-full {{ $flow['value'] > 0 ? 'bg-gradient-to-t from-rose-700 via-rose-600 to-rose-400 shadow-lg shadow-rose-500/30' : 'bg-slate-800/40' }} rounded-t-xl transition-all duration-500 group-hover:brightness-110" 
+                         style="height: {{ $heightPct }}%">
+                    </div>
+
+                    <!-- Detailed Tooltip on Hover -->
+                    <div class="opacity-0 group-hover:opacity-100 pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 bg-[#090d16] border border-rose-500/40 text-white text-[11px] font-bold px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-all shadow-2xl z-30">
+                        <span class="text-rose-400">{{ $flow['month_full'] ?? $flow['label'] }}:</span> R$ {{ number_format($flow['value'], 2, ',', '.') }}
                     </div>
                 </div>
-                <span class="text-xs text-slate-400 font-medium">{{ $flow['label'] }}</span>
+                
+                <span class="text-xs font-semibold {{ ($flow['year_month'] ?? '') === now()->format('Y-m') ? 'text-rose-400 font-bold' : 'text-slate-400' }} uppercase tracking-wider">{{ $flow['label'] }}</span>
             </div>
             @endforeach
         </div>
@@ -201,7 +225,7 @@
                                     default => 'bg-slate-800 text-slate-300'
                                 };
                             @endphp
-                            <span class="px-2.5 py-1 {{ $beltColor }} rounded-md text-[10px] font-bold tracking-wider shadow-sm uppercase">FAIXA {{ strtoupper($student->faixa) }}</span>
+                            <span class="px-2.5 py-1 {{ $beltColor }} rounded-md text-[10px] font-bold tracking-wider shadow-sm uppercase">FAIXA {{ strtoupper($student->faixa) }}{{ ($student->grau ?? 0) > 0 ? ' • ' . $student->grau . 'º GRAU' : '' }}</span>
                         </td>
                         <td class="py-3.5 px-2 text-sm text-slate-300">{{ $student->plan?->name ?? 'Sem Plano' }}</td>
                         <td class="py-3.5 px-2">

@@ -151,6 +151,9 @@ class User extends Authenticatable
     public function getPhoneAttribute() { return $this->telefone; }
     public function getBirthDateAttribute() { return $this->data_nascimento; }
     public function getDueDayAttribute() { return $this->vencimento_mensalidade; }
+    public function getAddressAttribute() { return $this->endereco; }
+    public function getDegreesAttribute() { return (int) ($this->grau ?? 0); }
+    public function getGrausAttribute() { return (int) ($this->grau ?? 0); }
 
     public function getAvatarUrlAttribute()
     {

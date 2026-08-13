@@ -128,8 +128,8 @@
                         <span class="font-medium text-slate-200">{{ $user->email ?? 'Não cadastrado' }}</span>
                     </li>
                     <li class="flex items-center justify-between text-sm">
-                        <span class="text-slate-400"><i class="fas fa-medal mr-2 text-cyan-400"></i> Faixa:</span>
-                        <span class="font-bold text-rose-400 uppercase">FAIXA {{ $user->belt }}</span>
+                        <span class="text-slate-400"><i class="fas fa-medal mr-2 text-cyan-400"></i> Graduação / Faixa:</span>
+                        <span class="font-bold text-rose-400 uppercase">FAIXA {{ $user->faixa ?? $user->belt }} - {{ $user->grau ?? 0 }} {{ ($user->grau ?? 0) == 1 ? 'GRAU' : 'GRAUS' }}</span>
                     </li>
                     <li class="flex items-center justify-between text-sm">
                         <span class="text-slate-400"><i class="fas fa-calendar-alt mr-2 text-cyan-400"></i> Início:</span>

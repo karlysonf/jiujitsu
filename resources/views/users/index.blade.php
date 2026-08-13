@@ -83,7 +83,7 @@
                             default => 'bg-slate-800 text-slate-300'
                         };
                     @endphp
-                    <span class="px-2.5 py-1 {{ $beltColor }} rounded-md text-[10px] font-bold tracking-wider uppercase">FAIXA {{ strtoupper($user->belt) }}</span>
+                    <span class="px-2.5 py-1 {{ $beltColor }} rounded-md text-[10px] font-bold tracking-wider uppercase">FAIXA {{ strtoupper($user->belt) }}{{ ($user->grau ?? 0) > 0 ? ' • ' . $user->grau . 'º GRAU' : '' }}</span>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 mb-4 bg-[#182234] p-3.5 rounded-xl border border-white/5">

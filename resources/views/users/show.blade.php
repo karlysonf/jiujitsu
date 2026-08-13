@@ -37,8 +37,26 @@
                 <h2 class="font-['Outfit'] font-black text-2xl text-white mb-1">{{ $user->name }}</h2>
                 <p class="text-xs text-slate-400 mb-3">{{ $user->email ?? 'Sem e-mail cadastrado' }} • {{ $user->phone ?? 'Sem telefone' }}</p>
                 <div class="flex flex-wrap gap-2 justify-center md:justify-start">
-                    <span class="px-3 py-1 bg-rose-500/10 border border-rose-500/30 text-rose-400 rounded-full text-xs font-bold uppercase">
-                        Faixa {{ strtoupper($user->belt) }} - {{ $user->degrees ?? 0 }} Grau(s)
+                    @php
+                        $belt = $user->faixa ?? $user->belt ?? 'Branca';
+                        $grau = (int) ($user->grau ?? 0);
+                        $beltColor = match(strtolower($belt)) {
+                            'branca' => 'bg-slate-200 text-slate-900',
+                            'cinza' => 'bg-slate-500 text-white',
+                            'amarela' => 'bg-yellow-400 text-yellow-950 font-bold',
+                            'laranja' => 'bg-orange-500 text-white',
+                            'verde' => 'bg-emerald-600 text-white',
+                            'azul' => 'bg-blue-600 text-white',
+                            'roxa' => 'bg-purple-600 text-white',
+                            'marrom' => 'bg-amber-900 text-white',
+                            'preta' => 'bg-slate-900 text-white border border-slate-700',
+                            default => 'bg-slate-800 text-slate-300'
+                        };
+                    @endphp
+                    <span class="px-3 py-1 {{ $beltColor }} rounded-md text-xs font-bold uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+                        <span>FAIXA {{ strtoupper($belt) }}</span>
+                        <span class="opacity-75">•</span>
+                        <span>{{ $grau }} {{ $grau == 1 ? 'GRAU' : 'GRAUS' }}</span>
                     </span>
                     <span class="px-3 py-1 {{ $user->status == 'active' ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-rose-500/10 border border-rose-500/30 text-rose-400' }} rounded-full text-xs font-bold uppercase">
                         {{ $user->status == 'active' ? 'Cadastrado Ativo' : 'Inativo' }}
@@ -60,8 +78,12 @@
                         <span class="font-semibold text-white">{{ $user->cpf ?? 'Não informado' }}</span>
                     </li>
                     <li class="flex justify-between border-b border-white/5 pb-2">
+                        <span class="text-slate-400">Graduação:</span>
+                        <span class="font-semibold text-cyan-400 uppercase">Faixa {{ $belt }} ({{ $grau }} {{ $grau == 1 ? 'Grau' : 'Graus' }})</span>
+                    </li>
+                    <li class="flex justify-between border-b border-white/5 pb-2">
                         <span class="text-slate-400">Data de Nascimento:</span>
-                        <span class="font-semibold text-white">{{ $user->birth_date ? $user->birth_date->format('d/m/Y') : 'Não informado' }}</span>
+                        <span class="font-semibold text-white">{{ $user->birth_date ? $user->birth_date->format('d/m/Y') : ($user->data_nascimento ? $user->data_nascimento->format('d/m/Y') : 'Não informado') }}</span>
                     </li>
                     <li class="flex justify-between border-b border-white/5 pb-2">
                         <span class="text-slate-400">Data de Início:</span>
@@ -73,7 +95,7 @@
                     </li>
                     <li class="flex justify-between">
                         <span class="text-slate-400">Endereço:</span>
-                        <span class="font-semibold text-white truncate max-w-[150px]">{{ $user->address ?? 'Não informado' }}</span>
+                        <span class="font-semibold text-white truncate max-w-[150px]">{{ $user->address ?? $user->endereco ?? 'Não informado' }}</span>
                     </li>
                 </ul>
             </div>
