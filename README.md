@@ -189,9 +189,8 @@ This project is licensed under the MIT License.
 
 **Karlyson Felipe**
 
-Backend Developer
-
-Laravel • PHP • PostgreSQL
+Software Developer
+Flutter • Dart • Laravel • PHP • PostgreSQL
 
 GitHub:
 https://github.com/karlysonf
